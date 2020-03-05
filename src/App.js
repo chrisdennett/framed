@@ -37,7 +37,7 @@ export default function App() {
       <Space.Fill>
         {/* MENU */}
         {showMenuOnLeft && (
-          <Space.LeftResizable size={200} scrollable={true}>
+          <Space.LeftResizable size={240} scrollable={true}>
             <Controls
               onUpdate={setAppData}
               appData={appData}
@@ -47,7 +47,7 @@ export default function App() {
         )}
 
         {showMenuAtBottom && (
-          <Space.BottomResizable size={"40%"} scrollable={true}>
+          <Space.BottomResizable size={"30%"} scrollable={true}>
             <Controls
               onUpdate={setAppData}
               appData={appData}

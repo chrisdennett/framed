@@ -1,114 +1,6 @@
 import React from "react";
 
 //
-// EIGHT
-//
-export const getTileEight = ({
-  width,
-  height,
-  x,
-  y,
-  lineColour = "#000",
-  lineThickness,
-  totalMediumHatchLines,
-  totalTightStripes,
-  stripeSpacing
-}) => {
-  const stripes = [];
-  const horizontalOffset = width / totalMediumHatchLines;
-
-  const hatchings = getStripesForTriangle({
-    height,
-    width,
-    totalStripes: totalTightStripes
-  });
-
-  for (let s = 0; s <= totalMediumHatchLines; s++) {
-    stripes.push(
-      <line
-        key={s}
-        x1={width - s * horizontalOffset}
-        x2={width}
-        y1={s * stripeSpacing}
-        y2={s * stripeSpacing}
-      />
-    );
-  }
-
-  return (
-    <g
-      key={`x${x},y${y}`}
-      transform={`translate(${x} ${y})`}
-      stroke={lineColour}
-      strokeWidth={lineThickness}
-    >
-      {hatchings}
-      {stripes}
-    </g>
-  );
-};
-
-//
-// SEVEN
-//
-export const getTileSeven = ({
-  width,
-  height,
-  x,
-  y,
-  lineColour = "#000",
-  lineThickness,
-  totalLooseHatchLines
-}) => {
-  const hatchings = getStripesForRectangle({
-    height,
-    width,
-    totalStripes: totalLooseHatchLines
-  });
-
-  return (
-    <g
-      key={`x${x},y${y}`}
-      transform={`translate(${x} ${y})`}
-      stroke={lineColour}
-      strokeWidth={lineThickness}
-    >
-      {hatchings}
-    </g>
-  );
-};
-
-//
-// SIX
-//
-export const getTileSix = ({
-  width,
-  height,
-  x,
-  y,
-  lineColour = "#000",
-  lineThickness,
-  totalTightStripes
-}) => {
-  const hatchings = getStripesForRectangle({
-    height,
-    width,
-    totalStripes: totalTightStripes
-  });
-
-  return (
-    <g
-      key={`x${x},y${y}`}
-      transform={`translate(${x} ${y})`}
-      stroke={lineColour}
-      strokeWidth={lineThickness}
-    >
-      {hatchings}
-    </g>
-  );
-};
-
-//
 // FIVE
 //
 export const getTileFive = ({
@@ -117,23 +9,10 @@ export const getTileFive = ({
   x,
   y,
   lineColour = "#000",
-  lineThickness,
-  totalMediumHatchLines,
-  stripeSpacing,
-  options = { top: false, right: false, bottom: false, left: false }
+  lineThickness
 }) => {
-  const stripes = [];
-  for (let s = 0; s <= totalMediumHatchLines; s++) {
-    stripes.push(
-      <line
-        key={s}
-        x1={0}
-        x2={width}
-        y1={s * stripeSpacing}
-        y2={s * stripeSpacing}
-      />
-    );
-  }
+  const halfHeight = height / 2;
+  const halfWidth = width / 2;
 
   return (
     <g
@@ -142,7 +21,19 @@ export const getTileFive = ({
       stroke={lineColour}
       strokeWidth={lineThickness}
     >
-      {stripes}
+      <path
+        d={`M ${0} ${halfHeight}
+            Q ${halfWidth} ${halfHeight}
+            , ${halfWidth} ${0}
+          `}
+      />
+
+      <path
+        d={`M ${halfWidth} ${height}
+            Q ${halfWidth} ${halfHeight}
+            , ${width} ${halfHeight}
+          `}
+      />
     </g>
   );
 };
@@ -156,22 +47,10 @@ export const getTileFour = ({
   x,
   y,
   lineColour = "#000",
-  lineThickness,
-  totalTightStripes,
-  totalLooseHatchLines
+  lineThickness
 }) => {
-  const hatchings = getStripesForTriangle({
-    height,
-    width,
-    totalStripes: totalTightStripes
-  });
-
-  const looseHatchings = getStripesForTriangle({
-    height,
-    width,
-    totalStripes: totalLooseHatchLines,
-    isBottomRight: true
-  });
+  const halfHeight = height / 2;
+  const halfWidth = width / 2;
 
   return (
     <g
@@ -180,9 +59,19 @@ export const getTileFour = ({
       stroke={lineColour}
       strokeWidth={lineThickness}
     >
-      {hatchings}
+      <path
+        d={`M ${0} ${halfHeight}
+            Q ${halfWidth} ${halfHeight}
+            , ${halfWidth} ${height}
+          `}
+      />
 
-      {looseHatchings}
+      <path
+        d={`M ${halfWidth} ${0}
+            Q ${halfWidth} ${halfHeight}
+            , ${width} ${halfHeight}
+          `}
+      />
     </g>
   );
 };
@@ -196,34 +85,8 @@ export const getTileThree = ({
   x,
   y,
   lineColour = "#000",
-  totalMediumHatchLines,
-  lineThickness,
-  totalTightStripes,
-  stripeSpacing,
-  options = { top: false, right: false, bottom: false, left: false }
+  lineThickness
 }) => {
-  const hatchings = getStripesForTriangle({
-    height,
-    width,
-    totalStripes: totalTightStripes,
-    isBottomRight: true
-  });
-
-  const stripes = [];
-  const horizontalOffset = width / totalMediumHatchLines;
-
-  for (let s = 0; s <= totalMediumHatchLines; s++) {
-    stripes.push(
-      <line
-        key={s}
-        x1={0}
-        x2={width - s * horizontalOffset}
-        y1={s * stripeSpacing}
-        y2={s * stripeSpacing}
-      />
-    );
-  }
-
   return (
     <g
       key={`x${x},y${y}`}
@@ -231,8 +94,8 @@ export const getTileThree = ({
       stroke={lineColour}
       strokeWidth={lineThickness}
     >
-      {stripes}
-      {hatchings}
+      <line x1={width / 2} y1={0} x2={width / 2} y2={height} />
+      <line x1={0} y1={height / 2} x2={width} y2={height / 2} />
     </g>
   );
 };
@@ -246,33 +109,8 @@ export const getTileTwo = ({
   x,
   y,
   lineColour = "#000",
-  lineThickness,
-  totalMediumHatchLines,
-  totalLooseHatchLines,
-  stripeSpacing
+  lineThickness
 }) => {
-  const stripes = [];
-  const horizontalOffset = width / totalMediumHatchLines;
-
-  const looseHatchings = getStripesForTriangle({
-    height,
-    width,
-    totalStripes: totalLooseHatchLines,
-    isBottomRight: false
-  });
-
-  for (let s = 0; s <= totalMediumHatchLines; s++) {
-    stripes.push(
-      <line
-        key={s}
-        x1={width - s * horizontalOffset}
-        x2={width}
-        y1={s * stripeSpacing}
-        y2={s * stripeSpacing}
-      />
-    );
-  }
-
   return (
     <g
       key={`x${x},y${y}`}
@@ -280,8 +118,7 @@ export const getTileTwo = ({
       stroke={lineColour}
       strokeWidth={lineThickness}
     >
-      {looseHatchings}
-      {stripes}
+      <line x1={0} y1={height} x2={width} y2={0} />
     </g>
   );
 };
@@ -295,8 +132,7 @@ export const getTileOne = ({
   x,
   y,
   lineColour = "#000",
-  lineThickness,
-  options = { top: false, right: false, bottom: false, left: false }
+  lineThickness
 }) => {
   return (
     <g
@@ -305,115 +141,7 @@ export const getTileOne = ({
       stroke={lineColour}
       strokeWidth={lineThickness}
     >
-      {/* <rect
-        x={0}
-        y={0}
-        width={width}
-        height={height}
-        stroke={"none"}
-        fill={"none"}
-      /> */}
-
-      {/* {options.top && (
-        <line x1={0} y1={0} x2={width} y2={0} stroke={lineColour} />
-      )}*/}
-      {options.bottom && <line x1={0} y1={height} x2={width} y2={height} />}
-      {options.left && <line x1={0} y1={0} x2={0} y2={height} />}
-      {options.right && (
-        <line x1={width} y1={0} x2={width} y2={height} stroke={lineColour} />
-      )}
+      <line x1={0} y1={0} x2={width} y2={height} />
     </g>
   );
-};
-
-//
-// ErrorTile
-//
-export const getErrorTile = ({ size, x, y, lineColour = "#000" }) => {
-  return (
-    <rect
-      key={`x${x},y${y}`}
-      x={x}
-      y={y}
-      width={size}
-      height={size}
-      stroke={"none"}
-      fill={"#FF00FF"}
-    />
-  );
-};
-
-//
-// Striped rectangle
-//
-const getStripesForRectangle = ({ height, width, totalStripes }) => {
-  const hatchings = [];
-  const verticalSpacing = height / totalStripes;
-  const horizontalSpacing = width / totalStripes;
-
-  for (let h = 1; h <= totalStripes * 2; h++) {
-    let startY = h * verticalSpacing;
-    let endY = 0;
-
-    let startX = 0;
-    let endX = h * horizontalSpacing;
-
-    if (startY > height) {
-      startY = height;
-      endY = h * verticalSpacing - height;
-    }
-
-    if (endX > width) {
-      startX = h * horizontalSpacing - width;
-      endX = width;
-    }
-
-    hatchings.push(
-      <line key={h} x1={startX} x2={endX} y1={startY} y2={endY} />
-    );
-  }
-
-  return hatchings;
-};
-
-//
-// Striped triangle
-//
-const getStripesForTriangle = ({
-  height,
-  width,
-  totalStripes,
-  isBottomRight = false
-}) => {
-  const hatchings = [];
-  const verticalSpacing = height / totalStripes;
-  const horizontalSpacing = width / totalStripes;
-
-  for (let h = 0; h <= totalStripes; h++) {
-    let startY = h * verticalSpacing;
-    let endY = 0;
-
-    let startX = 0;
-    let endX = h * horizontalSpacing;
-
-    if (isBottomRight) {
-      startY = height;
-      endY = h * verticalSpacing;
-
-      startX = h * horizontalSpacing;
-      endX = width;
-    }
-
-    hatchings.push(
-      <line
-        key={h + "" + startX + "" + startY}
-        x1={startX}
-        x2={endX}
-        y1={startY}
-        y2={endY}
-      />
-    );
-  }
-
-  return hatchings;
 };

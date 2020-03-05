@@ -55,6 +55,7 @@ const Display = ({ appData }) => {
       <SvgHolder id="svgHolder">
         {showKey && (
           <TilesSVG
+            fill={"none"}
             className="keySVG"
             xmlns="http://www.w3.org/2000/svg"
             viewBox={`0 0 ${tileWidth * 1.3} ${tileHeight * 10}`}
@@ -69,6 +70,7 @@ const Display = ({ appData }) => {
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
         >
           <g
+            fill={"none"}
             transform={`translate(${margin} ${margin}) scale(${svgScaleWidth} ${svgScaleHeight})`}
           >
             <rect

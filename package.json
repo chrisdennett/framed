@@ -7,6 +7,7 @@
   "dependencies": {
     "@rmwc/button": "^5.7.2",
     "@rmwc/switch": "^5.7.2",
+    "@rmwc/tabs": "^5.7.2",
     "file-saver": "^2.0.2",
     "react": "16.12.0",
     "react-compound-slider": "^2.5.0",

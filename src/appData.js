@@ -1,38 +1,11 @@
 const defaultAppData = {
-  title: "Tiles with Rules",
+  title: "Truchet Tiles",
   infoUrl: "https://artfly.io/little-boxes/",
   settings: {
     showKey: {
       label: "Show Key",
       type: "boolean",
-      defaultValue: true
-    },
-
-    stripesPerBox1: {
-      label: "BG Diagonal sections",
-      type: "range",
-      min: 4,
-      max: 42,
-      step: 2,
-      defaultValue: 4
-    },
-
-    stripesPerBox2: {
-      label: "Horizontal sections",
-      type: "range",
-      min: 3,
-      max: 42,
-      step: 1,
-      defaultValue: 14
-    },
-
-    stripesPerBox3: {
-      label: "Side Diagonal sections",
-      type: "range",
-      min: 4,
-      max: 42,
-      step: 2,
-      defaultValue: 36
+      defaultValue: false
     },
 
     showOuterBox: {
@@ -44,33 +17,33 @@ const defaultAppData = {
     lineColour: {
       label: "Line Colour",
       type: "colour",
-      defaultValue: "#4db39e"
+      defaultValue: "#a7589f"
     },
 
     lineThickness: {
       label: "Line Thickness",
       type: "range",
       min: 1,
-      max: 10,
-      defaultValue: 2.5
+      max: 50,
+      defaultValue: 6
     },
 
     tilesWide: {
       label: "Tiles Wide",
       type: "range",
       min: 1,
-      max: 50,
+      max: 100,
       step: 1,
-      defaultValue: 10
+      defaultValue: 20
     },
 
     tilesHigh: {
       label: "Tiles High",
       type: "range",
       min: 1,
-      max: 50,
+      max: 100,
       step: 1,
-      defaultValue: 10
+      defaultValue: 40
     }
   }
 };
