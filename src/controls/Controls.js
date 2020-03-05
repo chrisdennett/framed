@@ -8,10 +8,12 @@ import SliderControl from "./sliderControl/SliderControl";
 import { SwitchControl } from "./switchControl/SwitchControl";
 import ColourPicker from "../components/colourPicker/ColourPicker";
 import { TabsControl } from "./tabsControl/TabsControl";
+import QuickSelectMenu from "./quickSelectControl/QuickSelectControl";
 
 const Controls = ({ appData, onUpdate, wrap = false }) => {
   const [activeTabIndex, setActiveTabIndex] = React.useState(1);
   const { settings } = appData;
+  const { currentPreset, presets } = settings;
 
   const updateSettings = (key, newValue) => {
     onUpdate({ ...appData, [key]: newValue });
@@ -27,6 +29,10 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
     saveAs(blob, `artfly-${name}.svg`);
   };
 
+  const updatePreset = things => {
+    console.log("things: ", things);
+  };
+
   return (
     <Container>
       <TabsControl
@@ -35,7 +41,13 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
       />
 
       {activeTabIndex === 1 && (
-        <ControlsUI wrapControls={wrap}>HELLO</ControlsUI>
+        <ControlsUI wrapControls={wrap}>
+          <QuickSelectMenu
+            currentOptionKey={currentPreset}
+            options={presets}
+            onUpdate={updatePreset}
+          />
+        </ControlsUI>
       )}
 
       {activeTabIndex === 0 && (
