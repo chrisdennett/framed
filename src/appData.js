@@ -2,12 +2,6 @@ const defaultAppData = {
   title: "Truchet Tiles",
   infoUrl: "https://artfly.io/little-boxes/",
   settings: {
-    showKey: {
-      label: "Show Key",
-      type: "boolean",
-      defaultValue: false
-    },
-
     showOuterBox: {
       label: "Outer Box",
       type: "boolean",

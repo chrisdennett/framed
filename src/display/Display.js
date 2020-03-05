@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { GetTiles, getTileTypes } from "../utils";
+import { GetTiles } from "../utils";
 
 const Display = ({ appData }) => {
   const {
     lineColour,
     showOuterBox,
     lineThickness,
-    showKey,
     tilesWide,
     tilesHigh,
     settings,
@@ -29,12 +28,12 @@ const Display = ({ appData }) => {
     lineThickness: lineThickness
   });
 
-  const keyTiles = getTileTypes({
-    tileWidth,
-    tileHeight,
-    lineColour: lineColour,
-    lineThickness: lineThickness
-  });
+  // const keyTiles = getTileTypes({
+  //   tileWidth,
+  //   tileHeight,
+  //   lineColour: lineColour,
+  //   lineThickness: lineThickness
+  // });
   const svgWidth = tileWidth * tilesWide;
   const svgHeight = tileHeight * tilesHigh;
 
@@ -153,14 +152,14 @@ const MainSVG = styled.svg`
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
 `;
 
-const TilesSVG = styled.svg`
-  padding-top: 40px;
-  margin-right: 10px;
-  background: white;
-  border-radius: 5px;
-  flex: 1;
-  flex: 1;
-  max-width: 200px;
-  max-height: 700px;
-  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
-`;
+// const TilesSVG = styled.svg`
+//   padding-top: 40px;
+//   margin-right: 10px;
+//   background: white;
+//   border-radius: 5px;
+//   flex: 1;
+//   flex: 1;
+//   max-width: 200px;
+//   max-height: 700px;
+//   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+// `;
