@@ -4,6 +4,7 @@ import { GetTiles } from "../utils";
 
 const Display = ({ appData, sizeInfo }) => {
   const {
+    selectedTiles,
     lineColour,
     showOuterBox,
     lineThickness,
@@ -15,8 +16,13 @@ const Display = ({ appData, sizeInfo }) => {
   const tileWidth = 250;
   const tileHeight = 250;
 
-  const selectedTileOptions =
-    settings.tileGroup.presets[currentTileGroupKey].keys;
+  const allTileOptions = settings.tileGroup.presets[currentTileGroupKey].keys;
+
+  console.log("allTileOptions: ", allTileOptions);
+
+  const selectedTileOptions = allTileOptions.filter(key => selectedTiles[key]);
+
+  console.log("selectedTileOptions: ", selectedTileOptions);
 
   const tiles = GetTiles({
     tileOptions: selectedTileOptions,
@@ -28,12 +34,6 @@ const Display = ({ appData, sizeInfo }) => {
     lineThickness: lineThickness
   });
 
-  // const keyTiles = getTileTypes({
-  //   tileWidth,
-  //   tileHeight,
-  //   lineColour: lineColour,
-  //   lineThickness: lineThickness
-  // });
   const svgWidth = tileWidth * tilesWide;
   const svgHeight = tileHeight * tilesHigh;
 
@@ -44,19 +44,19 @@ const Display = ({ appData, sizeInfo }) => {
   const svgScaleHeight = svgHeightAfterMargin / svgHeight;
 
   const { height: maxHeight, width: maxWidth } = sizeInfo;
-  const svgPadding = 100;
+  const svgPadding = 0.07 * maxHeight;
 
   const svgHeightToWidthRatio = svgWidth / svgHeight;
   const svgWidthHeightRatio = svgHeight / svgWidth;
 
-  // if it is higher than it is wide
-  let holderHeight = maxHeight - svgPadding;
-  let holderWidth = holderHeight * svgHeightToWidthRatio;
+  // Figure out holder dimensions to surround SVG
+  let holderHeight, holderWidth;
+  holderWidth = maxWidth - svgPadding;
+  holderHeight = holderWidth * svgWidthHeightRatio;
 
-  // if it is wider than it is high
-  if (svgWidth > svgHeight) {
-    holderWidth = maxWidth - svgPadding;
-    holderHeight = holderWidth * svgWidthHeightRatio;
+  if (holderHeight > maxHeight) {
+    holderHeight = maxHeight - svgPadding;
+    holderWidth = holderHeight * svgHeightToWidthRatio;
   }
 
   return (

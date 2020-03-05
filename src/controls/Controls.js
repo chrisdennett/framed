@@ -9,20 +9,20 @@ import { SwitchControl } from "./switchControl/SwitchControl";
 import ColourPicker from "../components/colourPicker/ColourPicker";
 import { TabsControl } from "./tabsControl/TabsControl";
 import QuickSelectMenu from "./quickSelectControl/QuickSelectControl";
+import { TileSelectorControl } from "./tileSelectorControl/TileSelectorControl";
 
 const Controls = ({ appData, onUpdate, wrap = false }) => {
   const [activeTabIndex, setActiveTabIndex] = React.useState(1);
-  const { settings, tileGroup: currentTileGroupKey } = appData;
+  const { settings, tileGroup: currentTileGroupKey, selectedTiles } = appData;
   const { tileGroup } = settings;
 
-  // console.log("appData: ", appData);
+  console.log("appData: ", appData);
 
   const updateSettings = (key, newValue) => {
     onUpdate({ ...appData, [key]: newValue });
   };
 
   const settingsKeys = Object.keys(settings);
-
   const onSaveSvgClick = ({ name = "tiles-art", svgClass = "mainSVG" }) => {
     let full_svg = document.getElementsByClassName(svgClass)[0].outerHTML;
     full_svg = full_svg.split(">").join(`>`);
@@ -46,6 +46,12 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
             onUpdate={selectedOption =>
               updateSettings("tileGroup", selectedOption)
             }
+          />
+          <TileSelectorControl
+            selectedTiles={selectedTiles}
+            currentTileGroupKey={currentTileGroupKey}
+            tileGroup={tileGroup}
+            onUpdate={updateSettings}
           />
         </ControlsUI>
       )}

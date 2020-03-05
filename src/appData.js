@@ -41,7 +41,7 @@ const defaultAppData = {
     },
 
     tileGroup: {
-      defaultValue: "triangles",
+      defaultValue: "custom",
       type: "select",
       presets: {
         diagonals: {
@@ -57,10 +57,27 @@ const defaultAppData = {
           keys: ["triangle1", "triangle2", "triangle3", "triangle4"],
           description: "2 triangles, 2 colours."
         },
-        fourEdgeConnections: {
+        edgeCurves: {
           number: 3,
           name: "Edge Curves",
           keys: ["cross", "cornerCurves1", "cornerCurves2"],
+          description:
+            "Here we've got three variations, giving a greater range of possibilities, but I reckon it's still nice with any two of them."
+        },
+        custom: {
+          number: 4,
+          name: "Pick and Mix",
+          keys: [
+            "diagonal1",
+            "diagonal2",
+            "cross",
+            "cornerCurves1",
+            "cornerCurves2",
+            "triangle1",
+            "triangle2",
+            "triangle3",
+            "triangle4"
+          ],
           description:
             "Here we've got three variations, giving a greater range of possibilities, but I reckon it's still nice with any two of them."
         }
@@ -84,37 +101,38 @@ const defaultAppData = {
         //     "With double conector points on each side you end up with nice worm-like patterns."
         // }
       }
-    },
-    selectedTiles: {
-      diagonal1: true,
-      diagonal2: true,
-
-      drawCross: false,
-      drawCornerCurves1: false,
-      drawCornerCurves2: false,
-
-      doubleLoop1: false,
-      doubleLoop2: false,
-      allLoopEnds: false,
-      crossLoops1: false,
-      crossLoops2: false,
-      crossLoopWithEnds: false,
-      downLoopWithEnds: false,
-      singleLoopWithEnds1: false,
-      singleLoopWithEnds2: false,
-      singleLoopWithEnds3: false,
-      singleLoopWithEnds4: false
     }
   }
 };
 
 export const getAppData = (srcData = defaultAppData) => {
   // add easy access values from default data
-  const appData = { ...defaultAppData };
-  const settingsKeys = Object.keys(defaultAppData.settings);
+  const appData = { ...srcData };
+  const settingsKeys = Object.keys(srcData.settings);
 
   for (let key of settingsKeys) {
-    appData[key] = defaultAppData.settings[key].defaultValue;
+    const currSetting = srcData.settings[key];
+
+    // tile selects need to be treated a bit differently
+    if (currSetting.type === "select") {
+      const { presets } = currSetting;
+      // const { presets, defaultValue } = currSetting;
+      const presetKeys = Object.keys(presets);
+      let allTileKeys = [];
+      const selectedTiles = {};
+      // for each preset.keys
+      for (let key of presetKeys) {
+        allTileKeys = allTileKeys.concat(presets[key].keys);
+      }
+
+      for (let tileKey of allTileKeys) {
+        selectedTiles[tileKey] = true;
+      }
+
+      appData.selectedTiles = selectedTiles;
+    }
+
+    appData[key] = srcData.settings[key].defaultValue;
   }
 
   return appData;
