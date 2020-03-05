@@ -1,8 +1,5 @@
 import React from "react";
 import {
-  getTileEight,
-  getTileSeven,
-  getTileSix,
   getTileFive,
   getTileFour,
   getTileThree,
@@ -11,19 +8,18 @@ import {
 } from "./tiles";
 
 export const getRandomTilesData = ({
+  tileOptions,
   tileWidth,
   tileHeight,
   tilesWide,
   tilesHigh
 }) => {
-  // const possibleTileKeys = ["t1", "t2", "t3", "t4"];
-  const possibleTileKeys = ["t4", "t5"];
   const tileDataArray = [];
 
   for (let tileRow = 0; tileRow < tilesHigh; tileRow++) {
     for (let tileCol = 0; tileCol < tilesWide; tileCol++) {
-      const randKeyIndex = Math.floor(Math.random() * possibleTileKeys.length);
-      const tileKey = possibleTileKeys[randKeyIndex];
+      const randKeyIndex = Math.floor(Math.random() * tileOptions.length);
+      const tileKey = tileOptions[randKeyIndex];
 
       let tileData = {
         x: tileCol * tileWidth,
@@ -42,6 +38,7 @@ export const getRandomTilesData = ({
 };
 
 export const GetTiles = ({
+  tileOptions,
   tileWidth,
   tileHeight,
   tilesWide,
@@ -50,6 +47,7 @@ export const GetTiles = ({
   lineThickness = 2
 }) => {
   const randTileData = getRandomTilesData({
+    tileOptions,
     tileWidth,
     tileHeight,
     tilesWide,
@@ -153,23 +151,23 @@ export const getTileTypes = ({
 };
 
 const tileTypes = {
-  t1: {
+  diagonal1: {
     name: "1",
     func: getTileOne
   },
-  t2: {
+  diagonal2: {
     name: "2",
     func: getTileTwo
   },
-  t3: {
+  cross: {
     name: "3",
     func: getTileThree
   },
-  t4: {
+  cornerCurves1: {
     name: "4",
     func: getTileFour
   },
-  t5: {
+  cornerCurves2: {
     name: "5",
     func: getTileFive
   }

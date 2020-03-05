@@ -10,36 +10,30 @@ const Display = ({ appData }) => {
     showKey,
     tilesWide,
     tilesHigh,
-    stripesPerBox1,
-    stripesPerBox2,
-    stripesPerBox3
+    settings,
+    tileGroup: currentTileGroupKey
   } = appData;
   const tileWidth = 250;
   const tileHeight = 250;
-  const tightLinesPerHeight = stripesPerBox3;
-  const midLinesPerHeight = stripesPerBox2;
-  const looseLinesPerHeight = stripesPerBox1;
+
+  const selectedTileOptions =
+    settings.tileGroup.presets[currentTileGroupKey].keys;
 
   const tiles = GetTiles({
+    tileOptions: selectedTileOptions,
     tileWidth,
     tileHeight,
     tilesWide,
     tilesHigh,
     lineColour: lineColour,
-    lineThickness: lineThickness,
-    tightLinesPerHeight,
-    midLinesPerHeight,
-    looseLinesPerHeight
+    lineThickness: lineThickness
   });
 
   const keyTiles = getTileTypes({
     tileWidth,
     tileHeight,
     lineColour: lineColour,
-    lineThickness: lineThickness,
-    tightLinesPerHeight,
-    midLinesPerHeight,
-    looseLinesPerHeight
+    lineThickness: lineThickness
   });
   const svgWidth = tileWidth * tilesWide;
   const svgHeight = tileHeight * tilesHigh;
