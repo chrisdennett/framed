@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { GetTiles } from "../utils";
 
-const Display = ({ appData }) => {
+const Display = ({ appData, sizeInfo }) => {
   const {
     lineColour,
     showOuterBox,
@@ -43,9 +43,28 @@ const Display = ({ appData }) => {
   const svgScaleWidth = svgWidthAfterMargin / svgWidth;
   const svgScaleHeight = svgHeightAfterMargin / svgHeight;
 
+  const { height: maxHeight, width: maxWidth } = sizeInfo;
+  const svgPadding = 100;
+
+  const svgHeightToWidthRatio = svgWidth / svgHeight;
+  const svgWidthHeightRatio = svgHeight / svgWidth;
+
+  // if it is higher than it is wide
+  let holderHeight = maxHeight - svgPadding;
+  let holderWidth = holderHeight * svgHeightToWidthRatio;
+
+  // if it is wider than it is high
+  if (svgWidth > svgHeight) {
+    holderWidth = maxWidth - svgPadding;
+    holderHeight = holderWidth * svgWidthHeightRatio;
+  }
+
   return (
     <Container>
-      <SvgHolder id="svgHolder">
+      <SvgHolder
+        id="svgHolder"
+        style={{ width: holderWidth, height: holderHeight }}
+      >
         <MainSVG
           className="mainSVG"
           xmlns="http://www.w3.org/2000/svg"
@@ -140,8 +159,6 @@ const Container = styled.div`
 `;
 
 const SvgHolder = styled.div`
-  width: 95%;
-  height: 95%;
   display: flex;
 `;
 

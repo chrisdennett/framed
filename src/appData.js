@@ -28,7 +28,7 @@ const defaultAppData = {
       min: 1,
       max: 100,
       step: 1,
-      defaultValue: 10
+      defaultValue: 30
     },
 
     tilesHigh: {

@@ -64,7 +64,9 @@ export default function App() {
             borderRadius: 10
           }}
         >
-          <Display appData={appData} />
+          <Space.Info>
+            {sizeInfo => <Display sizeInfo={sizeInfo} appData={appData} />}
+          </Space.Info>
         </Space.Fill>
       </Space.Fill>
     </Space.ViewPort>
