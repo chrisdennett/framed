@@ -1,10 +1,14 @@
 import React from "react";
 import {
+  getTileSeven,
+  getTileSix,
   getTileFive,
   getTileFour,
   getTileThree,
   getTileTwo,
-  getTileOne
+  getTileOne,
+  getTileEight,
+  getTileNine
 } from "./tiles";
 
 export const getRandomTilesData = ({
@@ -170,5 +174,21 @@ const tileTypes = {
   cornerCurves2: {
     name: "5",
     func: getTileFive
+  },
+  triangle1: {
+    name: "6",
+    func: getTileSix
+  },
+  triangle2: {
+    name: "7",
+    func: getTileSeven
+  },
+  triangle3: {
+    name: "8",
+    func: getTileEight
+  },
+  triangle4: {
+    name: "9",
+    func: getTileNine
   }
 };

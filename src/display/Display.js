@@ -47,21 +47,12 @@ const Display = ({ appData }) => {
   return (
     <Container>
       <SvgHolder id="svgHolder">
-        {showKey && (
-          <TilesSVG
-            fill={"none"}
-            className="keySVG"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox={`0 0 ${tileWidth * 1.3} ${tileHeight * 10}`}
-          >
-            {keyTiles}
-          </TilesSVG>
-        )}
-
         <MainSVG
           className="mainSVG"
           xmlns="http://www.w3.org/2000/svg"
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+          strokeLinejoin="round"
+          strokeLinecap="round"
         >
           <g
             fill={"none"}

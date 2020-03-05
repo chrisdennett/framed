@@ -1,6 +1,75 @@
 import React from "react";
 
 //
+// NINE
+//
+export const getTileNine = ({ width, height, x, y, lineColour = "#000" }) => {
+  return (
+    <g
+      key={`x${x},y${y}`}
+      transform={`translate(${x} ${y})`}
+      stroke={lineColour}
+      strokeWidth={10}
+      strokeLinejoin="round"
+      fill={lineColour}
+    >
+      <polygon points={`${0},${0} ${width},${height} ${0},${height}`} />
+    </g>
+  );
+};
+
+//
+// EIGHT
+//
+export const getTileEight = ({ width, height, x, y, lineColour = "#000" }) => {
+  return (
+    <g
+      key={`x${x},y${y}`}
+      transform={`translate(${x} ${y})`}
+      stroke={lineColour}
+      strokeWidth={10}
+      fill={lineColour}
+    >
+      <polygon points={`${0},${height} ${width},${0} ${width},${height}`} />
+    </g>
+  );
+};
+
+//
+// SEVEN
+//
+export const getTileSeven = ({ width, height, x, y, lineColour = "#000" }) => {
+  return (
+    <g
+      key={`x${x},y${y}`}
+      transform={`translate(${x} ${y})`}
+      stroke={lineColour}
+      strokeWidth={10}
+      fill={lineColour}
+    >
+      <polygon points={`0,0 ${width},${0} ${0},${height}`} />
+    </g>
+  );
+};
+
+//
+// SIX
+//
+export const getTileSix = ({ width, height, x, y, lineColour = "#000" }) => {
+  return (
+    <g
+      key={`x${x},y${y}`}
+      transform={`translate(${x} ${y})`}
+      stroke={lineColour}
+      strokeWidth={10}
+      fill={lineColour}
+    >
+      <polygon points={`0,0 ${width},${0} ${width},${height}`} />
+    </g>
+  );
+};
+
+//
 // FIVE
 //
 export const getTileFive = ({
