@@ -19,7 +19,7 @@ const defaultAppData = {
       type: "range",
       min: 1,
       max: 50,
-      defaultValue: 6
+      defaultValue: 20
     },
 
     tilesWide: {
@@ -41,7 +41,7 @@ const defaultAppData = {
     },
 
     tileGroup: {
-      defaultValue: "worms",
+      defaultValue: "custom",
       type: "select",
       presets: {
         diagonals: {

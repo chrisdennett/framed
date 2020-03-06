@@ -13,7 +13,7 @@ import { TileSelectorControl } from "./tileSelectorControl/TileSelectorControl";
 import { getTileKeysForGroup } from "../utils";
 
 const Controls = ({ appData, onUpdate, wrap = false }) => {
-  const [activeTabIndex, setActiveTabIndex] = React.useState(1);
+  const [activeTabIndex, setActiveTabIndex] = React.useState(0);
   const { settings, tileGroup: currentTileGroupKey, selectedTiles } = appData;
   const { tileGroup } = settings;
 
@@ -42,7 +42,7 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
         setActiveTabIndex={setActiveTabIndex}
       />
 
-      {activeTabIndex === 1 && (
+      {activeTabIndex === 0 && (
         <ControlsUI wrapControls={wrap}>
           <QuickSelectMenu
             currentOptionKey={currentTileGroupKey}
@@ -52,6 +52,7 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
             }
           />
           <TileSelectorControl
+            lineColour={appData.lineColour}
             onUpdate={updateSettings}
             selectedTiles={selectedTiles}
             currentGroupTileKeys={currentGroupTileKeys}
@@ -59,7 +60,7 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
         </ControlsUI>
       )}
 
-      {activeTabIndex === 0 && (
+      {activeTabIndex === 1 && (
         <ControlsUI wrapControls={wrap}>
           <ButtHolder>
             <Button label="Save SVG" raised onClick={onSaveSvgClick} />

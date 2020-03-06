@@ -219,7 +219,8 @@ export const getWormEnds = ({
   x,
   y,
   lineColour = "#000",
-  fill = "#fff"
+  fill = "#fff",
+  lineThickness
 }) => {
   const {
     oneThirdWidth,
@@ -256,7 +257,7 @@ export const getWormEnds = ({
       key={`x${x},y${y}`}
       transform={`translate(${x} ${y})`}
       stroke={lineColour}
-      strokeWidth={10}
+      strokeWidth={lineThickness}
       strokeLinejoin="round"
       fill={fill}
     >
@@ -273,7 +274,8 @@ export const getCornerWorm6 = ({
   x,
   y,
   lineColour = "#000",
-  fill = "#fff"
+  fill = "#fff",
+  lineThickness
 }) => {
   const {
     oneThirdWidth,
@@ -307,7 +309,7 @@ export const getCornerWorm6 = ({
       key={`x${x},y${y}`}
       transform={`translate(${x} ${y})`}
       stroke={lineColour}
-      strokeWidth={10}
+      strokeWidth={lineThickness}
       strokeLinejoin="round"
       fill={fill}
     >
@@ -323,7 +325,8 @@ export const getCornerWorm5 = ({
   x,
   y,
   lineColour = "#000",
-  fill = "#fff"
+  fill = "#fff",
+  lineThickness
 }) => {
   const {
     oneThirdWidth,
@@ -356,7 +359,7 @@ export const getCornerWorm5 = ({
       key={`x${x},y${y}`}
       transform={`translate(${x} ${y})`}
       stroke={lineColour}
-      strokeWidth={10}
+      strokeWidth={lineThickness}
       strokeLinejoin="round"
       fill={fill}
     >
@@ -372,6 +375,7 @@ export const getCornerWorm4 = ({
   x,
   y,
   lineColour = "#000",
+  lineThickness,
   fill = "#fff"
 }) => {
   const {
@@ -409,7 +413,7 @@ export const getCornerWorm4 = ({
       key={`x${x},y${y}`}
       transform={`translate(${x} ${y})`}
       stroke={lineColour}
-      strokeWidth={10}
+      strokeWidth={lineThickness}
       strokeLinejoin="round"
       fill={fill}
     >
@@ -425,6 +429,7 @@ export const getCornerWorm3 = ({
   x,
   y,
   lineColour = "#000",
+  lineThickness,
   fill = "#fff"
 }) => {
   const {
@@ -459,7 +464,7 @@ export const getCornerWorm3 = ({
       key={`x${x},y${y}`}
       transform={`translate(${x} ${y})`}
       stroke={lineColour}
-      strokeWidth={10}
+      strokeWidth={lineThickness}
       strokeLinejoin="round"
       fill={fill}
     >
@@ -475,6 +480,7 @@ export const getCornerWorm2 = ({
   x,
   y,
   lineColour = "#000",
+  lineThickness,
   fill = "#fff"
 }) => {
   const {
@@ -506,7 +512,7 @@ export const getCornerWorm2 = ({
       key={`x${x},y${y}`}
       transform={`translate(${x} ${y})`}
       stroke={lineColour}
-      strokeWidth={10}
+      strokeWidth={lineThickness}
       strokeLinejoin="round"
       fill={fill}
     >
@@ -521,6 +527,7 @@ export const getCornerWorm1 = ({
   x,
   y,
   lineColour = "#000",
+  lineThickness,
   fill = "#fff"
 }) => {
   const {
@@ -550,7 +557,7 @@ export const getCornerWorm1 = ({
       key={`x${x},y${y}`}
       transform={`translate(${x} ${y})`}
       stroke={lineColour}
-      strokeWidth={10}
+      strokeWidth={lineThickness}
       strokeLinejoin="round"
       fill={fill}
     >
@@ -565,6 +572,7 @@ export const getWormLine2 = ({
   x,
   y,
   lineColour = "#000",
+  lineThickness,
   fill = "#fff"
 }) => {
   const {
@@ -597,7 +605,7 @@ export const getWormLine2 = ({
       key={`x${x},y${y}`}
       transform={`translate(${x} ${y})`}
       stroke={lineColour}
-      strokeWidth={10}
+      strokeWidth={lineThickness}
       strokeLinejoin="round"
       fill={fill}
     >
@@ -613,6 +621,7 @@ export const getWormLine1 = ({
   x,
   y,
   lineColour = "#000",
+  lineThickness,
   fill = "#fff"
 }) => {
   const {
@@ -645,7 +654,7 @@ export const getWormLine1 = ({
       key={`x${x},y${y}`}
       transform={`translate(${x} ${y})`}
       stroke={lineColour}
-      strokeWidth={10}
+      strokeWidth={lineThickness}
       strokeLinejoin="round"
       fill={fill}
     >
@@ -661,6 +670,7 @@ export const getWormCross2 = ({
   x,
   y,
   lineColour = "#000",
+  lineThickness,
   fill = "#fff"
 }) => {
   const {
@@ -682,7 +692,7 @@ export const getWormCross2 = ({
       key={`x${x},y${y}`}
       transform={`translate(${x} ${y})`}
       stroke={lineColour}
-      strokeWidth={10}
+      strokeWidth={lineThickness}
       strokeLinejoin="round"
       fill={fill}
     >
@@ -697,6 +707,7 @@ export const getWormCross1 = ({
   x,
   y,
   lineColour = "#000",
+  lineThickness,
   fill = "#fff"
 }) => {
   const {
@@ -718,7 +729,7 @@ export const getWormCross1 = ({
       key={`x${x},y${y}`}
       transform={`translate(${x} ${y})`}
       stroke={lineColour}
-      strokeWidth={10}
+      strokeWidth={lineThickness}
       strokeLinejoin="round"
       fill={fill}
     >

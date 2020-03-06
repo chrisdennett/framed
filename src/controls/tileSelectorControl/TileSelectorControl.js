@@ -6,7 +6,8 @@ import { TileCheckbox } from "./TileCheckbox";
 export const TileSelectorControl = ({
   onUpdate,
   selectedTiles,
-  currentGroupTileKeys
+  currentGroupTileKeys,
+  lineColour
 }) => {
   const onUpdateSelected = (key, isChecked) => {
     const newSelectedTiles = { ...selectedTiles, [key]: isChecked };
@@ -19,6 +20,7 @@ export const TileSelectorControl = ({
         return (
           <TileCheckbox
             key={key}
+            lineColour={lineColour}
             selected={selectedTiles[key]}
             tileFunction={tileTypes[key]}
             onUpdate={isChecked => onUpdateSelected(key, isChecked)}

@@ -9,7 +9,7 @@ export const TileCheckbox = ({
   tileWidth = 50,
   tileHeight = 50,
   strokeThickness = 1,
-  lineColour = "white",
+  lineColour = "black",
   selected,
   onUpdate
 }) => {
@@ -29,16 +29,16 @@ export const TileCheckbox = ({
       onChange={e => onUpdate(e.target.checked)}
     >
       <svg width={tileWidth + 10} height={tileHeight + 10}>
-        <g fill={"none"}>{tile}</g>
         <rect
           x={0}
           y={0}
           width={tileWidth}
           height={tileHeight}
           strokeWidth={2}
-          stroke={"white"}
-          fill={"none"}
+          stroke={"black"}
+          fill={"white"}
         />
+        <g fill={"none"}>{tile}</g>
       </svg>
     </StyledCheckbox>
   );

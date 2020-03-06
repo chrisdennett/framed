@@ -55,7 +55,9 @@ const QuickSelectMenu = ({ currentOptionKey, options = {}, onUpdate }) => {
 export default QuickSelectMenu;
 
 const Container = styled.div`
-  display: inline-block;
+  display: block;
+  width: 100%;
+  text-align: center;
 
   .mdc-select__native-control {
     padding-right: 10px;

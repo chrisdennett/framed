@@ -13,8 +13,8 @@ export const TabsControl = ({ activeTabIndex, setActiveTabIndex }) => {
         activeTabIndex={activeTabIndex}
         onActivate={e => setActiveTabIndex(e.detail.index)}
       >
-        <StyledTab>Settings</StyledTab>
         <StyledTab>Tiles</StyledTab>
+        <StyledTab>Settings</StyledTab>
       </TabBar>
     </Wrapper>
   );
