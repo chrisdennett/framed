@@ -16,8 +16,6 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
   const { settings, tileGroup: currentTileGroupKey, selectedTiles } = appData;
   const { tileGroup } = settings;
 
-  console.log("appData: ", appData);
-
   const updateSettings = (key, newValue) => {
     onUpdate({ ...appData, [key]: newValue });
   };

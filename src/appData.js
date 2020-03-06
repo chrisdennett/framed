@@ -28,7 +28,7 @@ const defaultAppData = {
       min: 1,
       max: 100,
       step: 1,
-      defaultValue: 30
+      defaultValue: 20
     },
 
     tilesHigh: {
@@ -37,7 +37,7 @@ const defaultAppData = {
       min: 1,
       max: 100,
       step: 1,
-      defaultValue: 12
+      defaultValue: 20
     },
 
     tileGroup: {
@@ -47,22 +47,17 @@ const defaultAppData = {
         diagonals: {
           number: 1,
           name: "Diagonals",
-          keys: ["diagonal1", "diagonal2"],
-          description:
-            "Simply randomising tiles containing the 2 possible diagonal lines gives a surprisingly pleasing result.  Try deselecting and reselecting one of the tiles to flip from order to art over and over! Touch or click on the pattern to generate a new combination."
+          keys: ["diagonal1", "diagonal2"]
         },
         triangles: {
           number: 2,
           name: "Triangles",
-          keys: ["triangle1", "triangle2", "triangle3", "triangle4"],
-          description: "2 triangles, 2 colours."
+          keys: ["triangle1", "triangle2", "triangle3", "triangle4"]
         },
         edgeCurves: {
           number: 3,
           name: "Edge Curves",
-          keys: ["cross", "cornerCurves1", "cornerCurves2"],
-          description:
-            "Here we've got three variations, giving a greater range of possibilities, but I reckon it's still nice with any two of them."
+          keys: ["cross", "cornerCurves1", "cornerCurves2"]
         },
         custom: {
           number: 4,

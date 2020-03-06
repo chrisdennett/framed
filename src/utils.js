@@ -19,6 +19,9 @@ export const getRandomTilesData = ({
 }) => {
   const tileDataArray = [];
 
+  // if no options available return an empty array
+  if (tileOptions.length === 0) return tileDataArray;
+
   for (let tileRow = 0; tileRow < tilesHigh; tileRow++) {
     for (let tileCol = 0; tileCol < tilesWide; tileCol++) {
       const randKeyIndex = Math.floor(Math.random() * tileOptions.length);
@@ -58,7 +61,6 @@ export const GetTiles = ({
   });
 
   const tiles = [];
-
   for (let titleInfo of randTileData) {
     if (titleInfo) {
       tiles.push(

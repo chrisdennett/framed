@@ -17,12 +17,7 @@ const Display = ({ appData, sizeInfo }) => {
   const tileHeight = 250;
 
   const allTileOptions = settings.tileGroup.presets[currentTileGroupKey].keys;
-
-  console.log("allTileOptions: ", allTileOptions);
-
   const selectedTileOptions = allTileOptions.filter(key => selectedTiles[key]);
-
-  console.log("selectedTileOptions: ", selectedTileOptions);
 
   const tiles = GetTiles({
     tileOptions: selectedTileOptions,
