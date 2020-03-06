@@ -37,12 +37,17 @@ const getHorizontalWorm = ({ oneThirdHeight, twoThirdsHeight, width }) => (
     <line x1={0} x2={width} y1={twoThirdsHeight} y2={twoThirdsHeight} />
   </g>
 );
-const getTopWormEnd = ({ oneThirdWidth, twoThirdsWidth, oneThirdHeight }) => (
+const getTopWormEnd = ({
+  oneThirdWidth,
+  twoThirdsWidth,
+  oneThirdHeight,
+  roundingFraction = 0.7
+}) => (
   <g>
     <path
       d={` M ${oneThirdWidth} 0 
-        C ${oneThirdWidth} ${oneThirdHeight}
-          ${twoThirdsWidth} ${oneThirdHeight}
+        C ${oneThirdWidth} ${oneThirdHeight * roundingFraction}
+          ${twoThirdsWidth} ${oneThirdHeight * roundingFraction}
           ${twoThirdsWidth} 0
       `}
     />
@@ -52,25 +57,31 @@ const getBottomWormEnd = ({
   height,
   oneThirdWidth,
   twoThirdsWidth,
-  oneThirdHeight
+  oneThirdHeight,
+  roundingFraction = 0.7
 }) => (
   <g>
     <path
       d={` M ${oneThirdWidth} ${height} 
-        C ${oneThirdWidth} ${height - oneThirdHeight}
-          ${twoThirdsWidth} ${height - oneThirdHeight}
+        C ${oneThirdWidth} ${height - oneThirdHeight * roundingFraction}
+          ${twoThirdsWidth} ${height - oneThirdHeight * roundingFraction}
           ${twoThirdsWidth} ${height}
       `}
     />
   </g>
 );
-const getLeftWormEnd = ({ oneThirdHeight, twoThirdsHeight, oneThirdWidth }) => (
+const getLeftWormEnd = ({
+  oneThirdHeight,
+  twoThirdsHeight,
+  oneThirdWidth,
+  roundingFraction = 0.7
+}) => (
   <g>
     <path
       d={` 
         M ${0} ${oneThirdHeight}
-        C ${oneThirdWidth} ${oneThirdHeight}
-          ${oneThirdWidth} ${twoThirdsHeight}
+        C ${oneThirdWidth * roundingFraction} ${oneThirdHeight}
+          ${oneThirdWidth * roundingFraction} ${twoThirdsHeight}
           ${0} ${twoThirdsHeight}
       `}
     />
@@ -80,20 +91,474 @@ const getRightWormEnd = ({
   width,
   oneThirdHeight,
   twoThirdsHeight,
-  oneThirdWidth
+  oneThirdWidth,
+  roundingFraction = 0.7
 }) => (
   <g>
     <path
       d={` 
         M ${width} ${oneThirdHeight}
-        C ${width - oneThirdWidth} ${oneThirdHeight}
-          ${width - oneThirdWidth} ${twoThirdsHeight}
+        C ${width - oneThirdWidth * roundingFraction} ${oneThirdHeight}
+          ${width - oneThirdWidth * roundingFraction} ${twoThirdsHeight}
           ${width} ${twoThirdsHeight}
       `}
     />
   </g>
 );
+const getBottomLeftCornerWorm = ({
+  height,
+  oneThirdHeight,
+  twoThirdsHeight,
+  oneThirdWidth,
+  twoThirdsWidth,
+  roundingFraction = 0.7
+}) => (
+  <g>
+    <path
+      d={` 
+        M ${0} ${oneThirdHeight}
+        C ${twoThirdsWidth * roundingFraction} ${oneThirdHeight}
+          ${twoThirdsWidth} ${height - twoThirdsWidth * roundingFraction}
+          ${twoThirdsWidth} ${height}
+      `}
+    />
+    <path
+      d={` 
+        M ${0} ${twoThirdsHeight}
+        C ${oneThirdWidth * roundingFraction} ${twoThirdsHeight}
+          ${oneThirdWidth} ${height - oneThirdHeight * roundingFraction}
+          ${oneThirdWidth} ${height}
+      `}
+    />
+  </g>
+);
+const getTopRightCornerWorm = ({
+  width,
+  oneThirdHeight,
+  twoThirdsHeight,
+  oneThirdWidth,
+  twoThirdsWidth,
+  roundingFraction = 0.7
+}) => (
+  <g>
+    <path
+      d={` 
+        M ${oneThirdWidth} ${0}
+        C ${oneThirdWidth} ${twoThirdsHeight * roundingFraction}
+          ${width - oneThirdWidth * roundingFraction} ${twoThirdsHeight}
+          ${width} ${twoThirdsHeight}
+      `}
+    />
+    <path
+      d={` 
+        M ${twoThirdsWidth} ${0}
+        C ${twoThirdsWidth} ${oneThirdHeight * roundingFraction}
+          ${width - oneThirdWidth * roundingFraction} ${oneThirdHeight}
+          ${width} ${oneThirdHeight}
+      `}
+    />
+  </g>
+);
+const getBottomRightCornerWorm = ({
+  width,
+  height,
+  oneThirdHeight,
+  twoThirdsHeight,
+  oneThirdWidth,
+  twoThirdsWidth,
+  roundingFraction = 0.7
+}) => (
+  <g>
+    <path
+      d={` 
+        M ${width} ${oneThirdHeight}
+        C ${width - twoThirdsWidth * roundingFraction} ${oneThirdHeight}
+          ${oneThirdWidth} ${height - twoThirdsHeight * roundingFraction}
+          ${oneThirdWidth} ${height}
+      `}
+    />
+    <path
+      d={` 
+        M ${width} ${twoThirdsHeight}
+        C ${width - oneThirdWidth * roundingFraction} ${twoThirdsHeight}
+          ${twoThirdsWidth} ${height - oneThirdHeight * roundingFraction}
+          ${twoThirdsWidth} ${height}
+      `}
+    />
+  </g>
+);
+const getTopLeftCornerWorm = ({
+  oneThirdHeight,
+  twoThirdsHeight,
+  oneThirdWidth,
+  twoThirdsWidth,
+  roundingFraction = 0.7
+}) => (
+  <g>
+    <path
+      d={` 
+        M ${0} ${oneThirdHeight}
+        C ${oneThirdWidth * roundingFraction} ${oneThirdHeight}
+          ${oneThirdWidth} ${oneThirdHeight * roundingFraction}
+          ${oneThirdWidth} ${0}
+      `}
+    />
+    <path
+      d={` 
+        M ${0} ${twoThirdsHeight}
+        C ${twoThirdsWidth * roundingFraction} ${twoThirdsHeight}
+          ${twoThirdsWidth} ${twoThirdsHeight * roundingFraction}
+          ${twoThirdsWidth} ${0}
+      `}
+    />
+  </g>
+);
+export const getWormEnds = ({
+  width,
+  height,
+  x,
+  y,
+  lineColour = "#000",
+  fill = "#fff"
+}) => {
+  const {
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight
+  } = getWormNums({ width, height });
 
+  const bottomEnd = getBottomWormEnd({
+    height,
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight
+  });
+  const leftEnd = getLeftWormEnd({
+    oneThirdHeight,
+    twoThirdsHeight,
+    oneThirdWidth
+  });
+  const rightEnd = getRightWormEnd({
+    width,
+    oneThirdHeight,
+    twoThirdsHeight,
+    oneThirdWidth
+  });
+  const topEnd = getTopWormEnd({
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight
+  });
+
+  return (
+    <g
+      key={`x${x},y${y}`}
+      transform={`translate(${x} ${y})`}
+      stroke={lineColour}
+      strokeWidth={10}
+      strokeLinejoin="round"
+      fill={fill}
+    >
+      {topEnd}
+      {rightEnd}
+      {bottomEnd}
+      {leftEnd}
+    </g>
+  );
+};
+export const getCornerWorm6 = ({
+  width,
+  height,
+  x,
+  y,
+  lineColour = "#000",
+  fill = "#fff"
+}) => {
+  const {
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight
+  } = getWormNums({ width, height });
+
+  const topRightCornerWorm = getTopRightCornerWorm({
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight,
+    width
+  });
+
+  const bottomEnd = getBottomWormEnd({
+    height,
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight
+  });
+  const leftEnd = getLeftWormEnd({
+    oneThirdHeight,
+    twoThirdsHeight,
+    oneThirdWidth
+  });
+
+  return (
+    <g
+      key={`x${x},y${y}`}
+      transform={`translate(${x} ${y})`}
+      stroke={lineColour}
+      strokeWidth={10}
+      strokeLinejoin="round"
+      fill={fill}
+    >
+      {topRightCornerWorm}
+      {bottomEnd}
+      {leftEnd}
+    </g>
+  );
+};
+export const getCornerWorm5 = ({
+  width,
+  height,
+  x,
+  y,
+  lineColour = "#000",
+  fill = "#fff"
+}) => {
+  const {
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight
+  } = getWormNums({ width, height });
+
+  const bottomLeftCornerWorm = getBottomLeftCornerWorm({
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight,
+    height
+  });
+  const rightEnd = getRightWormEnd({
+    width,
+    oneThirdHeight,
+    twoThirdsHeight,
+    oneThirdWidth
+  });
+  const topEnd = getTopWormEnd({
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight
+  });
+
+  return (
+    <g
+      key={`x${x},y${y}`}
+      transform={`translate(${x} ${y})`}
+      stroke={lineColour}
+      strokeWidth={10}
+      strokeLinejoin="round"
+      fill={fill}
+    >
+      {bottomLeftCornerWorm}
+      {rightEnd}
+      {topEnd}
+    </g>
+  );
+};
+export const getCornerWorm4 = ({
+  width,
+  height,
+  x,
+  y,
+  lineColour = "#000",
+  fill = "#fff"
+}) => {
+  const {
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight
+  } = getWormNums({ width, height });
+
+  const topLeftCornerWorm = getTopLeftCornerWorm({
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight,
+    width,
+    height
+  });
+
+  const bottomWormEnd = getBottomWormEnd({
+    height,
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight
+  });
+
+  const rightWormEnd = getRightWormEnd({
+    width,
+    oneThirdHeight,
+    twoThirdsHeight,
+    oneThirdWidth
+  });
+
+  return (
+    <g
+      key={`x${x},y${y}`}
+      transform={`translate(${x} ${y})`}
+      stroke={lineColour}
+      strokeWidth={10}
+      strokeLinejoin="round"
+      fill={fill}
+    >
+      {topLeftCornerWorm}
+      {bottomWormEnd}
+      {rightWormEnd}
+    </g>
+  );
+};
+export const getCornerWorm3 = ({
+  width,
+  height,
+  x,
+  y,
+  lineColour = "#000",
+  fill = "#fff"
+}) => {
+  const {
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight
+  } = getWormNums({ width, height });
+
+  const bottomRightCornerWorm = getBottomRightCornerWorm({
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight,
+    height,
+    width
+  });
+
+  const topWormEnd = getTopWormEnd({
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight
+  });
+  const leftWormEnd = getLeftWormEnd({
+    oneThirdHeight,
+    twoThirdsHeight,
+    oneThirdWidth
+  });
+
+  return (
+    <g
+      key={`x${x},y${y}`}
+      transform={`translate(${x} ${y})`}
+      stroke={lineColour}
+      strokeWidth={10}
+      strokeLinejoin="round"
+      fill={fill}
+    >
+      {topWormEnd}
+      {bottomRightCornerWorm}
+      {leftWormEnd}
+    </g>
+  );
+};
+export const getCornerWorm2 = ({
+  width,
+  height,
+  x,
+  y,
+  lineColour = "#000",
+  fill = "#fff"
+}) => {
+  const {
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight
+  } = getWormNums({ width, height });
+
+  const bottomRightCornerWorm = getBottomRightCornerWorm({
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight,
+    height,
+    width
+  });
+  const topLeftCornerWorm = getTopLeftCornerWorm({
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight,
+    width,
+    height
+  });
+
+  return (
+    <g
+      key={`x${x},y${y}`}
+      transform={`translate(${x} ${y})`}
+      stroke={lineColour}
+      strokeWidth={10}
+      strokeLinejoin="round"
+      fill={fill}
+    >
+      {bottomRightCornerWorm}
+      {topLeftCornerWorm}
+    </g>
+  );
+};
+export const getCornerWorm1 = ({
+  width,
+  height,
+  x,
+  y,
+  lineColour = "#000",
+  fill = "#fff"
+}) => {
+  const {
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight
+  } = getWormNums({ width, height });
+
+  const bottomLeftCornerWorm = getBottomLeftCornerWorm({
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight,
+    height
+  });
+  const topRightCornerWorm = getTopRightCornerWorm({
+    oneThirdWidth,
+    twoThirdsWidth,
+    oneThirdHeight,
+    twoThirdsHeight,
+    width
+  });
+
+  return (
+    <g
+      key={`x${x},y${y}`}
+      transform={`translate(${x} ${y})`}
+      stroke={lineColour}
+      strokeWidth={10}
+      strokeLinejoin="round"
+      fill={fill}
+    >
+      {bottomLeftCornerWorm}
+      {topRightCornerWorm}
+    </g>
+  );
+};
 export const getWormLine2 = ({
   width,
   height,

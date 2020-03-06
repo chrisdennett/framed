@@ -28,7 +28,7 @@ const defaultAppData = {
       min: 1,
       max: 100,
       step: 1,
-      defaultValue: 4
+      defaultValue: 15
     },
 
     tilesHigh: {
@@ -37,7 +37,7 @@ const defaultAppData = {
       min: 1,
       max: 100,
       step: 1,
-      defaultValue: 4
+      defaultValue: 15
     },
 
     tileGroup: {
@@ -62,7 +62,19 @@ const defaultAppData = {
         worms: {
           number: 4,
           name: "Worms",
-          keys: ["wormCross1", "wormCross2", "wormLine1", "wormLine2"]
+          keys: [
+            "wormCross1",
+            "wormCross2",
+            "wormLine1",
+            "wormLine2",
+            "wormCorner1",
+            "wormCorner2",
+            "wormCorner3",
+            "wormCorner4",
+            "wormCorner5",
+            "wormCorner6",
+            "wormEnds"
+          ]
         },
         custom: {
           number: 5,
@@ -76,30 +88,20 @@ const defaultAppData = {
             "triangle1",
             "triangle2",
             "triangle3",
-            "triangle4"
-          ],
-          description:
-            "Here we've got three variations, giving a greater range of possibilities, but I reckon it's still nice with any two of them."
+            "triangle4",
+            "wormCross1",
+            "wormCross2",
+            "wormLine1",
+            "wormLine2",
+            "wormCorner1",
+            "wormCorner2",
+            "wormCorner3",
+            "wormCorner4",
+            "wormCorner5",
+            "wormCorner6",
+            "wormEnds"
+          ]
         }
-        // EightEdgeConnections: {
-        //   number: 3,
-        //   name: "8 Edge Connections",
-        //   keys: [
-        //     "doubleLoop1",
-        //     "doubleLoop2",
-        //     "allLoopEnds",
-        //     "crossLoops1",
-        //     "crossLoops2",
-        //     "crossLoopWithEnds",
-        //     "downLoopWithEnds",
-        //     "singleLoopWithEnds1",
-        //     "singleLoopWithEnds2",
-        //     "singleLoopWithEnds3",
-        //     "singleLoopWithEnds4"
-        //   ],
-        //   description:
-        //     "With double conector points on each side you end up with nice worm-like patterns."
-        // }
       }
     }
   }

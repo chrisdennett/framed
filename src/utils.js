@@ -87,5 +87,12 @@ export const tileTypes = {
   wormCross1: tiles.getWormCross1,
   wormCross2: tiles.getWormCross2,
   wormLine1: tiles.getWormLine1,
-  wormLine2: tiles.getWormLine2
+  wormLine2: tiles.getWormLine2,
+  wormCorner1: tiles.getCornerWorm1,
+  wormCorner2: tiles.getCornerWorm2,
+  wormCorner3: tiles.getCornerWorm3,
+  wormCorner4: tiles.getCornerWorm4,
+  wormCorner5: tiles.getCornerWorm5,
+  wormCorner6: tiles.getCornerWorm6,
+  wormEnds: tiles.getWormEnds
 };
