@@ -1,6 +1,6 @@
 const defaultAppData = {
   title: "Truchet Tiles",
-  infoUrl: "https://artfly.io/little-boxes/",
+  infoUrl: "https://artfly.io/generative-tiles",
   settings: {
     showOuterBox: {
       label: "Outer Box",
