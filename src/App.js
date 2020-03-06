@@ -65,7 +65,13 @@ export default function App() {
           }}
         >
           <Space.Info>
-            {sizeInfo => <Display sizeInfo={sizeInfo} appData={appData} />}
+            {sizeInfo => (
+              <Display
+                sizeInfo={sizeInfo}
+                appData={appData}
+                onClick={() => setAppData({ ...appData })}
+              />
+            )}
           </Space.Info>
         </Space.Fill>
       </Space.Fill>

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { GetTiles } from "../utils";
 
-const Display = ({ appData, sizeInfo }) => {
+const Display = ({ appData, sizeInfo, onClick }) => {
   const {
     selectedTiles,
     lineColour,
@@ -61,6 +61,7 @@ const Display = ({ appData, sizeInfo }) => {
         style={{ width: holderWidth, height: holderHeight }}
       >
         <MainSVG
+          onClick={onClick}
           className="mainSVG"
           xmlns="http://www.w3.org/2000/svg"
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
@@ -162,6 +163,7 @@ const MainSVG = styled.svg`
   border-radius: 5px;
   flex: 1;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 `;
 
 // const TilesSVG = styled.svg`
