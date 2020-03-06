@@ -42,6 +42,8 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
         setActiveTabIndex={setActiveTabIndex}
       />
 
+      <Instruction>-- tap pic to regenerate! --</Instruction>
+
       {activeTabIndex === 0 && (
         <ControlsUI wrapControls={wrap}>
           <QuickSelectMenu
@@ -146,4 +148,10 @@ const ControlsUI = styled.div`
 
 const ButtHolder = styled.div`
   margin: 5px;
+`;
+
+const Instruction = styled.p`
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
 `;

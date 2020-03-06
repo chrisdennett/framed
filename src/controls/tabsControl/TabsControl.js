@@ -5,6 +5,7 @@ import "@material/tab/dist/mdc.tab.css";
 import "@material/tab-scroller/dist/mdc.tab-scroller.css";
 import "@material/tab-indicator/dist/mdc.tab-indicator.css";
 import { TabBar, Tab } from "@rmwc/tabs";
+import { GoSettings } from "react-icons/go";
 
 export const TabsControl = ({ activeTabIndex, setActiveTabIndex }) => {
   return (
@@ -14,7 +15,9 @@ export const TabsControl = ({ activeTabIndex, setActiveTabIndex }) => {
         onActivate={e => setActiveTabIndex(e.detail.index)}
       >
         <StyledTab>Tiles</StyledTab>
-        <StyledTab>Settings</StyledTab>
+        <StyledTab>
+          <GoSettings style={{ fontSize: 24 }} />
+        </StyledTab>
       </TabBar>
     </Wrapper>
   );

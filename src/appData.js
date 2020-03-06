@@ -41,7 +41,7 @@ const defaultAppData = {
     },
 
     tileGroup: {
-      defaultValue: "custom",
+      defaultValue: "diagonals",
       type: "select",
       presets: {
         diagonals: {
