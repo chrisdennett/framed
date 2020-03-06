@@ -28,7 +28,7 @@ const defaultAppData = {
       min: 1,
       max: 100,
       step: 1,
-      defaultValue: 20
+      defaultValue: 4
     },
 
     tilesHigh: {
@@ -37,11 +37,11 @@ const defaultAppData = {
       min: 1,
       max: 100,
       step: 1,
-      defaultValue: 20
+      defaultValue: 4
     },
 
     tileGroup: {
-      defaultValue: "custom",
+      defaultValue: "worms",
       type: "select",
       presets: {
         diagonals: {
@@ -59,8 +59,13 @@ const defaultAppData = {
           name: "Edge Curves",
           keys: ["cross", "cornerCurves1", "cornerCurves2"]
         },
-        custom: {
+        worms: {
           number: 4,
+          name: "Worms",
+          keys: ["wormCross1", "wormCross2", "wormLine1", "wormLine2"]
+        },
+        custom: {
+          number: 5,
           name: "Pick and Mix",
           keys: [
             "diagonal1",

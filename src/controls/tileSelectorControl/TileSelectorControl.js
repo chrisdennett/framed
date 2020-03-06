@@ -20,7 +20,7 @@ export const TileSelectorControl = ({
           <TileCheckbox
             key={key}
             selected={selectedTiles[key]}
-            tileFunction={tileTypes[key].func}
+            tileFunction={tileTypes[key]}
             onUpdate={isChecked => onUpdateSelected(key, isChecked)}
           />
         );

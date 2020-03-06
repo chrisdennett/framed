@@ -1,14 +1,4 @@
-import {
-  getTileSeven,
-  getTileSix,
-  getTileFive,
-  getTileFour,
-  getTileThree,
-  getTileTwo,
-  getTileOne,
-  getTileEight,
-  getTileNine
-} from "./tiles";
+import * as tiles from "./tiles";
 
 export const getRandomTilesData = ({
   tileOptions,
@@ -33,7 +23,7 @@ export const getRandomTilesData = ({
         width: tileWidth,
         height: tileHeight,
         key: tileKey,
-        func: tileTypes[tileKey].func
+        func: tileTypes[tileKey]
       };
 
       tileDataArray.push(tileData);
@@ -85,40 +75,17 @@ export const GetTiles = ({
 };
 
 export const tileTypes = {
-  diagonal1: {
-    name: "1",
-    func: getTileOne
-  },
-  diagonal2: {
-    name: "2",
-    func: getTileTwo
-  },
-  cross: {
-    name: "3",
-    func: getTileThree
-  },
-  cornerCurves1: {
-    name: "4",
-    func: getTileFour
-  },
-  cornerCurves2: {
-    name: "5",
-    func: getTileFive
-  },
-  triangle1: {
-    name: "6",
-    func: getTileSix
-  },
-  triangle2: {
-    name: "7",
-    func: getTileSeven
-  },
-  triangle3: {
-    name: "8",
-    func: getTileEight
-  },
-  triangle4: {
-    name: "9",
-    func: getTileNine
-  }
+  diagonal1: tiles.getTileOne,
+  diagonal2: tiles.getTileTwo,
+  cross: tiles.getTileThree,
+  cornerCurves1: tiles.getTileFour,
+  cornerCurves2: tiles.getTileFive,
+  triangle1: tiles.getTileSix,
+  triangle2: tiles.getTileSeven,
+  triangle3: tiles.getTileEight,
+  triangle4: tiles.getTileNine,
+  wormCross1: tiles.getWormCross1,
+  wormCross2: tiles.getWormCross2,
+  wormLine1: tiles.getWormLine1,
+  wormLine2: tiles.getWormLine2
 };
