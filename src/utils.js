@@ -43,6 +43,10 @@ export const getRandomTilesData = ({
   return tileDataArray;
 };
 
+export const getTileKeysForGroup = (appData, groupKey) => {
+  return appData.settings.tileGroup.presets[groupKey].keys;
+};
+
 export const GetTiles = ({
   tileOptions,
   tileWidth,

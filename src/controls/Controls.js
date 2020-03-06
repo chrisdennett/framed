@@ -10,6 +10,7 @@ import ColourPicker from "../components/colourPicker/ColourPicker";
 import { TabsControl } from "./tabsControl/TabsControl";
 import QuickSelectMenu from "./quickSelectControl/QuickSelectControl";
 import { TileSelectorControl } from "./tileSelectorControl/TileSelectorControl";
+import { getTileKeysForGroup } from "../utils";
 
 const Controls = ({ appData, onUpdate, wrap = false }) => {
   const [activeTabIndex, setActiveTabIndex] = React.useState(1);
@@ -29,6 +30,11 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
     saveAs(blob, `artfly-${name}.svg`);
   };
 
+  const currentGroupTileKeys = getTileKeysForGroup(
+    appData,
+    currentTileGroupKey
+  );
+
   return (
     <Container>
       <TabsControl
@@ -46,10 +52,9 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
             }
           />
           <TileSelectorControl
-            selectedTiles={selectedTiles}
-            currentTileGroupKey={currentTileGroupKey}
-            tileGroup={tileGroup}
             onUpdate={updateSettings}
+            selectedTiles={selectedTiles}
+            currentGroupTileKeys={currentGroupTileKeys}
           />
         </ControlsUI>
       )}

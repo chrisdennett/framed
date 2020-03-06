@@ -6,10 +6,8 @@ import { TileCheckbox } from "./TileCheckbox";
 export const TileSelectorControl = ({
   onUpdate,
   selectedTiles,
-  currentTileGroupKey
+  currentGroupTileKeys
 }) => {
-  const tileKeys = Object.keys(tileTypes);
-
   const onUpdateSelected = (key, isChecked) => {
     const newSelectedTiles = { ...selectedTiles, [key]: isChecked };
     onUpdate("selectedTiles", newSelectedTiles);
@@ -17,7 +15,7 @@ export const TileSelectorControl = ({
 
   return (
     <Wrapper>
-      {tileKeys.map(key => {
+      {currentGroupTileKeys.map(key => {
         return (
           <TileCheckbox
             key={key}
