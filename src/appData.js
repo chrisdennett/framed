@@ -1,6 +1,6 @@
 const defaultAppData = {
   title: "Jumbled Boxes",
-  infoUrl: "https://artfly.io/generative-tiles",
+  infoUrl: "https://artfly.io/jumbled-boxes",
   settings: {
     outlineOnly: {
       label: "Outline only",
