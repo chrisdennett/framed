@@ -1,9 +1,9 @@
 const defaultAppData = {
-  title: "Truchet Tiles",
+  title: "Jumbled Boxes",
   infoUrl: "https://artfly.io/generative-tiles",
   settings: {
-    showOuterBox: {
-      label: "Outer Box",
+    outlineOnly: {
+      label: "Outline only",
       type: "boolean",
       defaultValue: true
     },
@@ -22,87 +22,76 @@ const defaultAppData = {
       defaultValue: 1
     },
 
-    tilesWide: {
-      label: "Tiles Wide",
+    boxesWide: {
+      label: "Boxes Wide",
       type: "range",
       min: 1,
-      max: 100,
+      max: 30,
       step: 1,
       defaultValue: 15
     },
 
-    tilesHigh: {
+    boxesHigh: {
       label: "Tiles High",
       type: "range",
       min: 1,
-      max: 100,
+      max: 30,
+      step: 1,
+      defaultValue: 30
+    },
+
+    boxWidth: {
+      label: "Box Width",
+      type: "range",
+      min: 1,
+      max: 50,
       step: 1,
       defaultValue: 15
     },
 
-    tileGroup: {
-      defaultValue: "diagonals",
-      type: "select",
-      presets: {
-        diagonals: {
-          number: 1,
-          name: "Diagonals",
-          keys: ["diagonal1", "diagonal2"]
-        },
-        triangles: {
-          number: 2,
-          name: "Triangles",
-          keys: ["triangle1", "triangle2", "triangle3", "triangle4"]
-        },
-        edgeCurves: {
-          number: 3,
-          name: "Edge Curves",
-          keys: ["cross", "cornerCurves1", "cornerCurves2"]
-        },
-        worms: {
-          number: 4,
-          name: "Worms",
-          keys: [
-            "wormCross1",
-            "wormCross2",
-            "wormLine1",
-            "wormLine2",
-            "wormCorner1",
-            "wormCorner2",
-            "wormCorner3",
-            "wormCorner4",
-            "wormCorner5",
-            "wormCorner6",
-            "wormEnds"
-          ]
-        },
-        custom: {
-          number: 5,
-          name: "Pick and Mix",
-          keys: [
-            "diagonal1",
-            "diagonal2",
-            "cross",
-            "cornerCurves1",
-            "cornerCurves2",
-            "triangle1",
-            "triangle2",
-            "triangle3",
-            "triangle4",
-            "wormCross1",
-            "wormCross2",
-            "wormLine1",
-            "wormLine2",
-            "wormCorner1",
-            "wormCorner2",
-            "wormCorner3",
-            "wormCorner4",
-            "wormCorner5",
-            "wormCorner6",
-            "wormEnds"
-          ]
-        }
-      }
+    boxHeight: {
+      label: "Box Height",
+      type: "range",
+      min: 1,
+      max: 50,
+      step: 1,
+      defaultValue: 15
+    },
+
+    maxXOffset: {
+      label: "Max X Offset",
+      type: "range",
+      min: 1,
+      max: 20,
+      step: 1,
+      defaultValue: 5
+    },
+
+    maxYOffset: {
+      label: "Max Y Offset",
+      type: "range",
+      min: 1,
+      max: 20,
+      step: 1,
+      defaultValue: 5
+    },
+
+    maxRotationOffset: {
+      label: "Max Rotation Offset",
+      type: "range",
+      min: 1,
+      max: 180,
+      step: 1,
+      defaultValue: 10
+    },
+
+    effectMultipler: {
+      label: "Effect Multiplier",
+      type: "range",
+      min: 1,
+      max: 10,
+      step: 0.1,
+      defaultValue: 1
     }
   }
 };

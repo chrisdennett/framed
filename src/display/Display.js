@@ -3,29 +3,39 @@ import styled from "styled-components";
 import { generateBoxes } from "../utils";
 
 const Display = ({ appData, sizeInfo, onClick }) => {
-  // const { lineColour, showOuterBox, lineThickness } = appData;
-
-  const boxWidth = 30;
-  const boxHeight = 30;
-  const boxesWide = 10;
-  const boxesHigh = 20;
-  const maxXOffset = 10;
-  const maxYOffset = 60;
-  const maxRotationOffset = 20;
-  const extraWidthForRotations = boxWidth; // half box each side (rough guess)
-  const extraWidthForXOffset = maxXOffset * 2;
-  const totalExtraHeight = maxYOffset;
-  const totalExtraWidth = extraWidthForRotations + extraWidthForXOffset;
-  const halfExtraWidth = totalExtraWidth / 2;
-
-  const boxes = generateBoxes({
+  const {
+    outlineOnly,
+    lineColour,
+    lineThickness,
     boxWidth,
     boxHeight,
     boxesWide,
     boxesHigh,
     maxXOffset,
     maxYOffset,
-    maxRotationOffset
+    maxRotationOffset,
+    effectMultipler
+  } = appData;
+
+  const extraWidthForRotations = boxWidth; // half box each side (rough guess)
+  const extraWidthForXOffset = maxXOffset * 2;
+  const totalExtraHeight =
+    maxYOffset * 2 * effectMultipler + extraWidthForRotations;
+  const totalExtraWidth =
+    extraWidthForRotations + extraWidthForXOffset * effectMultipler;
+  const halfExtraWidth = totalExtraWidth / 2;
+  const halfExtraHeight = totalExtraHeight / 2;
+
+  const boxes = generateBoxes({
+    outlineOnly,
+    boxWidth,
+    boxHeight,
+    boxesWide,
+    boxesHigh,
+    maxXOffset,
+    maxYOffset,
+    maxRotationOffset,
+    effectMultipler
   });
 
   const svgWidth = totalExtraWidth + boxWidth * boxesWide;
@@ -33,7 +43,6 @@ const Display = ({ appData, sizeInfo, onClick }) => {
 
   const { height: maxHeight, width: maxWidth } = sizeInfo; // holding element dimensions
   const svgPadding = 0.07 * maxHeight; // padding around edge of
-
   const svgHeightToWidthRatio = svgWidth / svgHeight;
   const svgWidthHeightRatio = svgHeight / svgWidth;
 
@@ -63,10 +72,10 @@ const Display = ({ appData, sizeInfo, onClick }) => {
           strokeLinecap="round"
         >
           <g
-            stroke={"#000"}
+            stroke={lineColour}
             fill={"none"}
-            strokeWidth={2}
-            transform={`translate(${halfExtraWidth}, ${0})`}
+            strokeWidth={lineThickness}
+            transform={`translate(${halfExtraWidth} ${halfExtraHeight / 2})`}
           >
             {boxes}
           </g>

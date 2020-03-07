@@ -1,13 +1,15 @@
 import React from "react";
 
 export const generateBoxes = ({
+  outlineOnly,
   boxWidth,
   boxHeight,
   boxesWide,
   boxesHigh,
   maxXOffset = 20,
   maxYOffset = 10,
-  maxRotationOffset = 20
+  maxRotationOffset = 20,
+  effectMultipler
 }) => {
   let boxes = [];
 
@@ -23,17 +25,20 @@ export const generateBoxes = ({
       var rotation = getPositionBasedRandom({
         y: boxY,
         gridHeight,
-        maxOffset: maxRotationOffset
+        maxOffset: maxRotationOffset,
+        effectMultipler
       });
       var xOffset = getPositionBasedRandom({
         y: boxY,
         gridHeight,
-        maxOffset: maxXOffset
+        maxOffset: maxXOffset,
+        effectMultipler
       });
       var yOffset = getPositionBasedRandom({
         y: boxY,
         gridHeight,
-        maxOffset: maxYOffset
+        maxOffset: maxYOffset,
+        effectMultipler
       });
 
       boxes.push(
@@ -46,7 +51,7 @@ export const generateBoxes = ({
               y={0}
               width={boxWidth}
               height={boxHeight}
-              fill={"#fff"}
+              fill={outlineOnly ? "none" : "#fff"}
             />
           </g>
         </g>
@@ -57,9 +62,16 @@ export const generateBoxes = ({
   return boxes;
 };
 
-const getPositionBasedRandom = ({ y, gridHeight, maxOffset }) => {
+const getPositionBasedRandom = ({
+  y,
+  gridHeight,
+  maxOffset,
+  effectMultipler
+}) => {
   const distancefractionFromTop = y / gridHeight;
-  const distanceBasedMaxOffset = maxOffset * distancefractionFromTop;
+
+  const distanceBasedMaxOffset =
+    distancefractionFromTop * (maxOffset * effectMultipler);
 
   return getRandomBetween(-distanceBasedMaxOffset, distanceBasedMaxOffset);
 };

@@ -7,10 +7,8 @@ import { Button } from "@rmwc/button";
 import SliderControl from "./sliderControl/SliderControl";
 import { SwitchControl } from "./switchControl/SwitchControl";
 import ColourPicker from "../components/colourPicker/ColourPicker";
-import { TabsControl } from "./tabsControl/TabsControl";
 
 const Controls = ({ appData, onUpdate, wrap = false }) => {
-  const [activeTabIndex, setActiveTabIndex] = React.useState(0);
   const { settings } = appData;
 
   const updateSettings = (key, newValue) => {
@@ -18,7 +16,7 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
   };
 
   const settingsKeys = Object.keys(settings);
-  const onSaveSvgClick = ({ name = "tiles-art", svgClass = "mainSVG" }) => {
+  const onSaveSvgClick = ({ name = "jumbled-boxes", svgClass = "mainSVG" }) => {
     let full_svg = document.getElementsByClassName(svgClass)[0].outerHTML;
     full_svg = full_svg.split(">").join(`>`);
 
@@ -28,69 +26,58 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
 
   return (
     <Container>
-      <TabsControl
-        activeTabIndex={activeTabIndex}
-        setActiveTabIndex={setActiveTabIndex}
-      />
-
       <Instruction>-- tap pic to regenerate! --</Instruction>
 
-      {activeTabIndex === 0 && (
-        <ControlsUI wrapControls={wrap}>Hello</ControlsUI>
-      )}
+      <ControlsUI wrapControls={wrap}>
+        <ButtHolder>
+          <Button label="Save SVG" raised onClick={onSaveSvgClick} />
+        </ButtHolder>
 
-      {activeTabIndex === 1 && (
-        <ControlsUI wrapControls={wrap}>
-          <ButtHolder>
-            <Button label="Save SVG" raised onClick={onSaveSvgClick} />
-          </ButtHolder>
+        {settingsKeys.map(key => {
+          const currSetting = settings[key];
+          const currValue = appData[key];
 
-          {settingsKeys.map(key => {
-            const currSetting = settings[key];
-            const currValue = appData[key];
+          if (currSetting.type === "colour") {
+            return (
+              <ColourPicker
+                key={key}
+                label={currSetting.label}
+                value={currValue}
+                onChange={value => updateSettings(key, value)}
+              />
+            );
+          }
 
-            if (currSetting.type === "colour") {
-              return (
-                <ColourPicker
-                  key={key}
-                  label={currSetting.label}
-                  value={currValue}
-                  onChange={value => updateSettings(key, value)}
-                />
-              );
-            }
+          if (currSetting.type === "boolean") {
+            return (
+              <SwitchControl
+                key={key}
+                label={currSetting.label}
+                value={currValue}
+                onChange={value => updateSettings(key, value)}
+              />
+            );
+          }
 
-            if (currSetting.type === "boolean") {
-              return (
-                <SwitchControl
-                  key={key}
-                  label={currSetting.label}
-                  value={currValue}
-                  onChange={value => updateSettings(key, value)}
-                />
-              );
-            }
+          if (currSetting.type === "range") {
+            return (
+              <SliderControl
+                key={key}
+                labelStyle={{ minWidth: 150 }}
+                label={currSetting.label}
+                displayValue={true}
+                min={currSetting.min}
+                max={currSetting.max}
+                value={currValue}
+                step={currSetting.step}
+                onChange={value => updateSettings(key, value)}
+              />
+            );
+          }
 
-            if (currSetting.type === "range") {
-              return (
-                <SliderControl
-                  key={key}
-                  labelStyle={{ minWidth: 150 }}
-                  label={currSetting.label}
-                  displayValue={true}
-                  min={currSetting.min}
-                  max={currSetting.max}
-                  value={currValue}
-                  step={currSetting.step}
-                  onChange={value => updateSettings(key, value)}
-                />
-              );
-            }
-
-            return null;
-          })}
-        </ControlsUI>
-      )}
+          return null;
+        })}
+      </ControlsUI>
     </Container>
   );
 };
