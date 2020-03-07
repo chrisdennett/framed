@@ -1,98 +1,70 @@
-import * as tiles from "./tiles";
+import React from "react";
 
-export const getRandomTilesData = ({
-  tileOptions,
-  tileWidth,
-  tileHeight,
-  tilesWide,
-  tilesHigh
+export const generateBoxes = ({
+  boxWidth,
+  boxHeight,
+  boxesWide,
+  boxesHigh,
+  maxXOffset = 20,
+  maxYOffset = 10,
+  maxRotationOffset = 20
 }) => {
-  const tileDataArray = [];
+  let boxes = [];
 
-  // if no options available return an empty array
-  if (tileOptions.length === 0) return tileDataArray;
+  const gridHeight = boxHeight * boxesHigh;
+  const halfBoxWidth = boxWidth / 2;
+  const halfBoxHeight = boxHeight / 2;
 
-  for (let tileRow = 0; tileRow < tilesHigh; tileRow++) {
-    for (let tileCol = 0; tileCol < tilesWide; tileCol++) {
-      const randKeyIndex = Math.floor(Math.random() * tileOptions.length);
-      const tileKey = tileOptions[randKeyIndex];
+  for (let y = 0; y < boxesHigh; y++) {
+    for (let x = 0; x < boxesWide; x++) {
+      const boxX = x * boxWidth;
+      const boxY = y * boxHeight;
 
-      let tileData = {
-        x: tileCol * tileWidth,
-        y: tileRow * tileHeight,
-        width: tileWidth,
-        height: tileHeight,
-        key: tileKey,
-        func: tileTypes[tileKey]
-      };
+      var rotation = getPositionBasedRandom({
+        y: boxY,
+        gridHeight,
+        maxOffset: maxRotationOffset
+      });
+      var xOffset = getPositionBasedRandom({
+        y: boxY,
+        gridHeight,
+        maxOffset: maxXOffset
+      });
+      var yOffset = getPositionBasedRandom({
+        y: boxY,
+        gridHeight,
+        maxOffset: maxYOffset
+      });
 
-      tileDataArray.push(tileData);
-    }
-  }
-
-  return tileDataArray;
-};
-
-export const getTileKeysForGroup = (appData, groupKey) => {
-  return appData.settings.tileGroup.presets[groupKey].keys;
-};
-
-export const GetTiles = ({
-  tileOptions,
-  tileWidth,
-  tileHeight,
-  tilesWide,
-  tilesHigh,
-  lineColour,
-  lineThickness = 2
-}) => {
-  const randTileData = getRandomTilesData({
-    tileOptions,
-    tileWidth,
-    tileHeight,
-    tilesWide,
-    tilesHigh
-  });
-
-  const tiles = [];
-  for (let titleInfo of randTileData) {
-    if (titleInfo) {
-      tiles.push(
-        titleInfo.func({
-          lineColour,
-          lineThickness,
-          width: tileWidth,
-          height: tileHeight,
-          x: titleInfo.x,
-          y: titleInfo.y,
-          fill: "#fff"
-        })
+      boxes.push(
+        <g transform={`translate(${boxX} ${boxY})`} key={`x${boxX}y${boxY}`}>
+          <g
+            transform={`translate(${xOffset} ${yOffset}) rotate(${rotation} ${halfBoxWidth} ${halfBoxHeight})`}
+          >
+            <rect
+              x={0}
+              y={0}
+              width={boxWidth}
+              height={boxHeight}
+              fill={"#fff"}
+            />
+          </g>
+        </g>
       );
     }
   }
 
-  return tiles;
+  return boxes;
 };
 
-export const tileTypes = {
-  diagonal1: tiles.getTileOne,
-  diagonal2: tiles.getTileTwo,
-  cross: tiles.getTileThree,
-  cornerCurves1: tiles.getTileFour,
-  cornerCurves2: tiles.getTileFive,
-  triangle1: tiles.getTileSix,
-  triangle2: tiles.getTileSeven,
-  triangle3: tiles.getTileEight,
-  triangle4: tiles.getTileNine,
-  wormCross1: tiles.getWormCross1,
-  wormCross2: tiles.getWormCross2,
-  wormLine1: tiles.getWormLine1,
-  wormLine2: tiles.getWormLine2,
-  wormCorner1: tiles.getCornerWorm1,
-  wormCorner2: tiles.getCornerWorm2,
-  wormCorner3: tiles.getCornerWorm3,
-  wormCorner4: tiles.getCornerWorm4,
-  wormCorner5: tiles.getCornerWorm5,
-  wormCorner6: tiles.getCornerWorm6,
-  wormEnds: tiles.getWormEnds
+const getPositionBasedRandom = ({ y, gridHeight, maxOffset }) => {
+  const distancefractionFromTop = y / gridHeight;
+  const distanceBasedMaxOffset = maxOffset * distancefractionFromTop;
+
+  return getRandomBetween(-distanceBasedMaxOffset, distanceBasedMaxOffset);
+};
+
+const getRandomBetween = (min, max) => {
+  const randFraction = Math.random();
+  return min + randFraction * (max - min);
 };

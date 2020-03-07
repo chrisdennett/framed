@@ -19,7 +19,7 @@ const defaultAppData = {
       type: "range",
       min: 1,
       max: 50,
-      defaultValue: 20
+      defaultValue: 1
     },
 
     tilesWide: {

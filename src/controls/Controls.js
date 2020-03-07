@@ -8,14 +8,10 @@ import SliderControl from "./sliderControl/SliderControl";
 import { SwitchControl } from "./switchControl/SwitchControl";
 import ColourPicker from "../components/colourPicker/ColourPicker";
 import { TabsControl } from "./tabsControl/TabsControl";
-import QuickSelectMenu from "./quickSelectControl/QuickSelectControl";
-import { TileSelectorControl } from "./tileSelectorControl/TileSelectorControl";
-import { getTileKeysForGroup } from "../utils";
 
 const Controls = ({ appData, onUpdate, wrap = false }) => {
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
-  const { settings, tileGroup: currentTileGroupKey, selectedTiles } = appData;
-  const { tileGroup } = settings;
+  const { settings } = appData;
 
   const updateSettings = (key, newValue) => {
     onUpdate({ ...appData, [key]: newValue });
@@ -30,11 +26,6 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
     saveAs(blob, `artfly-${name}.svg`);
   };
 
-  const currentGroupTileKeys = getTileKeysForGroup(
-    appData,
-    currentTileGroupKey
-  );
-
   return (
     <Container>
       <TabsControl
@@ -45,21 +36,7 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
       <Instruction>-- tap pic to regenerate! --</Instruction>
 
       {activeTabIndex === 0 && (
-        <ControlsUI wrapControls={wrap}>
-          <QuickSelectMenu
-            currentOptionKey={currentTileGroupKey}
-            options={tileGroup.presets}
-            onUpdate={selectedOption =>
-              updateSettings("tileGroup", selectedOption)
-            }
-          />
-          <TileSelectorControl
-            lineColour={appData.lineColour}
-            onUpdate={updateSettings}
-            selectedTiles={selectedTiles}
-            currentGroupTileKeys={currentGroupTileKeys}
-          />
-        </ControlsUI>
+        <ControlsUI wrapControls={wrap}>Hello</ControlsUI>
       )}
 
       {activeTabIndex === 1 && (
@@ -67,18 +44,6 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
           <ButtHolder>
             <Button label="Save SVG" raised onClick={onSaveSvgClick} />
           </ButtHolder>
-
-          {appData.showKey && (
-            <ButtHolder>
-              <Button
-                label="Save KEY SVG"
-                raised
-                onClick={() =>
-                  onSaveSvgClick({ name: "tile-art-key", svgClass: "keySVG" })
-                }
-              />
-            </ButtHolder>
-          )}
 
           {settingsKeys.map(key => {
             const currSetting = settings[key];
