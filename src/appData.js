@@ -1,17 +1,30 @@
 const defaultAppData = {
-  title: "Jumbled Boxes",
-  infoUrl: "https://artfly.io/jumbled-boxes/",
+  title: "Joy Lines",
+  infoUrl: "https://artfly.io/joy-lines/",
+  defaultSaveName: "artfly-joy-lines.svg",
   settings: {
     outlineOnly: {
       label: "Outline only",
       type: "boolean",
-      defaultValue: true
+      defaultValue: false
     },
 
     lineColour: {
       label: "Line Colour",
       type: "colour",
-      defaultValue: "#a7589f"
+      defaultValue: "#000"
+    },
+
+    mountainColour: {
+      label: "Mountain Colour",
+      type: "colour",
+      defaultValue: "#fff"
+    },
+
+    bgColour: {
+      label: "Background Colour",
+      type: "colour",
+      defaultValue: "#f2d739"
     },
 
     lineThickness: {
@@ -19,16 +32,16 @@ const defaultAppData = {
       type: "range",
       min: 1,
       max: 50,
-      defaultValue: 1
+      defaultValue: 1.5
     },
 
     boxesWide: {
-      label: "Boxes Wide",
+      label: "Wiggles Wide",
       type: "range",
       min: 1,
       max: 30,
       step: 1,
-      defaultValue: 15
+      defaultValue: 20
     },
 
     boxesHigh: {
@@ -37,11 +50,11 @@ const defaultAppData = {
       min: 1,
       max: 30,
       step: 1,
-      defaultValue: 30
+      defaultValue: 20
     },
 
     boxWidth: {
-      label: "Box Width",
+      label: "Lines width",
       type: "range",
       min: 1,
       max: 50,
@@ -50,48 +63,30 @@ const defaultAppData = {
     },
 
     boxHeight: {
-      label: "Box Height",
+      label: "Line Spacing",
       type: "range",
       min: 1,
-      max: 50,
+      max: 250,
       step: 1,
-      defaultValue: 15
+      defaultValue: 20
     },
 
-    maxXOffset: {
-      label: "Max X Offset",
+    maxPeakHeightFraction: {
+      label: "Max Peak Height",
       type: "range",
-      min: 1,
-      max: 20,
-      step: 1,
-      defaultValue: 5
+      min: 0,
+      max: 1,
+      step: 0.01,
+      defaultValue: 0.3
     },
 
-    maxYOffset: {
-      label: "Max Y Offset",
+    flatWidthFraction: {
+      label: "Flat width",
       type: "range",
-      min: 1,
-      max: 20,
-      step: 1,
-      defaultValue: 5
-    },
-
-    maxRotationOffset: {
-      label: "Max Rotation Offset",
-      type: "range",
-      min: 1,
-      max: 180,
-      step: 1,
-      defaultValue: 10
-    },
-
-    effectMultipler: {
-      label: "Effect Multiplier",
-      type: "range",
-      min: 1,
-      max: 10,
-      step: 0.1,
-      defaultValue: 1
+      min: 0,
+      max: 1,
+      step: 0.01,
+      defaultValue: 0.3
     }
   }
 };

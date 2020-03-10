@@ -16,12 +16,12 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
   };
 
   const settingsKeys = Object.keys(settings);
-  const onSaveSvgClick = ({ name = "jumbled-boxes", svgClass = "mainSVG" }) => {
+  const onSaveSvgClick = ({ svgClass = "mainSVG" }) => {
     let full_svg = document.getElementsByClassName(svgClass)[0].outerHTML;
     full_svg = full_svg.split(">").join(`>`);
 
     var blob = new Blob([full_svg], { type: "image/svg+xml" });
-    saveAs(blob, `artfly-${name}.svg`);
+    saveAs(blob, appData.defaultSaveName);
   };
 
   return (

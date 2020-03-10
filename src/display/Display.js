@@ -1,45 +1,25 @@
 import React from "react";
 import styled from "styled-components";
-import { generateBoxes } from "../utils";
 
 const Display = ({ appData, sizeInfo, onClick }) => {
   const {
     outlineOnly,
+    mountainColour,
+    bgColour,
     lineColour,
     lineThickness,
     boxWidth,
     boxHeight,
     boxesWide,
     boxesHigh,
-    maxXOffset,
-    maxYOffset,
-    maxRotationOffset,
-    effectMultipler
+    maxPeakHeightFraction,
+    flatWidthFraction
   } = appData;
 
-  const extraWidthForRotations = boxWidth; // half box each side (rough guess)
-  const extraWidthForXOffset = maxXOffset * 2;
-  const totalExtraHeight =
-    maxYOffset * 2 * effectMultipler + extraWidthForRotations;
-  const totalExtraWidth =
-    extraWidthForRotations + extraWidthForXOffset * effectMultipler;
-  const halfExtraWidth = totalExtraWidth / 2;
-  const halfExtraHeight = totalExtraHeight / 2;
-
-  const boxes = generateBoxes({
-    outlineOnly,
-    boxWidth,
-    boxHeight,
-    boxesWide,
-    boxesHigh,
-    maxXOffset,
-    maxYOffset,
-    maxRotationOffset,
-    effectMultipler
-  });
-
-  const svgWidth = totalExtraWidth + boxWidth * boxesWide;
-  const svgHeight = totalExtraHeight + boxHeight * boxesHigh;
+  const maxPeakHeight = boxesHigh * 20 * maxPeakHeightFraction;
+  const svgWidth = boxesWide * boxWidth;
+  const svgHeight = boxHeight * boxesHigh + maxPeakHeight;
+  const flatWidth = flatWidthFraction * svgWidth;
 
   const { height: maxHeight, width: maxWidth } = sizeInfo; // holding element dimensions
   const svgPadding = 0.07 * maxHeight; // padding around edge of
@@ -56,6 +36,17 @@ const Display = ({ appData, sizeInfo, onClick }) => {
     holderWidth = holderHeight * svgHeightToWidthRatio;
   }
 
+  const lineData = generateLinePoints({
+    boxWidth,
+    boxHeight,
+    boxesWide,
+    boxesHigh,
+    maxPeakHeight,
+    flatWidth
+  });
+
+  const lines = generateLines({ lineData, boxHeight, boxWidth });
+
   return (
     <Container>
       <SvgHolder
@@ -63,21 +54,21 @@ const Display = ({ appData, sizeInfo, onClick }) => {
         style={{ width: holderWidth, height: holderHeight }}
       >
         <MainSVG
-          style={{ padding: 20 }}
           onClick={onClick}
           className="mainSVG"
           xmlns="http://www.w3.org/2000/svg"
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           strokeLinejoin="round"
           strokeLinecap="round"
+          style={{ background: bgColour, padding: "0 40px" }}
         >
           <g
             stroke={lineColour}
-            fill={"none"}
+            fill={mountainColour}
             strokeWidth={lineThickness}
-            transform={`translate(${halfExtraWidth} ${halfExtraHeight / 2})`}
+            transform={`translate(${0} ${maxPeakHeight})`}
           >
-            {boxes}
+            {lines}
           </g>
         </MainSVG>
       </SvgHolder>
@@ -110,3 +101,71 @@ const MainSVG = styled.svg`
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
   cursor: pointer;
 `;
+
+const generateLinePoints = ({
+  boxWidth,
+  boxHeight,
+  boxesWide,
+  boxesHigh,
+  maxPeakHeight,
+  flatWidth
+}) => {
+  let points = [];
+  let ptData, line;
+  const fullWidth = boxWidth * boxesWide;
+  const halfWidth = fullWidth / 2;
+
+  for (let y = 0; y < boxesHigh; y++) {
+    // for each row add the point data
+    line = [];
+    for (let x = 0; x <= boxesWide; x++) {
+      const boxX = x * boxWidth;
+      const boxY = y * boxHeight;
+      // get random based on dist from center
+      const distFromCenter = Math.abs(halfWidth - boxX) + flatWidth;
+      const frac = 1 - distFromCenter / halfWidth;
+      let offset = maxPeakHeight * frac * Math.random();
+
+      if (boxX < flatWidth || boxX > fullWidth - flatWidth) {
+        offset *= 0.2;
+      }
+
+      ptData = {
+        x: boxX,
+        y: boxY - offset,
+        boxWidth,
+        boxHeight
+      };
+
+      line.push(ptData);
+    }
+
+    points.push(line);
+  }
+
+  return points;
+};
+
+const generateLines = ({ lineData, boxHeight, boxWidth }) => {
+  const cPtSize = boxWidth / 2.5;
+
+  return lineData.map((ptsArr, index) => {
+    let d = `M ${0} ${index * boxHeight}`;
+
+    for (let i = 1; i < ptsArr.length; i++) {
+      const prevPt = ptsArr[i - 1];
+      const pt = ptsArr[i];
+
+      d += `C ${prevPt.x + cPtSize},${prevPt.y}
+              ${pt.x - cPtSize},${pt.y}
+              ${pt.x}, ${pt.y}
+            `;
+    }
+
+    return (
+      <g key={index}>
+        <path d={d} />
+      </g>
+    );
+  });
+};
