@@ -4,6 +4,7 @@ const defaultAppData = {
   defaultSaveName: "artfly-joy-lines.svg",
   settings: {
     outlineOnly: {
+      dividerAbove: true,
       label: "Outline only",
       type: "boolean",
       defaultValue: false
@@ -17,6 +18,7 @@ const defaultAppData = {
     },
 
     lineColour: {
+      dividerAbove: true,
       label: "Line Colour",
       type: "colour",
       defaultValue: "#000"

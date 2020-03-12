@@ -16,11 +16,12 @@ code {
 :root {
   --mdc-theme-primary: #303030;
   --mdc-theme-secondary: #ffc300;
+  --mdc-theme-secondary-bg: #ffc300;
   --mdc-theme-error: #b00020;
   --mdc-theme-background: #fff;
   --mdc-theme-surface: #fff;
   --mdc-theme-on-primary: rgba(255, 255, 255, 1);
-  --mdc-theme-on-secondary: rgba(255, 255, 255, 1);
+  --mdc-theme-on-secondary: rgba(0, 0, 0, 0.87);
   --mdc-theme-on-surface: rgba(0, 0, 0, 0.87);
   --mdc-theme-on-error: #fff;
   --mdc-theme-text-primary-on-background: rgba(0, 0, 0, 0.87);

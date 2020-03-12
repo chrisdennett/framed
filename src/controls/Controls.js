@@ -102,6 +102,13 @@ export default Controls;
 const Container = styled.div`
   padding-top: 5px;
   color: white;
+
+  .mdc-button--raised:not(:disabled),
+  .mdc-button--unelevated:not(:disabled) {
+    background-color: #ffc300;
+    color: black;
+    width: 100%;
+  }
 `;
 
 const ControlsUI = styled.div`
@@ -119,7 +126,7 @@ const ControlHolder = styled.div`
 `;
 
 const ButtHolder = styled.div`
-  margin: 5px;
+  margin: 5px 5px 15px 5px;
 `;
 
 const Instruction = styled.p`
