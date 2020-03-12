@@ -66,8 +66,7 @@ const defaultAppData = {
       min: 2,
       max: 100,
       step: 1,
-      defaultValue: 2
-      // defaultValue: 24
+      defaultValue: 24
     },
 
     totalFlatWiggles: {
