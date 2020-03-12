@@ -8,50 +8,51 @@ const Display = ({ appData, sizeInfo, onClick }) => {
     bgColour,
     lineColour,
     lineThickness,
-    boxWidth,
-    boxHeight,
-    boxesWide,
-    boxesHigh,
-    maxPeakHeightFraction,
-    flatWidthFraction
+    totalPeakWiggles,
+    totalFlatWiggles,
+    totalLines,
+    wiggleWidth,
+    lineSpacing,
+    maxPeakHeight,
+    maxFlatWiggleHeight
   } = appData;
 
-  const maxPeakHeight = boxesHigh * 20 * maxPeakHeightFraction;
-  const svgWidth = boxesWide * boxWidth;
-  const svgHeight = boxHeight * boxesHigh + maxPeakHeight;
-  const flatWidth = flatWidthFraction * svgWidth;
+  const totalWiggles = totalPeakWiggles + totalFlatWiggles * 2;
+  const svgWidth = totalWiggles * wiggleWidth;
+  const svgHeight = lineSpacing * totalLines + maxPeakHeight;
 
-  const { height: maxHeight, width: maxWidth } = sizeInfo; // holding element dimensions
-  const svgPadding = 0.07 * maxHeight; // padding around edge of
-  const svgHeightToWidthRatio = svgWidth / svgHeight;
-  const svgWidthHeightRatio = svgHeight / svgWidth;
+  // const { height: maxHeight, width: maxWidth } = sizeInfo; // holding element dimensions
+  // const svgPadding = 0.07 * maxHeight; // padding around edge of
+  // const svgHeightToWidthRatio = svgWidth / svgHeight;
+  // const svgWidthHeightRatio = svgHeight / svgWidth;
 
-  // Figure out holder dimensions to surround SVG
-  let holderHeight, holderWidth;
-  holderWidth = maxWidth - svgPadding;
-  holderHeight = holderWidth * svgWidthHeightRatio;
+  // // Figure out holder dimensions to surround SVG
+  // let holderHeight, holderWidth;
+  // holderWidth = maxWidth - svgPadding;
+  // holderHeight = holderWidth * svgWidthHeightRatio;
 
-  if (holderHeight > maxHeight) {
-    holderHeight = maxHeight - svgPadding;
-    holderWidth = holderHeight * svgHeightToWidthRatio;
-  }
+  // if (holderHeight > maxHeight) {
+  //   holderHeight = maxHeight - svgPadding;
+  //   holderWidth = holderHeight * svgHeightToWidthRatio;
+  // }
 
   const lineData = generateLinePoints({
-    boxWidth,
-    boxHeight,
-    boxesWide,
-    boxesHigh,
+    wiggleWidth,
+    lineSpacing,
+    totalPeakWiggles,
+    totalFlatWiggles,
+    totalLines,
     maxPeakHeight,
-    flatWidth
+    maxFlatWiggleHeight
   });
 
-  const lines = generateLines({ lineData, boxHeight, boxWidth });
+  const lines = generateLines({ lineData, lineSpacing, wiggleWidth });
 
   return (
     <Container>
       <SvgHolder
         id="svgHolder"
-        style={{ width: holderWidth, height: holderHeight }}
+        // style={{ width: holderWidth, height: holderHeight }}
       >
         <MainSVG
           onClick={onClick}
@@ -60,11 +61,13 @@ const Display = ({ appData, sizeInfo, onClick }) => {
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           strokeLinejoin="round"
           strokeLinecap="round"
-          style={{ background: bgColour, padding: "0 40px" }}
+          style={{
+            background: bgColour
+          }}
         >
           <g
             stroke={lineColour}
-            fill={mountainColour}
+            fill={outlineOnly ? "none" : mountainColour}
             strokeWidth={lineThickness}
             transform={`translate(${0} ${maxPeakHeight})`}
           >
@@ -92,51 +95,73 @@ const Container = styled.div`
 
 const SvgHolder = styled.div`
   display: flex;
+  width: 95%;
+  height: 95%;
+  max-height: 95%;
+  max-width: 95%;
 `;
 
 const MainSVG = styled.svg`
+  padding: 20px;
   background: white;
   border-radius: 5px;
   flex: 1;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
   cursor: pointer;
+  max-width: 100%;
+  max-height: 100%;
 `;
 
 const generateLinePoints = ({
-  boxWidth,
-  boxHeight,
-  boxesWide,
-  boxesHigh,
+  wiggleWidth,
+  lineSpacing,
+  totalPeakWiggles,
+  totalFlatWiggles,
+  totalLines,
   maxPeakHeight,
-  flatWidth
+  maxFlatWiggleHeight
 }) => {
+  const totalWiggles = totalPeakWiggles + totalFlatWiggles * 2;
+
   let points = [];
   let ptData, line;
-  const fullWidth = boxWidth * boxesWide;
+
+  const fullWidth = wiggleWidth * totalWiggles;
   const halfWidth = fullWidth / 2;
 
-  for (let y = 0; y < boxesHigh; y++) {
+  for (let y = 0; y < totalLines; y++) {
     // for each row add the point data
     line = [];
-    for (let x = 0; x <= boxesWide; x++) {
-      const boxX = x * boxWidth;
-      const boxY = y * boxHeight;
-      // get random based on dist from center
-      const distFromCenter = Math.abs(halfWidth - boxX) + flatWidth;
-      const frac = 1 - distFromCenter / halfWidth;
+    const boxY = y * lineSpacing;
+
+    // START FLAT WIGGLES
+    for (let i = 0; i <= totalFlatWiggles; i++) {
+      const boxX = i * wiggleWidth;
+      let offset = maxFlatWiggleHeight * Math.random();
+      ptData = { x: boxX, y: boxY - offset };
+      line.push(ptData);
+    }
+
+    // MIDDLE PEAK WIGGLES
+    const flatWigglesEndX = ptData.x;
+    const halfPeakWiggles = totalPeakWiggles / 2;
+    for (let i = 0; i <= totalPeakWiggles; i++) {
+      const boxX = flatWigglesEndX + (i + 1) * wiggleWidth;
+
+      //   // get random based on dist from center
+      const distFromCenter = Math.abs(halfPeakWiggles - i);
+      const frac = 1 - distFromCenter / halfPeakWiggles;
       let offset = maxPeakHeight * frac * Math.random();
+      ptData = { x: boxX, y: boxY - offset };
+      line.push(ptData);
+    }
 
-      if (boxX < flatWidth || boxX > fullWidth - flatWidth) {
-        offset *= 0.2;
-      }
-
-      ptData = {
-        x: boxX,
-        y: boxY - offset,
-        boxWidth,
-        boxHeight
-      };
-
+    // END FLAT WIGGLES
+    const peakWigglesEndX = ptData.x;
+    for (let i = 0; i <= totalFlatWiggles; i++) {
+      const boxX = peakWigglesEndX + (i + 1) * wiggleWidth;
+      let offset = maxFlatWiggleHeight * Math.random();
+      ptData = { x: boxX, y: boxY - offset };
       line.push(ptData);
     }
 
@@ -146,11 +171,11 @@ const generateLinePoints = ({
   return points;
 };
 
-const generateLines = ({ lineData, boxHeight, boxWidth }) => {
-  const cPtSize = boxWidth / 2.5;
+const generateLines = ({ lineData, lineSpacing, wiggleWidth }) => {
+  const cPtSize = wiggleWidth / 2.5;
 
   return lineData.map((ptsArr, index) => {
-    let d = `M ${0} ${index * boxHeight}`;
+    let d = `M ${0} ${index * lineSpacing}`;
 
     for (let i = 1; i < ptsArr.length; i++) {
       const prevPt = ptsArr[i - 1];

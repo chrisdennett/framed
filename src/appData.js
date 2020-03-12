@@ -3,12 +3,6 @@ const defaultAppData = {
   infoUrl: "https://artfly.io/joy-lines/",
   defaultSaveName: "artfly-joy-lines.svg",
   settings: {
-    outlineOnly: {
-      label: "Outline only",
-      type: "boolean",
-      defaultValue: false
-    },
-
     lineColour: {
       label: "Line Colour",
       type: "colour",
@@ -27,66 +21,82 @@ const defaultAppData = {
       defaultValue: "#f2d739"
     },
 
-    lineThickness: {
-      label: "Line Thickness",
+    totalLines: {
+      label: "Total Lines",
       type: "range",
       min: 1,
-      max: 50,
-      defaultValue: 1.5
-    },
-
-    boxesWide: {
-      label: "Wiggles Wide",
-      type: "range",
-      min: 1,
-      max: 30,
+      max: 101,
       step: 1,
-      defaultValue: 20
+      defaultValue: 85
     },
 
-    boxesHigh: {
-      label: "Tiles High",
+    totalPeakWiggles: {
+      label: "Peak Wiggles",
       type: "range",
       min: 1,
-      max: 30,
+      max: 300,
       step: 1,
-      defaultValue: 20
+      defaultValue: 42
     },
 
-    boxWidth: {
-      label: "Lines width",
+    totalFlatWiggles: {
+      label: "Flat wiggles",
       type: "range",
       min: 1,
       max: 50,
       step: 1,
-      defaultValue: 15
+      defaultValue: 20
     },
 
-    boxHeight: {
+    wiggleWidth: {
+      label: "Wiggle Width",
+      type: "range",
+      min: 1,
+      max: 50,
+      step: 1,
+      defaultValue: 5
+    },
+
+    lineSpacing: {
       label: "Line Spacing",
       type: "range",
       min: 1,
       max: 250,
       step: 1,
-      defaultValue: 20
+      defaultValue: 5
     },
 
-    maxPeakHeightFraction: {
+    maxFlatWiggleHeight: {
+      label: "Max Flat Wiggle Height",
+      type: "range",
+      min: 0,
+      max: 10,
+      step: 1,
+      defaultValue: 2
+    },
+
+    maxPeakHeight: {
       label: "Max Peak Height",
       type: "range",
       min: 0,
-      max: 1,
-      step: 0.01,
-      defaultValue: 0.3
+      max: 200,
+      step: 1,
+      defaultValue: 20
     },
 
-    flatWidthFraction: {
-      label: "Flat width",
+    outlineOnly: {
+      label: "Outline only",
+      type: "boolean",
+      defaultValue: true
+    },
+
+    lineThickness: {
+      label: "Line Thickness",
       type: "range",
-      min: 0,
-      max: 1,
-      step: 0.01,
-      defaultValue: 0.3
+      min: 0.1,
+      max: 3,
+      step: 0.1,
+      defaultValue: 0.6
     }
   }
 };
