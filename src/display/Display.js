@@ -18,24 +18,24 @@ const Display = ({ appData, sizeInfo, onClick }) => {
     maxFlatWiggleHeight
   } = appData;
 
-  const totalWiggles = totalPeakWiggles + totalFlatWiggles * 2;
+  const totalWiggles = totalPeakWiggles + totalFlatWiggles * 2 + 2;
   const svgWidth = totalWiggles * wiggleWidth;
   const svgHeight = lineSpacing * totalLines + maxPeakHeight;
 
-  // const { height: maxHeight, width: maxWidth } = sizeInfo; // holding element dimensions
-  // const svgPadding = 0.07 * maxHeight; // padding around edge of
-  // const svgHeightToWidthRatio = svgWidth / svgHeight;
-  // const svgWidthHeightRatio = svgHeight / svgWidth;
+  const { height: maxHeight, width: maxWidth } = sizeInfo; // holding element dimensions
+  const svgPadding = 0.07 * maxHeight; // padding around edge of
+  const svgHeightToWidthRatio = svgWidth / svgHeight;
+  const svgWidthHeightRatio = svgHeight / svgWidth;
 
   // // Figure out holder dimensions to surround SVG
-  // let holderHeight, holderWidth;
-  // holderWidth = maxWidth - svgPadding;
-  // holderHeight = holderWidth * svgWidthHeightRatio;
+  let holderHeight, holderWidth;
+  holderWidth = maxWidth - svgPadding;
+  holderHeight = holderWidth * svgWidthHeightRatio;
 
-  // if (holderHeight > maxHeight) {
-  //   holderHeight = maxHeight - svgPadding;
-  //   holderWidth = holderHeight * svgHeightToWidthRatio;
-  // }
+  if (holderHeight > maxHeight) {
+    holderHeight = maxHeight - svgPadding;
+    holderWidth = holderHeight * svgHeightToWidthRatio;
+  }
 
   const lineData = generateLinePoints({
     wiggleWidth,
@@ -55,7 +55,7 @@ const Display = ({ appData, sizeInfo, onClick }) => {
     <Container>
       <SvgHolder
         id="svgHolder"
-        // style={{ width: holderWidth, height: holderHeight }}
+        style={{ width: holderWidth, height: holderHeight }}
       >
         <MainSVG
           onClick={onClick}
@@ -98,10 +98,6 @@ const Container = styled.div`
 
 const SvgHolder = styled.div`
   display: flex;
-  width: 95%;
-  height: 95%;
-  max-height: 95%;
-  max-width: 95%;
 `;
 
 const MainSVG = styled.svg`
@@ -124,8 +120,6 @@ const generateLinePoints = ({
   maxPeakHeight,
   maxFlatWiggleHeight
 }) => {
-  const totalWiggles = totalPeakWiggles + totalFlatWiggles * 2;
-
   let points = [];
   let ptData, line;
 

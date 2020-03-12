@@ -63,10 +63,11 @@ const defaultAppData = {
       dividerAbove: true,
       label: "Peak Wiggles",
       type: "range",
-      min: 0,
+      min: 2,
       max: 100,
       step: 1,
-      defaultValue: 24
+      defaultValue: 2
+      // defaultValue: 24
     },
 
     totalFlatWiggles: {
