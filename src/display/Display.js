@@ -4,6 +4,7 @@ import styled from "styled-components";
 const Display = ({ appData, sizeInfo, onClick }) => {
   const {
     outlineOnly,
+    diffMountainColour,
     mountainColour,
     bgColour,
     lineColour,
@@ -47,6 +48,8 @@ const Display = ({ appData, sizeInfo, onClick }) => {
   });
 
   const lines = generateLines({ lineData, lineSpacing, wiggleWidth });
+  let fillColour = diffMountainColour ? mountainColour : bgColour;
+  if (outlineOnly) fillColour = "none";
 
   return (
     <Container>
@@ -67,7 +70,7 @@ const Display = ({ appData, sizeInfo, onClick }) => {
         >
           <g
             stroke={lineColour}
-            fill={outlineOnly ? "none" : mountainColour}
+            fill={fillColour}
             strokeWidth={lineThickness}
             transform={`translate(${0} ${maxPeakHeight})`}
           >
@@ -125,9 +128,6 @@ const generateLinePoints = ({
 
   let points = [];
   let ptData, line;
-
-  const fullWidth = wiggleWidth * totalWiggles;
-  const halfWidth = fullWidth / 2;
 
   for (let y = 0; y < totalLines; y++) {
     // for each row add the point data

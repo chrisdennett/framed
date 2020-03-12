@@ -17,7 +17,7 @@ const SliderControl = ({
   values,
   onChange,
   disabled,
-  maxWidth = 200,
+  maxWidth = 500,
   showTicks = false,
   min = 0,
   max = 1,
@@ -39,69 +39,77 @@ const SliderControl = ({
   };
 
   return (
-    <div style={{ height: 50, width: "100%", maxWidth: maxWidth }}>
-      <SliderLabel disabled={disabled}>
-        {label}: <span>{displayValue && values}</span>
-      </SliderLabel>
-      <Slider
-        disabled={disabled}
-        mode={2}
-        step={step}
-        domain={domain}
-        rootStyle={sliderStyle}
-        onUpdate={onSliderUpdate}
-        values={values}
-      >
-        <Rail>
-          {({ getRailProps }) => <SliderRail getRailProps={getRailProps} />}
-        </Rail>
-        <Handles>
-          {({ handles, getHandleProps }) => (
-            <div className="slider-handles">
-              {handles.map(handle => (
-                <Handle
-                  disabled={disabled}
-                  key={handle.id}
-                  handle={handle}
-                  domain={domain}
-                  getHandleProps={getHandleProps}
-                />
-              ))}
-            </div>
-          )}
-        </Handles>
-        <Tracks left={false} right={false}>
-          {({ tracks, getTrackProps }) => (
-            <div className="slider-tracks">
-              {tracks.map(({ id, source, target }) => (
-                <Track
-                  key={id}
-                  source={source}
-                  target={target}
-                  getTrackProps={getTrackProps}
-                />
-              ))}
-            </div>
-          )}
-        </Tracks>
-
-        {showTicks && (
-          <Ticks count={5}>
-            {({ ticks }) => (
-              <div className="slider-ticks">
-                {ticks.map(tick => (
-                  <Tick key={tick.id} tick={tick} count={ticks.length} />
+    <Container>
+      <div style={{ maxWidth: maxWidth }}>
+        <SliderLabel disabled={disabled}>
+          {label}: <span>{displayValue && values}</span>
+        </SliderLabel>
+        <Slider
+          disabled={disabled}
+          mode={2}
+          step={step}
+          domain={domain}
+          rootStyle={sliderStyle}
+          onUpdate={onSliderUpdate}
+          values={values}
+        >
+          <Rail>
+            {({ getRailProps }) => <SliderRail getRailProps={getRailProps} />}
+          </Rail>
+          <Handles>
+            {({ handles, getHandleProps }) => (
+              <div className="slider-handles">
+                {handles.map(handle => (
+                  <Handle
+                    disabled={disabled}
+                    key={handle.id}
+                    handle={handle}
+                    domain={domain}
+                    getHandleProps={getHandleProps}
+                  />
                 ))}
               </div>
             )}
-          </Ticks>
-        )}
-      </Slider>
-    </div>
+          </Handles>
+          <Tracks left={false} right={false}>
+            {({ tracks, getTrackProps }) => (
+              <div className="slider-tracks">
+                {tracks.map(({ id, source, target }) => (
+                  <Track
+                    key={id}
+                    source={source}
+                    target={target}
+                    getTrackProps={getTrackProps}
+                  />
+                ))}
+              </div>
+            )}
+          </Tracks>
+
+          {showTicks && (
+            <Ticks count={5}>
+              {({ ticks }) => (
+                <div className="slider-ticks">
+                  {ticks.map(tick => (
+                    <Tick key={tick.id} tick={tick} count={ticks.length} />
+                  ))}
+                </div>
+              )}
+            </Ticks>
+          )}
+        </Slider>
+      </div>
+    </Container>
   );
 };
 
 export default SliderControl;
+
+const Container = styled.div`
+  height: 42px;
+  padding-left: 7px;
+  padding-right: 7px;
+`;
 
 const SliderLabel = styled.div`
   width: 100%;

@@ -3,16 +3,23 @@ const defaultAppData = {
   infoUrl: "https://artfly.io/joy-lines/",
   defaultSaveName: "artfly-joy-lines.svg",
   settings: {
+    outlineOnly: {
+      label: "Outline only",
+      type: "boolean",
+      defaultValue: false
+    },
+
+    diffMountainColour: {
+      showIfs: [{ key: "outlineOnly", condition: false }],
+      label: "Diff Mountain Colour",
+      type: "boolean",
+      defaultValue: true
+    },
+
     lineColour: {
       label: "Line Colour",
       type: "colour",
       defaultValue: "#000"
-    },
-
-    mountainColour: {
-      label: "Mountain Colour",
-      type: "colour",
-      defaultValue: "#fff"
     },
 
     bgColour: {
@@ -21,40 +28,24 @@ const defaultAppData = {
       defaultValue: "#f2d739"
     },
 
+    mountainColour: {
+      showIfs: [
+        { key: "outlineOnly", condition: false },
+        { key: "diffMountainColour", condition: true }
+      ],
+      label: "Mountain Colour",
+      type: "colour",
+      defaultValue: "#fff"
+    },
+
     totalLines: {
+      dividerAbove: true,
       label: "Total Lines",
       type: "range",
       min: 1,
-      max: 101,
+      max: 201,
       step: 1,
-      defaultValue: 85
-    },
-
-    totalPeakWiggles: {
-      label: "Peak Wiggles",
-      type: "range",
-      min: 1,
-      max: 300,
-      step: 1,
-      defaultValue: 42
-    },
-
-    totalFlatWiggles: {
-      label: "Flat wiggles",
-      type: "range",
-      min: 1,
-      max: 50,
-      step: 1,
-      defaultValue: 20
-    },
-
-    wiggleWidth: {
-      label: "Wiggle Width",
-      type: "range",
-      min: 1,
-      max: 50,
-      step: 1,
-      defaultValue: 5
+      defaultValue: 32
     },
 
     lineSpacing: {
@@ -63,40 +54,64 @@ const defaultAppData = {
       min: 1,
       max: 250,
       step: 1,
-      defaultValue: 5
+      defaultValue: 28
+    },
+
+    totalPeakWiggles: {
+      dividerAbove: true,
+      label: "Peak Wiggles",
+      type: "range",
+      min: 0,
+      max: 100,
+      step: 1,
+      defaultValue: 24
+    },
+
+    totalFlatWiggles: {
+      label: "Flat wiggles",
+      type: "range",
+      min: 0,
+      max: 50,
+      step: 1,
+      defaultValue: 1
+    },
+
+    maxPeakHeight: {
+      dividerAbove: true,
+      label: "Max Peak Height",
+      type: "range",
+      min: 0,
+      max: 250,
+      step: 1,
+      defaultValue: 120
     },
 
     maxFlatWiggleHeight: {
       label: "Max Flat Wiggle Height",
       type: "range",
       min: 0,
-      max: 10,
-      step: 1,
-      defaultValue: 2
+      max: 3,
+      step: 0.1,
+      defaultValue: 0
     },
 
-    maxPeakHeight: {
-      label: "Max Peak Height",
+    wiggleWidth: {
+      label: "Wiggle Width (roundness)",
       type: "range",
-      min: 0,
-      max: 200,
+      min: 3,
+      max: 50,
       step: 1,
-      defaultValue: 20
-    },
-
-    outlineOnly: {
-      label: "Outline only",
-      type: "boolean",
-      defaultValue: true
+      defaultValue: 42
     },
 
     lineThickness: {
+      dividerAbove: true,
       label: "Line Thickness",
       type: "range",
       min: 0.1,
-      max: 3,
+      max: 5,
       step: 0.1,
-      defaultValue: 0.6
+      defaultValue: 3
     }
   }
 };

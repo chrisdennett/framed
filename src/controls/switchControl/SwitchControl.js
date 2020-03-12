@@ -15,10 +15,10 @@ export const SwitchControl = ({ value, onChange, label, className }) => (
 
 const StyledSwitch = styled(Switch)`
   label {
-    margin-left: 5px;
+    margin-left: 15px;
     color: white;
   }
-  padding: 10px;
+  padding-left: 3px;
 
   .mdc-switch:not(.mdc-switch--checked) .mdc-switch__track {
     background-color: #fff;

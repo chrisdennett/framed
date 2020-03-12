@@ -40,7 +40,7 @@ const ColourPicker = ({ value = "#FF0000", onChange, label = value }) => {
 export default ColourPicker;
 
 const Container = styled.div`
-  margin: 0 15px 5px 0;
+  margin: 0;
   display: flex;
   align-items: center;
 `;
@@ -56,7 +56,7 @@ const StyledLabel = styled.label`
 `;
 
 const LabelTextGroup = styled.p`
-  margin-left: 10px;
+  margin: 0 0 0 10px;
   display: flex;
   flex-direction: column;
 `;
