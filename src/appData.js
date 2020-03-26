@@ -3,18 +3,11 @@ const defaultAppData = {
   infoUrl: "https://artfly.io/framed/",
   defaultSaveName: "artfly-framed.jpg",
   settings: {
-    // showRoom: {
-    //   dividerAbove: true,
-    //   label: "Show Room",
-    //   type: "boolean",
-    //   defaultValue: false
-    // },
-
     frameColour: {
       dividerAbove: true,
       label: "Frame Colour",
       type: "colour",
-      defaultValue: "#000"
+      defaultValue: "#000000"
     },
 
     mountColour: {

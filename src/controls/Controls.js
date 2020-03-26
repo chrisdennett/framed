@@ -37,9 +37,8 @@ const Controls = ({ appData, onUpdate, wrap = false, onSaveImage }) => {
 
           if (currSetting.type === "colour") {
             return (
-              <ControlHolder dividerAbove={dividerAbove}>
+              <ControlHolder dividerAbove={dividerAbove} key={key}>
                 <ColourPicker
-                  key={key}
                   label={currSetting.label}
                   value={currValue}
                   onChange={value => updateSettings(key, value)}
@@ -50,9 +49,8 @@ const Controls = ({ appData, onUpdate, wrap = false, onSaveImage }) => {
 
           if (currSetting.type === "boolean") {
             return (
-              <ControlHolder dividerAbove={dividerAbove}>
+              <ControlHolder dividerAbove={dividerAbove} key={key}>
                 <SwitchControl
-                  key={key}
                   label={currSetting.label}
                   value={currValue}
                   onChange={value => updateSettings(key, value)}
@@ -63,9 +61,8 @@ const Controls = ({ appData, onUpdate, wrap = false, onSaveImage }) => {
 
           if (currSetting.type === "range") {
             return (
-              <ControlHolder dividerAbove={dividerAbove}>
+              <ControlHolder dividerAbove={dividerAbove} key={key}>
                 <SliderControl
-                  key={key}
                   labelStyle={{ minWidth: 150 }}
                   label={currSetting.label}
                   displayValue={true}
@@ -117,10 +114,4 @@ const ControlHolder = styled.div`
 
 const ButtHolder = styled.div`
   margin: 5px 5px 15px 5px;
-`;
-
-const Instruction = styled.p`
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
-  text-align: center;
 `;

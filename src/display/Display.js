@@ -4,15 +4,15 @@ import styled from "styled-components";
 const Display = ({ appData, sizeInfo, setCanvasRef }) => {
   const canvasRef = useRef(null);
   const [sourceImg, setSourceImg] = useState(null);
-  const {
-    frameColour,
-    mountColour,
-    frameThickness,
-    mountThickness,
-    cropTop,
-    cropBottom,
-    cropLeft
-  } = appData;
+  // const {
+  //   frameColour,
+  //   mountColour,
+  //   frameThickness,
+  //   mountThickness,
+  //   cropTop,
+  //   cropBottom,
+  //   cropLeft
+  // } = appData;
 
   setCanvasRef(canvasRef.current);
 
@@ -37,7 +37,7 @@ const Display = ({ appData, sizeInfo, setCanvasRef }) => {
 
   return (
     <Container>
-      <CanvasStyled ref={canvasRef} class={"framedCanvas"} />
+      <CanvasStyled ref={canvasRef} />
     </Container>
   );
 };
@@ -59,7 +59,6 @@ const Container = styled.div`
 const CanvasStyled = styled.canvas`
   max-width: 100%;
   max-height: 100%;
-  /* border: red 1px solid; */
 `;
 
 // helper functions
@@ -68,8 +67,8 @@ const createFramedCanvas = ({
   sourceCanvas,
   frameColour = "#333",
   mountColour = "#eeeeee",
-  frameThickness = 15,
-  mountThickness = 50,
+  frameThickness = 20,
+  mountThickness = 90,
   frameBevel = 3,
   mountBevel = 3
 }) => {
@@ -214,17 +213,15 @@ const drawFrameSections = ({
 };
 
 const hexToHSL = H => {
-  console.log("H: ", H);
-
   // Convert hex to RGB first
   let r = 0,
     g = 0,
     b = 0;
-  if (H.length == 4) {
+  if (H.length === 4) {
     r = "0x" + H[1] + H[1];
     g = "0x" + H[2] + H[2];
     b = "0x" + H[3] + H[3];
-  } else if (H.length == 7) {
+  } else if (H.length === 7) {
     r = "0x" + H[1] + H[2];
     g = "0x" + H[3] + H[4];
     b = "0x" + H[5] + H[6];
@@ -240,9 +237,9 @@ const hexToHSL = H => {
     s = 0,
     l = 0;
 
-  if (delta == 0) h = 0;
-  else if (cmax == r) h = ((g - b) / delta) % 6;
-  else if (cmax == g) h = (b - r) / delta + 2;
+  if (delta === 0) h = 0;
+  else if (cmax === r) h = ((g - b) / delta) % 6;
+  else if (cmax === g) h = (b - r) / delta + 2;
   else h = (r - g) / delta + 4;
 
   h = Math.round(h * 60);
@@ -250,7 +247,7 @@ const hexToHSL = H => {
   if (h < 0) h += 360;
 
   l = (cmax + cmin) / 2;
-  s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+  s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
   s = +(s * 100).toFixed(1);
   l = +(l * 100).toFixed(1);
 
