@@ -1,3 +1,3 @@
-# joy-lines
+# Framed
 
-Generative art experiment for the plotter
+Make kids artwork look extra awesome.

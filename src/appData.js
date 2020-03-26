@@ -1,48 +1,31 @@
 const defaultAppData = {
-  title: "Joy Lines",
-  infoUrl: "https://artfly.io/joy-lines/",
-  defaultSaveName: "artfly-joy-lines.svg",
+  title: "Framed",
+  infoUrl: "https://artfly.io/framed/",
+  defaultSaveName: "artfly-framed.jpg",
   settings: {
-    outlineOnly: {
-      dividerAbove: true,
-      label: "Outline only",
-      type: "boolean",
-      defaultValue: false
-    },
+    // showRoom: {
+    //   dividerAbove: true,
+    //   label: "Show Room",
+    //   type: "boolean",
+    //   defaultValue: false
+    // },
 
-    diffMountainColour: {
-      showIfs: [{ key: "outlineOnly", condition: false }],
-      label: "Diff Mountain Colour",
-      type: "boolean",
-      defaultValue: true
-    },
-
-    lineColour: {
+    frameColour: {
       dividerAbove: true,
-      label: "Line Colour",
+      label: "Frame Colour",
       type: "colour",
       defaultValue: "#000"
     },
 
-    bgColour: {
-      label: "Background Colour",
+    mountColour: {
+      label: "Mount Colour",
       type: "colour",
       defaultValue: "#f2d739"
     },
 
-    mountainColour: {
-      showIfs: [
-        { key: "outlineOnly", condition: false },
-        { key: "diffMountainColour", condition: true }
-      ],
-      label: "Mountain Colour",
-      type: "colour",
-      defaultValue: "#fff"
-    },
-
-    totalLines: {
+    frameThickness: {
       dividerAbove: true,
-      label: "Total Lines",
+      label: "Frame Thickness",
       type: "range",
       min: 1,
       max: 201,
@@ -50,70 +33,60 @@ const defaultAppData = {
       defaultValue: 32
     },
 
-    lineSpacing: {
-      label: "Line Spacing",
+    mountThickness: {
+      label: "Mount Thickness",
       type: "range",
       min: 1,
-      max: 250,
+      max: 201,
       step: 1,
-      defaultValue: 28
+      defaultValue: 32
     },
 
-    totalPeakWiggles: {
+    cropArtwork: {
       dividerAbove: true,
-      label: "Peak Wiggles",
+      label: "Crop Art",
+      type: "boolean",
+      defaultValue: false
+    },
+
+    cropTop: {
+      showIfs: [{ key: "cropArtwork", condition: true }],
+      label: "Top",
       type: "range",
-      min: 2,
+      min: 0,
       max: 100,
       step: 1,
-      defaultValue: 24
-    },
-
-    totalFlatWiggles: {
-      label: "Flat wiggles",
-      type: "range",
-      min: 0,
-      max: 50,
-      step: 1,
-      defaultValue: 1
-    },
-
-    maxPeakHeight: {
-      dividerAbove: true,
-      label: "Max Peak Height",
-      type: "range",
-      min: 0,
-      max: 250,
-      step: 1,
-      defaultValue: 120
-    },
-
-    maxFlatWiggleHeight: {
-      label: "Max Flat Wiggle Height",
-      type: "range",
-      min: 0,
-      max: 3,
-      step: 0.1,
       defaultValue: 0
     },
 
-    wiggleWidth: {
-      label: "Wiggle Width (roundness)",
+    cropBottom: {
+      showIfs: [{ key: "cropArtwork", condition: true }],
+      label: "Bottom",
       type: "range",
-      min: 3,
-      max: 50,
+      min: 0,
+      max: 100,
       step: 1,
-      defaultValue: 42
+      defaultValue: 0
     },
 
-    lineThickness: {
-      dividerAbove: true,
-      label: "Line Thickness",
+    cropLeft: {
+      showIfs: [{ key: "cropArtwork", condition: true }],
+      label: "Left",
       type: "range",
-      min: 0.1,
-      max: 5,
-      step: 0.1,
-      defaultValue: 3
+      min: 0,
+      max: 100,
+      step: 1,
+      defaultValue: 0
+    },
+
+    cropRight: {
+      showIfs: [{ key: "cropArtwork", condition: true }],
+      label: "Right",
+      type: "range",
+      min: 0,
+      max: 100,
+      step: 1,
+      defaultValue: 0
     }
   }
 };
