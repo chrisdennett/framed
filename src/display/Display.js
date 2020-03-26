@@ -38,32 +38,6 @@ const Display = ({ appData, sizeInfo, setCanvasRef }) => {
   return (
     <Container>
       <CanvasStyled ref={canvasRef} class={"framedCanvas"} />
-
-      {/* <SvgHolder
-        id="svgHolder"
-        style={{ width: holderWidth, height: holderHeight }}
-      >
-        <MainSVG
-          onClick={onClick}
-          className="mainSVG"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          strokeLinejoin="round"
-          strokeLinecap="round"
-          style={{
-            background: bgColour
-          }}
-        >
-          <g
-            stroke={lineColour}
-            fill={fillColour}
-            strokeWidth={lineThickness}
-            transform={`translate(${0} ${maxPeakHeight})`}
-          >
-            {lines}
-          </g>
-        </MainSVG>
-      </SvgHolder> */}
     </Container>
   );
 };
@@ -90,54 +64,103 @@ const CanvasStyled = styled.canvas`
 
 // helper functions
 
-const createFramedCanvas = ({ sourceCanvas, frameThickness = 20 }) => {
+const createFramedCanvas = ({
+  sourceCanvas,
+  frameColour = "#333",
+  mountColour = "#eee",
+  frameThickness = 20,
+  mountThickness = 30,
+  frameBevel = 3,
+  mountBevel = 2
+}) => {
   const outputCanvas = document.createElement("canvas");
+  const { h: frameHue } = hexToHSL(frameColour);
+  const { h: mountHue } = hexToHSL(mountColour);
 
-  outputCanvas.width = sourceCanvas.width + frameThickness * 2;
-  outputCanvas.height = sourceCanvas.height + frameThickness * 2;
+  const { width: imgW, height: imgH } = sourceCanvas;
+  const doubleFrame = frameThickness * 2;
+  const doubleMount = mountThickness * 2;
+  const doubleFrameBevel = frameBevel * 2;
+  const doubleMountBevel = mountBevel * 2;
 
-  const frameWidth = sourceCanvas.width + frameThickness * 2;
-  const frameHeight = sourceCanvas.height + frameThickness * 2;
-  const frameInnerWidth = frameWidth - frameThickness * 2;
-  const frameInnerHeight = frameHeight - frameThickness * 2;
+  const mountBevelWidth = imgW + doubleMountBevel;
+  const mountBevelHeight = imgH + doubleMountBevel;
+  const mountWidth = mountBevelWidth + doubleMount;
+  const mountHeight = mountBevelHeight + doubleMount;
 
-  const imgX = frameThickness;
-  const imgY = frameThickness;
+  const frameWidth = mountWidth + doubleFrame + doubleFrameBevel;
+  const frameHeight = mountHeight + doubleFrame + doubleFrameBevel;
+  const frameBevelWidth = frameWidth - doubleFrame;
+  const frameBevelHeight = frameHeight - doubleFrame;
+
+  outputCanvas.width = frameWidth;
+  outputCanvas.height = frameHeight;
+
+  const frameBevelX = frameThickness;
+  const frameBevelY = frameThickness;
+
+  const mountX = frameBevelX + frameBevel;
+  const mountY = frameBevelY + frameBevel;
+
+  const mountBevelX = mountX + mountThickness;
+  const mountBevelY = mountY + mountThickness;
+
+  const imgX = mountBevelX + mountBevel;
+  const imgY = mountBevelY + mountBevel;
 
   const ctx = outputCanvas.getContext("2d");
 
+  // frame bg
+  ctx.fillStyle = frameColour;
+  ctx.fillRect(0, 0, frameWidth, frameHeight);
+
+  // mount
+  ctx.fillStyle = mountColour;
+  ctx.fillRect(mountX, mountY, mountWidth, mountHeight);
+
   ctx.drawImage(sourceCanvas, imgX, imgY);
 
+  // mount bevel
   drawFrameSections({
     ctx,
-    thickness: frameThickness,
-    width: frameWidth,
-    height: frameHeight
+    isInner: true,
+    thickness: mountBevel,
+    x: mountBevelX,
+    y: mountBevelY,
+    width: mountBevelWidth,
+    height: mountBevelHeight,
+    baseHue: mountHue,
+    baseLightness: 30
   });
 
+  // frame
   drawFrameSections({
     ctx,
     thickness: frameThickness,
     width: frameWidth,
     height: frameHeight,
-    baseHue: 265
+    baseHue: frameHue
   });
 
   drawFrameSections({
     ctx,
-    thickness: 5,
-    x: frameThickness,
-    y: frameThickness,
-    width: frameInnerWidth,
-    height: frameInnerHeight,
-    baseHue: 80
+    isInner: true,
+    thickness: frameBevel,
+    x: frameBevelX,
+    y: frameBevelY,
+    width: frameBevelWidth,
+    height: frameBevelHeight,
+    baseHue: frameHue,
+    baseLightness: 30
   });
 
   return outputCanvas;
 };
 
+// draw sections onto canvas
 const drawFrameSections = ({
   ctx,
+  isInner = false,
   x = 0,
   y = 0,
   baseHue = 265,
@@ -147,8 +170,11 @@ const drawFrameSections = ({
   width,
   height
 }) => {
+  const brightnessAdjust = isInner ? -10 : 10;
+
   // top
-  ctx.fillStyle = `hsl(${baseHue}, ${baseSaturation}%, ${baseLightness + 20}%)`;
+  ctx.fillStyle = `hsl(${baseHue}, ${baseSaturation}%, ${baseLightness +
+    brightnessAdjust}%)`;
   ctx.beginPath();
   ctx.moveTo(x, y);
   ctx.lineTo(x + width, y);
@@ -158,7 +184,8 @@ const drawFrameSections = ({
   ctx.fill();
 
   // right
-  ctx.fillStyle = `hsl(${baseHue}, ${baseSaturation}%, ${baseLightness}%)`;
+  ctx.fillStyle = `hsl(${baseHue}, ${baseSaturation}%, ${baseLightness -
+    brightnessAdjust / 1.5}%)`;
   ctx.beginPath();
   ctx.moveTo(x + width, y);
   ctx.lineTo(x + width, y + height);
@@ -168,7 +195,8 @@ const drawFrameSections = ({
   ctx.fill();
 
   // bottom
-  ctx.fillStyle = `hsl(${baseHue}, ${baseSaturation}%, ${baseLightness - 5}%)`;
+  ctx.fillStyle = `hsl(${baseHue}, ${baseSaturation}%, ${baseLightness -
+    brightnessAdjust}%)`;
   ctx.beginPath();
   ctx.moveTo(x, y + height);
   ctx.lineTo(x + width, y + height);
@@ -178,7 +206,8 @@ const drawFrameSections = ({
   ctx.fill();
 
   // left
-  ctx.fillStyle = `hsl(${baseHue}, ${baseSaturation}%, ${baseLightness + 15}%)`;
+  ctx.fillStyle = `hsl(${baseHue}, ${baseSaturation}%, ${baseLightness +
+    brightnessAdjust / 1.5}%)`;
   ctx.beginPath();
   ctx.moveTo(x, y);
   ctx.lineTo(x, y + height);
@@ -186,4 +215,46 @@ const drawFrameSections = ({
   ctx.lineTo(x + thickness, y + thickness);
   ctx.closePath();
   ctx.fill();
+};
+
+const hexToHSL = H => {
+  // Convert hex to RGB first
+  let r = 0,
+    g = 0,
+    b = 0;
+  if (H.length == 4) {
+    r = "0x" + H[1] + H[1];
+    g = "0x" + H[2] + H[2];
+    b = "0x" + H[3] + H[3];
+  } else if (H.length == 7) {
+    r = "0x" + H[1] + H[2];
+    g = "0x" + H[3] + H[4];
+    b = "0x" + H[5] + H[6];
+  }
+  // Then to HSL
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  let cmin = Math.min(r, g, b),
+    cmax = Math.max(r, g, b),
+    delta = cmax - cmin,
+    h = 0,
+    s = 0,
+    l = 0;
+
+  if (delta == 0) h = 0;
+  else if (cmax == r) h = ((g - b) / delta) % 6;
+  else if (cmax == g) h = (b - r) / delta + 2;
+  else h = (r - g) / delta + 4;
+
+  h = Math.round(h * 60);
+
+  if (h < 0) h += 360;
+
+  l = (cmax + cmin) / 2;
+  s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+  s = +(s * 100).toFixed(1);
+  l = +(l * 100).toFixed(1);
+
+  return { h, s, l };
 };
