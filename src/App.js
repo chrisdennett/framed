@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { saveAs } from "file-saver";
 import * as Space from "react-spaces";
 // comps
 //
@@ -10,11 +11,20 @@ import useWindowDimensions from "./hooks/usWindowDimensions";
 
 export default function App() {
   const [appData, setAppData] = useState(getAppData());
+  const [canvasRef, setCanvasRef] = useState(null);
   const [optionsVisible, setOptionsVisible] = useState(true);
   const { width } = useWindowDimensions();
 
   const showMenuOnLeft = width > 700 && optionsVisible;
   const showMenuAtBottom = !showMenuOnLeft && optionsVisible;
+
+  const onSaveImage = () => {
+    if (canvasRef) {
+      canvasRef.toBlob(blob => {
+        saveAs(blob, appData.defaultSaveName);
+      });
+    }
+  };
 
   return (
     <Space.ViewPort right={10} bottom={10} left={10}>
@@ -39,6 +49,7 @@ export default function App() {
         {showMenuOnLeft && (
           <Space.LeftResizable size={260} scrollable={true}>
             <Controls
+              onSaveImage={onSaveImage}
               onUpdate={setAppData}
               appData={appData}
               wrap={showMenuAtBottom}
@@ -49,6 +60,7 @@ export default function App() {
         {showMenuAtBottom && (
           <Space.BottomResizable size={"30%"} scrollable={true}>
             <Controls
+              onSaveImage={onSaveImage}
               onUpdate={setAppData}
               appData={appData}
               wrap={showMenuAtBottom}
@@ -67,9 +79,9 @@ export default function App() {
           <Space.Info>
             {sizeInfo => (
               <Display
+                setCanvasRef={setCanvasRef}
                 sizeInfo={sizeInfo}
                 appData={appData}
-                onClick={() => setAppData({ ...appData })}
               />
             )}
           </Space.Info>
