@@ -16,7 +16,7 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
   };
 
   const settingsKeys = Object.keys(settings);
-  const onSaveSvgClick = ({ svgClass = "mainSVG" }) => {
+  const onSaveClick = ({ svgClass = "mainSVG" }) => {
     let full_svg = document.getElementsByClassName(svgClass)[0].outerHTML;
     full_svg = full_svg.split(">").join(`>`);
 
@@ -30,7 +30,7 @@ const Controls = ({ appData, onUpdate, wrap = false }) => {
 
       <ControlsUI wrapControls={wrap}>
         <ButtHolder>
-          <Button label="Save SVG" raised onClick={onSaveSvgClick} />
+          <Button label="SAVE" raised onClick={onSaveClick} />
         </ButtHolder>
 
         {settingsKeys.map(key => {
