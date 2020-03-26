@@ -67,15 +67,13 @@ const CanvasStyled = styled.canvas`
 const createFramedCanvas = ({
   sourceCanvas,
   frameColour = "#333",
-  mountColour = "#eee",
-  frameThickness = 20,
-  mountThickness = 30,
+  mountColour = "#eeeeee",
+  frameThickness = 15,
+  mountThickness = 50,
   frameBevel = 3,
-  mountBevel = 2
+  mountBevel = 3
 }) => {
   const outputCanvas = document.createElement("canvas");
-  const { h: frameHue } = hexToHSL(frameColour);
-  const { h: mountHue } = hexToHSL(mountColour);
 
   const { width: imgW, height: imgH } = sourceCanvas;
   const doubleFrame = frameThickness * 2;
@@ -129,8 +127,7 @@ const createFramedCanvas = ({
     y: mountBevelY,
     width: mountBevelWidth,
     height: mountBevelHeight,
-    baseHue: mountHue,
-    baseLightness: 30
+    colour: mountColour
   });
 
   // frame
@@ -139,7 +136,7 @@ const createFramedCanvas = ({
     thickness: frameThickness,
     width: frameWidth,
     height: frameHeight,
-    baseHue: frameHue
+    colour: frameColour
   });
 
   drawFrameSections({
@@ -150,8 +147,7 @@ const createFramedCanvas = ({
     y: frameBevelY,
     width: frameBevelWidth,
     height: frameBevelHeight,
-    baseHue: frameHue,
-    baseLightness: 30
+    colour: frameColour
   });
 
   return outputCanvas;
@@ -163,14 +159,14 @@ const drawFrameSections = ({
   isInner = false,
   x = 0,
   y = 0,
-  baseHue = 265,
-  baseSaturation = 50,
-  baseLightness = 40,
+  colour,
   thickness,
   width,
   height
 }) => {
   const brightnessAdjust = isInner ? -10 : 10;
+
+  const { h: baseHue, s: baseSaturation, l: baseLightness } = hexToHSL(colour);
 
   // top
   ctx.fillStyle = `hsl(${baseHue}, ${baseSaturation}%, ${baseLightness +
@@ -218,6 +214,8 @@ const drawFrameSections = ({
 };
 
 const hexToHSL = H => {
+  console.log("H: ", H);
+
   // Convert hex to RGB first
   let r = 0,
     g = 0,
