@@ -8,13 +8,16 @@ import { SwitchControl } from "./switchControl/SwitchControl";
 import ColourPicker from "../components/colourPicker/ColourPicker";
 import PhotoSelector from "../components/photoSelector/PhotoSelector";
 import QuickSelectMenu from "../components/quickSelectControl/QuickSelectControl";
+import { PiffleControl } from "./piffleControl/PiffleControl";
 
 const Controls = ({
   appData,
   onUpdate,
   wrap = false,
   onSaveImage,
-  onAddImage
+  onAddImage,
+  piffle,
+  setPiffle
 }) => {
   const { settings } = appData;
 
@@ -42,6 +45,10 @@ const Controls = ({
         <ButtHolder>
           <Button label="SAVE" raised onClick={onSaveImage} />
         </ButtHolder>
+
+        <ControlHolder dividerAbove={true}>
+          <PiffleControl piffle={piffle} setPiffle={setPiffle} />
+        </ControlHolder>
 
         {settingsKeys.map(key => {
           const currSetting = settings[key];
