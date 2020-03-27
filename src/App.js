@@ -120,6 +120,7 @@ export default function App() {
           <Space.Info>
             {sizeInfo => (
               <Display
+                piffle={piffle}
                 sourceImg={sourceImg}
                 spriteSheet={spriteSheet}
                 setCanvasRef={setCanvasRef}

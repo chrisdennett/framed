@@ -4,6 +4,7 @@ import { frameOptionSettings } from "../appData";
 
 const Display = ({
   appData,
+  piffle,
   setCanvasRef,
   sourceImg,
   spriteSheet,
@@ -12,7 +13,7 @@ const Display = ({
   const canvasRef = useRef(null);
   setCanvasRef(canvasRef.current);
 
-  const { width: displayWidth, height: displayHeight } = sizeInfo;
+  const { height: displayHeight } = sizeInfo;
 
   const {
     frameOption,
@@ -32,7 +33,8 @@ const Display = ({
       frameThickness,
       mountThickness,
       sourceCanvas: sourceImg,
-      spriteSheet
+      spriteSheet,
+      piffle
     });
     const ctx = canvasRef.current.getContext("2d");
     canvasRef.current.width = framedCanvas.width;
@@ -88,7 +90,8 @@ const createFramedCanvas = ({
   mountThickness = 90,
   frameBevel = 5,
   mountBevel = 3,
-  spriteSheet
+  spriteSheet,
+  piffle
 }) => {
   const outputCanvas = document.createElement("canvas");
 
@@ -110,7 +113,7 @@ const createFramedCanvas = ({
   const frameHeight = mountHeight + doubleFrame + doubleFrameBevel;
 
   outputCanvas.width = frameWidth;
-  outputCanvas.height = frameHeight;
+  outputCanvas.height = frameHeight + 300;
 
   const frameBevelX = frameThickness;
   const frameBevelY = frameThickness;
@@ -183,31 +186,100 @@ const createFramedCanvas = ({
   }
 
   // frame shadows
-  drawInnerShadow(
-    ctx,
-    mountX,
-    mountY,
-    mountWidth,
-    mountHeight,
-    0.007,
-    shadowOpacity
-  );
-  drawInnerShadow(
-    ctx,
-    mountX,
-    mountY,
-    mountWidth,
-    mountHeight,
-    -0.004,
-    shadowOpacity - 0.1
-  );
+  // drawInnerShadow(
+  //   ctx,
+  //   mountX,
+  //   mountY,
+  //   mountWidth,
+  //   mountHeight,
+  //   0.007,
+  //   shadowOpacity
+  // );
+  // drawInnerShadow(
+  //   ctx,
+  //   mountX,
+  //   mountY,
+  //   mountWidth,
+  //   mountHeight,
+  //   -0.004,
+  //   shadowOpacity - 0.1
+  // );
 
-  // mount shadows
-  drawInnerShadow(ctx, imgX, imgY, imgW, imgH, 0.003, 0.7);
-  drawInnerShadow(ctx, imgX, imgY, imgW, imgH, -0.003, 0.5);
+  // // mount shadows
+  // drawInnerShadow(ctx, imgX, imgY, imgW, imgH, 0.003, 0.7);
+  // drawInnerShadow(ctx, imgX, imgY, imgW, imgH, -0.003, 0.5);
+
+  drawPifflePlaque({ ctx, piffle, frameX, frameY, frameHeight, frameWidth });
 
   return outputCanvas;
 };
+
+const drawPifflePlaque = ({
+  ctx,
+  piffle,
+  frameX,
+  frameY,
+  frameHeight,
+  frameWidth
+}) => {
+  // ctx.fillText(piffle.text, 50, frameY + frameHeight + 80);
+
+  const plaqueX = frameX;
+  const plaqueY = frameY + frameHeight + 80;
+  const maxPlaqueWidth = frameWidth;
+  const fontSize = 42;
+  const textPadding = 20;
+
+  ctx.fillStyle = "#ddd";
+  ctx.fillRect(plaqueX, plaqueY, maxPlaqueWidth, 300);
+
+  ctx.font = `${fontSize}px Calibri`;
+  ctx.fillStyle = "#333";
+  console.log("piffle: ", piffle);
+
+  wrapText(
+    ctx,
+    piffle.text,
+    plaqueX + textPadding,
+    plaqueY + fontSize + textPadding,
+    maxPlaqueWidth - textPadding,
+    fontSize * 1.5
+  );
+};
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  var words = text.split(" ");
+  var line = "";
+
+  for (var n = 0; n < words.length; n++) {
+    var testLine = line + words[n] + " ";
+    var metrics = ctx.measureText(testLine);
+    var testWidth = metrics.width;
+    if (testWidth > maxWidth && n > 0) {
+      ctx.fillText(line, x, y);
+      line = words[n] + " ";
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line, x, y);
+}
+
+// var canvas = document.getElementById('myCanvas');
+// var context = canvas.getContext('2d');
+// var maxWidth = 400;
+// var lineHeight = 24;
+// var x = (canvas.width - maxWidth) / 2;
+// var y = 60;
+// var text = 'All the world\'s a stage, and all the men and women merely players. They have their exits and their entrances; And one man in his time plays many parts.';
+
+// context.font = '15pt Calibri';
+// context.fillStyle = '#333';
+
+// wrapText(context, text, x, y, maxWidth, lineHeight);
+
+// });
 
 // draw bg colour blocks
 const drawBgColourBlocks = ({
