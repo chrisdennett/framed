@@ -31,16 +31,17 @@ const defaultAppData = {
     },
 
     frameColour: {
+      showIfs: [{ key: "frameOption", condition: "simple" }],
       dividerAbove: true,
       label: "Frame Colour",
       type: "colour",
-      defaultValue: "#000000"
+      defaultValue: "#242424"
     },
 
     mountColour: {
       label: "Mount Colour",
       type: "colour",
-      defaultValue: "#f2d739"
+      defaultValue: "#f5f5f5"
     },
 
     frameThickness: {
@@ -59,55 +60,55 @@ const defaultAppData = {
       min: 1,
       max: 201,
       step: 1,
-      defaultValue: 32
-    },
-
-    cropArtwork: {
-      dividerAbove: true,
-      label: "Crop Art",
-      type: "boolean",
-      defaultValue: false
-    },
-
-    cropTop: {
-      showIfs: [{ key: "cropArtwork", condition: true }],
-      label: "Top",
-      type: "range",
-      min: 0,
-      max: 100,
-      step: 1,
-      defaultValue: 0
-    },
-
-    cropBottom: {
-      showIfs: [{ key: "cropArtwork", condition: true }],
-      label: "Bottom",
-      type: "range",
-      min: 0,
-      max: 100,
-      step: 1,
-      defaultValue: 0
-    },
-
-    cropLeft: {
-      showIfs: [{ key: "cropArtwork", condition: true }],
-      label: "Left",
-      type: "range",
-      min: 0,
-      max: 100,
-      step: 1,
-      defaultValue: 0
-    },
-
-    cropRight: {
-      showIfs: [{ key: "cropArtwork", condition: true }],
-      label: "Right",
-      type: "range",
-      min: 0,
-      max: 100,
-      step: 1,
-      defaultValue: 0
+      defaultValue: 62
     }
+
+    // cropArtwork: {
+    //   dividerAbove: true,
+    //   label: "Crop Art",
+    //   type: "boolean",
+    //   defaultValue: false
+    // }
+
+    // cropTop: {
+    //   showIfs: [{ key: "cropArtwork", condition: true }],
+    //   label: "Top",
+    //   type: "range",
+    //   min: 0,
+    //   max: 100,
+    //   step: 1,
+    //   defaultValue: 0
+    // },
+
+    // cropBottom: {
+    //   showIfs: [{ key: "cropArtwork", condition: true }],
+    //   label: "Bottom",
+    //   type: "range",
+    //   min: 0,
+    //   max: 100,
+    //   step: 1,
+    //   defaultValue: 0
+    // },
+
+    // cropLeft: {
+    //   showIfs: [{ key: "cropArtwork", condition: true }],
+    //   label: "Left",
+    //   type: "range",
+    //   min: 0,
+    //   max: 100,
+    //   step: 1,
+    //   defaultValue: 0
+    // },
+
+    // cropRight: {
+    //   showIfs: [{ key: "cropArtwork", condition: true }],
+    //   label: "Right",
+    //   type: "range",
+    //   min: 0,
+    //   max: 100,
+    //   step: 1,
+    //   defaultValue: 0
+    // }
   }
 };
 

@@ -14,10 +14,7 @@ const Display = ({ appData, sizeInfo, setCanvasRef }) => {
     frameColour,
     mountColour,
     frameThickness,
-    mountThickness,
-    cropTop,
-    cropBottom,
-    cropLeft
+    mountThickness
   } = appData;
 
   console.log("frameOption: ", frameOption);
@@ -42,6 +39,10 @@ const Display = ({ appData, sizeInfo, setCanvasRef }) => {
     if (sourceImg && spriteSheet) {
       const framedCanvas = createFramedCanvas({
         ...frameSettings,
+        frameColour,
+        mountColour,
+        frameThickness,
+        mountThickness,
         sourceCanvas: sourceImg,
         spriteSheet
       });
