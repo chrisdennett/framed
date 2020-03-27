@@ -1,13 +1,33 @@
+export const frameOptionSettings = {
+  simple: {
+    frameType: "simple",
+    frameBevel: 5
+  },
+
+  fancy: {
+    frameType: "fancy",
+    frameBevel: 0
+  }
+};
+
 const defaultAppData = {
   title: "Framed",
   infoUrl: "https://artfly.io/framed/",
   defaultSaveName: "artfly-framed.jpg",
   settings: {
-    useFancyFrame: {
+    frameOption: {
+      label: "Frame Type",
       dividerAbove: true,
-      label: "Fancy Frame",
-      type: "boolean",
-      defaultValue: true
+      defaultValue: "simple",
+      type: "select",
+      options: {
+        simple: {
+          name: "Simple"
+        },
+        fancy: {
+          name: "Fancy"
+        }
+      }
     },
 
     frameColour: {
@@ -98,27 +118,7 @@ export const getAppData = (srcData = defaultAppData) => {
 
   for (let key of settingsKeys) {
     const currSetting = srcData.settings[key];
-
-    // tile selects need to be treated a bit differently
-    if (currSetting.type === "select") {
-      const { presets } = currSetting;
-      // const { presets, defaultValue } = currSetting;
-      const presetKeys = Object.keys(presets);
-      let allTileKeys = [];
-      const selectedTiles = {};
-      // for each preset.keys
-      for (let key of presetKeys) {
-        allTileKeys = allTileKeys.concat(presets[key].keys);
-      }
-
-      for (let tileKey of allTileKeys) {
-        selectedTiles[tileKey] = true;
-      }
-
-      appData.selectedTiles = selectedTiles;
-    }
-
-    appData[key] = srcData.settings[key].defaultValue;
+    appData[key] = currSetting.defaultValue;
   }
 
   return appData;

@@ -11,7 +11,12 @@ import "@material/menu-surface/dist/mdc.menu-surface.css";
 import { Select } from "@rmwc/select";
 import { MdSkipPrevious, MdSkipNext } from "react-icons/md";
 
-const QuickSelectMenu = ({ currentOptionKey, options = {}, onUpdate }) => {
+const QuickSelectMenu = ({
+  currentOptionKey,
+  options = {},
+  onUpdate,
+  label = "hello"
+}) => {
   const optionKeys = Object.keys(options);
   const totalOptions = optionKeys.length;
   const currOptionIndex = optionKeys.indexOf(currentOptionKey);
@@ -31,20 +36,21 @@ const QuickSelectMenu = ({ currentOptionKey, options = {}, onUpdate }) => {
     onUpdate(optionKey);
   };
 
+  console.log("currentOptionKey: ", currentOptionKey);
+
   return (
     <Container>
+      <SliderLabel>{label}</SliderLabel>
       <NavButton onClick={() => onUpdate(optionKeys[prevOptionIndex])}>
         <MdSkipPrevious />
       </NavButton>
-
       <Select
         style={{ maxWidth: 120, fontSize: 14 }}
         value={options[currentOptionKey].name}
-        label="Tile Group"
+        label={null}
         onChange={onSelect}
         options={optionNames}
       />
-
       <NavButton onClick={() => onUpdate(optionKeys[nextOptionIndex])}>
         <MdSkipNext />
       </NavButton>
@@ -54,17 +60,29 @@ const QuickSelectMenu = ({ currentOptionKey, options = {}, onUpdate }) => {
 
 export default QuickSelectMenu;
 
+const SliderLabel = styled.div`
+  width: 100%;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+`;
+
 const Container = styled.div`
   display: block;
   width: 100%;
-  text-align: center;
+  /* text-align: center; */
 
   .mdc-select__native-control {
+    padding-bottom: 0;
+    padding-top: 0;
     padding-right: 10px;
     padding-left: 5px;
+    height: 42px;
   }
 
   .mdc-select {
+    height: 42px;
+
     option {
       color: black;
     }

@@ -1,24 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import fancyFrameSpriteSheet from "./spritesheet.png";
-
-const basicDefaults = {
-  frameColour: "#333",
-  mountColour: "#eeeeee",
-  frameType: "simple",
-  frameThickness: 20,
-  mountThickness: 90,
-  frameBevel: 5,
-  mountBevel: 3
-};
-
-const fancyDefaults = {
-  frameType: "fancy",
-  frameThickness: 80,
-  mountThickness: 90,
-  frameBevel: 0,
-  mountBevel: 3
-};
+import { frameOptionSettings } from "../appData";
 
 const Display = ({ appData, sizeInfo, setCanvasRef }) => {
   const canvasRef = useRef(null);
@@ -27,7 +10,7 @@ const Display = ({ appData, sizeInfo, setCanvasRef }) => {
   setCanvasRef(canvasRef.current);
 
   const {
-    useFancyFrame,
+    frameOption,
     frameColour,
     mountColour,
     frameThickness,
@@ -36,6 +19,9 @@ const Display = ({ appData, sizeInfo, setCanvasRef }) => {
     cropBottom,
     cropLeft
   } = appData;
+
+  console.log("frameOption: ", frameOption);
+  const frameSettings = frameOptionSettings[frameOption];
 
   useEffect(() => {
     if (!sourceImg) {
@@ -54,10 +40,8 @@ const Display = ({ appData, sizeInfo, setCanvasRef }) => {
     }
 
     if (sourceImg && spriteSheet) {
-      const presetDefaults = useFancyFrame ? fancyDefaults : basicDefaults;
-
       const framedCanvas = createFramedCanvas({
-        ...presetDefaults,
+        ...frameSettings,
         sourceCanvas: sourceImg,
         spriteSheet
       });

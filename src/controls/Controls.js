@@ -7,6 +7,7 @@ import SliderControl from "./sliderControl/SliderControl";
 import { SwitchControl } from "./switchControl/SwitchControl";
 import ColourPicker from "../components/colourPicker/ColourPicker";
 import PhotoSelector from "../components/photoSelector/PhotoSelector";
+import QuickSelectMenu from "../components/quickSelectControl/QuickSelectControl";
 
 const Controls = ({
   appData,
@@ -19,6 +20,10 @@ const Controls = ({
 
   const updateSettings = (key, newValue) => {
     onUpdate({ ...appData, [key]: newValue });
+  };
+
+  const updateMultipleSettings = updates => {
+    onUpdate({ ...appData, ...updates });
   };
 
   const onPhotoSelected = file => {
@@ -48,6 +53,24 @@ const Controls = ({
               if (appData[condition.key] !== condition.condition) {
                 return null;
               }
+          }
+
+          if (currSetting.type === "select") {
+            return (
+              <ControlHolder dividerAbove={dividerAbove} key={key}>
+                <QuickSelectMenu
+                  currentOptionKey={currValue}
+                  label={currSetting.label}
+                  options={currSetting.options}
+                  onUpdate={selectedOption => {
+                    updateMultipleSettings({
+                      [key]: selectedOption,
+                      ...currSetting.options[currValue].data
+                    });
+                  }}
+                />
+              </ControlHolder>
+            );
           }
 
           if (currSetting.type === "colour") {
