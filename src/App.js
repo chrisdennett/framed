@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { saveAs } from "file-saver";
 import * as Space from "react-spaces";
+import fancyFrameSpriteSheet from "./spritesheet.png";
 // comps
 //
 import TopBar from "./top-bar/TopBar";
@@ -8,8 +9,11 @@ import Display from "./display/Display";
 import Controls from "./controls/Controls";
 import { getAppData } from "./appData";
 import useWindowDimensions from "./hooks/usWindowDimensions";
+import { GetImage } from "./ImageHelper";
 
 export default function App() {
+  const [sourceImg, setSourceImg] = useState(null);
+  const [spriteSheet, setSpriteSheet] = useState(null);
   const [appData, setAppData] = useState(getAppData());
   const [canvasRef, setCanvasRef] = useState(null);
   const [optionsVisible, setOptionsVisible] = useState(true);
@@ -26,9 +30,28 @@ export default function App() {
     }
   };
 
-  const onAddImage = () => {
-    console.log("CHOOSE IMAGE");
+  const onAddImage = imgFile => {
+    GetImage(imgFile, img => {
+      setSourceImg(img);
+    });
   };
+
+  useEffect(() => {
+    if (!sourceImg) {
+      const image = new Image();
+      image.crossOrigin = "Anonymous";
+      image.onload = () => {
+        setSourceImg(image);
+      };
+      image.src = "./img/doug.png";
+    }
+
+    if (!spriteSheet) {
+      loadImage(fancyFrameSpriteSheet, img => {
+        setSpriteSheet(img);
+      });
+    }
+  });
 
   return (
     <Space.ViewPort right={10} bottom={10} left={10}>
@@ -84,6 +107,8 @@ export default function App() {
           <Space.Info>
             {sizeInfo => (
               <Display
+                sourceImg={sourceImg}
+                spriteSheet={spriteSheet}
                 setCanvasRef={setCanvasRef}
                 sizeInfo={sizeInfo}
                 appData={appData}
@@ -95,3 +120,12 @@ export default function App() {
     </Space.ViewPort>
   );
 }
+
+const loadImage = (url, callback) => {
+  let sourceImg = new Image();
+  sourceImg.setAttribute("crossOrigin", "anonymous"); //
+  sourceImg.src = url;
+  sourceImg.onload = () => {
+    if (callback) callback(sourceImg);
+  };
+};

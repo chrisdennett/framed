@@ -15,7 +15,7 @@ const QuickSelectMenu = ({
   currentOptionKey,
   options = {},
   onUpdate,
-  label = "hello"
+  label
 }) => {
   const optionKeys = Object.keys(options);
   const totalOptions = optionKeys.length;
@@ -35,8 +35,6 @@ const QuickSelectMenu = ({
 
     onUpdate(optionKey);
   };
-
-  console.log("currentOptionKey: ", currentOptionKey);
 
   return (
     <Container>
@@ -70,7 +68,6 @@ const SliderLabel = styled.div`
 const Container = styled.div`
   display: block;
   width: 100%;
-  /* text-align: center; */
 
   .mdc-select__native-control {
     padding-bottom: 0;

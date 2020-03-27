@@ -27,7 +27,7 @@ const Controls = ({
   };
 
   const onPhotoSelected = file => {
-    console.log("file: ", file);
+    onAddImage(file);
   };
 
   const settingsKeys = Object.keys(settings);

@@ -1,12 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
-import fancyFrameSpriteSheet from "./spritesheet.png";
 import { frameOptionSettings } from "../appData";
 
-const Display = ({ appData, sizeInfo, setCanvasRef }) => {
+const Display = ({ appData, setCanvasRef, sourceImg, spriteSheet }) => {
   const canvasRef = useRef(null);
-  const [sourceImg, setSourceImg] = useState(null);
-  const [spriteSheet, setSpriteSheet] = useState(null);
   setCanvasRef(canvasRef.current);
 
   const {
@@ -17,41 +14,23 @@ const Display = ({ appData, sizeInfo, setCanvasRef }) => {
     mountThickness
   } = appData;
 
-  console.log("frameOption: ", frameOption);
   const frameSettings = frameOptionSettings[frameOption];
 
-  useEffect(() => {
-    if (!sourceImg) {
-      const image = new Image();
-      image.crossOrigin = "Anonymous";
-      image.onload = () => {
-        setSourceImg(image);
-      };
-      image.src = "./img/doug.png";
-    }
-
-    if (!spriteSheet) {
-      loadImage(fancyFrameSpriteSheet, img => {
-        setSpriteSheet(img);
-      });
-    }
-
-    if (sourceImg && spriteSheet) {
-      const framedCanvas = createFramedCanvas({
-        ...frameSettings,
-        frameColour,
-        mountColour,
-        frameThickness,
-        mountThickness,
-        sourceCanvas: sourceImg,
-        spriteSheet
-      });
-      const ctx = canvasRef.current.getContext("2d");
-      canvasRef.current.width = framedCanvas.width;
-      canvasRef.current.height = framedCanvas.height;
-      ctx.drawImage(framedCanvas, 0, 0);
-    }
-  });
+  if (sourceImg && spriteSheet) {
+    const framedCanvas = createFramedCanvas({
+      ...frameSettings,
+      frameColour,
+      mountColour,
+      frameThickness,
+      mountThickness,
+      sourceCanvas: sourceImg,
+      spriteSheet
+    });
+    const ctx = canvasRef.current.getContext("2d");
+    canvasRef.current.width = framedCanvas.width;
+    canvasRef.current.height = framedCanvas.height;
+    ctx.drawImage(framedCanvas, 0, 0);
+  }
 
   return (
     <Container>
@@ -127,14 +106,24 @@ const createFramedCanvas = ({
   const imgY = mountBevelY + mountBevel;
 
   const ctx = outputCanvas.getContext("2d");
-
-  // mount
-  ctx.fillStyle = mountColour;
-  ctx.fillRect(mountX, mountY, mountWidth, mountHeight);
-
-  ctx.drawImage(sourceCanvas, imgX, imgY);
-
   const shadowOpacity = frameType === "fancy" ? 0.9 : 0.3;
+
+  drawBgColourBlocks({
+    ctx,
+    frameX,
+    frameY,
+    frameWidth,
+    frameHeight,
+    frameColour,
+    mountX,
+    mountY,
+    mountWidth,
+    mountHeight,
+    mountColour
+  });
+
+  // IMAGE
+  ctx.drawImage(sourceCanvas, imgX, imgY);
 
   // mount bevel
   drawFrameSections({
@@ -208,11 +197,20 @@ const drawBgColourBlocks = ({
   frameWidth,
   frameHeight,
   frameX,
-  frameY
+  frameY,
+  mountColour,
+  mountWidth,
+  mountHeight,
+  mountX,
+  mountY
 }) => {
   // frame bg
   ctx.fillStyle = frameColour;
   ctx.fillRect(frameX, frameY, frameWidth, frameHeight);
+
+  // mount
+  ctx.fillStyle = mountColour;
+  ctx.fillRect(mountX, mountY, mountWidth, mountHeight);
 };
 
 // draw sections onto canvas
@@ -816,13 +814,4 @@ const hexToHSL = H => {
   l = +(l * 100).toFixed(1);
 
   return { h, s, l };
-};
-
-const loadImage = (url, callback) => {
-  let sourceImg = new Image();
-  sourceImg.setAttribute("crossOrigin", "anonymous"); //
-  sourceImg.src = url;
-  sourceImg.onload = () => {
-    if (callback) callback(sourceImg);
-  };
 };
