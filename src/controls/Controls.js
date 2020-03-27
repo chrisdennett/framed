@@ -32,7 +32,6 @@ const Controls = ({
       <ControlsUI wrapControls={wrap}>
         <ButtHolder>
           <PhotoSelector onPhotoSelected={onPhotoSelected} />
-          <Button label="ADD IMAGE" raised onClick={onAddImage} />
         </ButtHolder>
 
         <ButtHolder>

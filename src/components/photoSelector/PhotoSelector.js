@@ -1,5 +1,7 @@
-// externals
 import React from "react";
+import styled from "styled-components";
+import "@material/button/dist/mdc.button.css";
+import { Button } from "@rmwc/button";
 
 const PhotoSelector = ({ onPhotoSelected }) => {
   const onFileSelect = e => {
@@ -12,7 +14,7 @@ const PhotoSelector = ({ onPhotoSelected }) => {
   };
 
   return (
-    <div>
+    <Holder>
       <input
         onChange={onFileSelect}
         multiple={false}
@@ -24,10 +26,38 @@ const PhotoSelector = ({ onPhotoSelected }) => {
       />
 
       <label htmlFor={"photo-selector"}>
-        <button alt="Select a photo">SELECT A PHOTO</button>
+        <Button label="ADD IMAGE" raised />
       </label>
-    </div>
+    </Holder>
   );
 };
 
 export default PhotoSelector;
+
+const Holder = styled.div`
+  position: relative;
+  input {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
+  label {
+    padding: 10px 0;
+    cursor: pointer;
+  }
+
+  button {
+    pointer-events: none;
+  }
+`;
+
+// .quickPhotoSelector--customInputButton{
+//     cursor: pointer;
+//     margin-top: 10px;
+//     outline: none;
+//     text-align: center;
+// }
