@@ -6,12 +6,23 @@ import { Button } from "@rmwc/button";
 import SliderControl from "./sliderControl/SliderControl";
 import { SwitchControl } from "./switchControl/SwitchControl";
 import ColourPicker from "../components/colourPicker/ColourPicker";
+import PhotoSelector from "../components/photoSelector/PhotoSelector";
 
-const Controls = ({ appData, onUpdate, wrap = false, onSaveImage }) => {
+const Controls = ({
+  appData,
+  onUpdate,
+  wrap = false,
+  onSaveImage,
+  onAddImage
+}) => {
   const { settings } = appData;
 
   const updateSettings = (key, newValue) => {
     onUpdate({ ...appData, [key]: newValue });
+  };
+
+  const onPhotoSelected = file => {
+    console.log("file: ", file);
   };
 
   const settingsKeys = Object.keys(settings);
@@ -19,6 +30,11 @@ const Controls = ({ appData, onUpdate, wrap = false, onSaveImage }) => {
   return (
     <Container>
       <ControlsUI wrapControls={wrap}>
+        <ButtHolder>
+          <PhotoSelector onPhotoSelected={onPhotoSelected} />
+          <Button label="ADD IMAGE" raised onClick={onAddImage} />
+        </ButtHolder>
+
         <ButtHolder>
           <Button label="SAVE" raised onClick={onSaveImage} />
         </ButtHolder>

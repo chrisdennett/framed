@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
+import fancyFrameSpriteSheet from "./spritesheet.png";
 
 const Display = ({ appData, sizeInfo, setCanvasRef }) => {
   const canvasRef = useRef(null);
@@ -117,6 +118,9 @@ const createFramedCanvas = ({
 
   ctx.drawImage(sourceCanvas, imgX, imgY);
 
+  const frameType = "plain";
+  const shadowOpacity = frameType === "ornate" ? 0.9 : 0.3;
+
   // mount bevel
   drawFrameSections({
     ctx,
@@ -148,6 +152,30 @@ const createFramedCanvas = ({
     height: frameBevelHeight,
     colour: frameColour
   });
+
+  // frame shadows
+  drawInnerShadow(
+    ctx,
+    mountX,
+    mountY,
+    mountWidth,
+    mountHeight,
+    0.007,
+    shadowOpacity
+  );
+  drawInnerShadow(
+    ctx,
+    mountX,
+    mountY,
+    mountWidth,
+    mountHeight,
+    -0.004,
+    shadowOpacity - 0.1
+  );
+
+  // mount shadows
+  drawInnerShadow(ctx, imgX, imgY, imgW, imgH, 0.003, 0.7);
+  drawInnerShadow(ctx, imgX, imgY, imgW, imgH, -0.003, 0.5);
 
   return outputCanvas;
 };
@@ -212,6 +240,467 @@ const drawFrameSections = ({
   ctx.fill();
 };
 
+// shadows
+const drawInnerShadow = (
+  ctx,
+  startX,
+  startY,
+  width,
+  height,
+  offsetFraction,
+  opacity = 0.9
+) => {
+  ctx.shadowOffsetX = offsetFraction * width;
+  ctx.shadowOffsetY = offsetFraction * width;
+  ctx.shadowBlur = 0.01 * width;
+  ctx.shadowColor = `rgba(0, 0, 0, ${opacity})`;
+
+  const sizeDiff = 10;
+  const doubleSizeDiff = sizeDiff * 2;
+
+  const bigRectLeft = startX - sizeDiff;
+  const bigRectTop = startY - sizeDiff;
+  const bigRectRight = bigRectLeft + width + doubleSizeDiff;
+  const bigRectBottom = bigRectTop + height + doubleSizeDiff;
+
+  const smallRectLeft = startX;
+  const smallRectTop = startY;
+  const smallRectRight = smallRectLeft + width;
+  const smallRectBottom = smallRectTop + height;
+
+  // hide the frame shape used to generate the shadow
+  // could probably use a stroke instead
+  ctx.rect(startX, startY, width, height);
+  ctx.clip();
+
+  // draw anti-clockwise
+  ctx.beginPath();
+  ctx.moveTo(bigRectRight, bigRectBottom);
+  ctx.lineTo(bigRectRight, bigRectTop);
+  ctx.lineTo(bigRectLeft, bigRectTop);
+  ctx.lineTo(bigRectLeft, bigRectBottom);
+  ctx.lineTo(bigRectRight, bigRectBottom);
+
+  // then clockwise to cut out a frame shape
+  // the shadow on the inner edge is what's seen
+  ctx.moveTo(smallRectLeft, smallRectTop);
+  ctx.lineTo(smallRectRight, smallRectTop);
+  ctx.lineTo(smallRectRight, smallRectBottom);
+  ctx.lineTo(smallRectLeft, smallRectBottom);
+
+  ctx.closePath();
+  ctx.fill();
+};
+
+// FANCY FRAME
+// https://www.codeandweb.com/free-sprite-sheet-packer
+const fancyFrameJson = {
+  "corner-bottom-left": {
+    x: 1,
+    y: 1,
+    w: 153,
+    h: 150
+  },
+  "corner-bottom-right": {
+    x: 156,
+    y: 1,
+    w: 153,
+    h: 150
+  },
+  "corner-extension-bottom-left-horizontal": {
+    x: 311,
+    y: 1,
+    w: 34,
+    h: 150
+  },
+  "corner-extension-bottom-left-vertical": {
+    x: 1,
+    y: 153,
+    w: 153,
+    h: 41
+  },
+  "corner-extension-bottom-right-horizontal": {
+    x: 347,
+    y: 1,
+    w: 34,
+    h: 150
+  },
+  "corner-extension-bottom-right-vertical": {
+    x: 157,
+    y: 153,
+    w: 153,
+    h: 41
+  },
+  "corner-extension-top-left-horizontal": {
+    x: 383,
+    y: 1,
+    w: 34,
+    h: 150
+  },
+  "corner-extension-top-left-vertical": {
+    x: 1,
+    y: 196,
+    w: 153,
+    h: 41
+  },
+  "corner-extension-top-right-horizontal": {
+    x: 312,
+    y: 153,
+    w: 34,
+    h: 150
+  },
+  "corner-extension-top-right-vertical": {
+    x: 156,
+    y: 196,
+    w: 153,
+    h: 41
+  },
+  "corner-top-left": {
+    x: 1,
+    y: 239,
+    w: 153,
+    h: 150
+  },
+  "corner-top-right": {
+    x: 156,
+    y: 239,
+    w: 153,
+    h: 150
+  },
+  "horizontal-slice-bottom": {
+    x: 348,
+    y: 154,
+    w: 82,
+    h: 151
+  },
+  "horizontal-slice-top": {
+    x: 432,
+    y: 1,
+    w: 82,
+    h: 150
+  },
+  "vertical-slice-left": {
+    x: 311,
+    y: 306,
+    w: 153,
+    h: 77
+  },
+  "vertical-slice-right": {
+    x: 312,
+    y: 385,
+    w: 153,
+    h: 77
+  }
+};
+const drawFancyFrame = (
+  ctx,
+  startX,
+  startY,
+  width,
+  height,
+  thickness,
+  frameDepth,
+  frameColour,
+  frameSpriteSheet
+) => {
+  // corners
+  const { x: tlX, y: tlY, h: tlH, w: tlW } = fancyFrameJson["corner-top-left"];
+  const { x: trX, y: trY, h: trH, w: trW } = fancyFrameJson["corner-top-right"];
+  const { x: blX, y: blY, h: blH, w: blW } = fancyFrameJson[
+    "corner-bottom-left"
+  ];
+  const { x: brX, y: brY, h: brH, w: brW } = fancyFrameJson[
+    "corner-bottom-right"
+  ];
+
+  const frameScale = thickness / tlH;
+
+  ctx.drawImage(
+    frameSpriteSheet,
+    tlX,
+    tlY,
+    tlW,
+    tlH,
+    startX,
+    startY,
+    thickness,
+    thickness
+  );
+  ctx.drawImage(
+    frameSpriteSheet,
+    trX,
+    trY,
+    trW,
+    trH,
+    width - thickness,
+    startY,
+    thickness,
+    thickness
+  );
+  ctx.drawImage(
+    frameSpriteSheet,
+    blX,
+    blY,
+    blW,
+    blH,
+    startX,
+    height - thickness,
+    thickness,
+    thickness
+  );
+  ctx.drawImage(
+    frameSpriteSheet,
+    brX,
+    brY,
+    brW,
+    brH,
+    width - thickness,
+    height - thickness,
+    thickness,
+    thickness
+  );
+
+  // corner extensions
+  const { x: tlhX, y: tlhY, h: tlhH, w: tlhW } = fancyFrameJson[
+    "corner-extension-top-left-horizontal"
+  ];
+  const { x: trhX, y: trhY, h: trhH, w: trhW } = fancyFrameJson[
+    "corner-extension-top-right-horizontal"
+  ];
+  const { x: tlvX, y: tlvY, h: tlvH, w: tlvW } = fancyFrameJson[
+    "corner-extension-top-left-vertical"
+  ];
+  const { x: trvX, y: trvY, h: trvH, w: trvW } = fancyFrameJson[
+    "corner-extension-top-right-vertical"
+  ];
+  const { x: blhX, y: blhY, h: blhH, w: blhW } = fancyFrameJson[
+    "corner-extension-bottom-left-horizontal"
+  ];
+  const { x: brhX, y: brhY, h: brhH, w: brhW } = fancyFrameJson[
+    "corner-extension-bottom-right-horizontal"
+  ];
+  const { x: blvX, y: blvY, h: blvH, w: blvW } = fancyFrameJson[
+    "corner-extension-bottom-left-vertical"
+  ];
+  const { x: brvX, y: brvY, h: brvH, w: brvW } = fancyFrameJson[
+    "corner-extension-bottom-right-vertical"
+  ];
+  const cornerWidth = thickness + tlhW * frameScale;
+  const cornerHeight = thickness + tlvH * frameScale;
+  const middleWidth = width - cornerWidth * 2;
+  const middleHeight = height - cornerHeight * 2;
+  // top left
+  ctx.drawImage(
+    frameSpriteSheet,
+    tlhX,
+    tlhY,
+    tlhW,
+    tlhH,
+    startX + thickness,
+    startY,
+    tlhW * frameScale + 1,
+    thickness
+  );
+  ctx.drawImage(
+    frameSpriteSheet,
+    trhX,
+    trhY,
+    trhW,
+    trhH,
+    width - cornerWidth - 1,
+    startY,
+    trhW * frameScale + 1,
+    thickness
+  );
+  // top right
+  ctx.drawImage(
+    frameSpriteSheet,
+    tlvX,
+    tlvY,
+    tlvW,
+    tlvH,
+    startX,
+    startY + thickness,
+    thickness,
+    tlvH * frameScale + 1
+  );
+  ctx.drawImage(
+    frameSpriteSheet,
+    trvX,
+    trvY,
+    trvW,
+    trvH,
+    width - thickness,
+    startY + thickness,
+    thickness,
+    trvH * frameScale + 1
+  );
+
+  // bottom left
+  ctx.drawImage(
+    frameSpriteSheet,
+    blhX,
+    blhY,
+    blhW,
+    blhH,
+    startX + thickness,
+    height - thickness,
+    blhW * frameScale + 1,
+    thickness
+  );
+  ctx.drawImage(
+    frameSpriteSheet,
+    brhX,
+    brhY,
+    brhW,
+    brhH,
+    width - cornerWidth - 1,
+    height - thickness,
+    brhW * frameScale + 1,
+    thickness
+  );
+  // bottom right
+  ctx.drawImage(
+    frameSpriteSheet,
+    blvX,
+    blvY,
+    blvW,
+    blvH,
+    startX,
+    height - cornerHeight - 1,
+    thickness,
+    blvH * frameScale + 1
+  );
+  ctx.drawImage(
+    frameSpriteSheet,
+    brvX,
+    brvY,
+    brvW,
+    brvH,
+    width - thickness,
+    height - cornerHeight - 1,
+    thickness,
+    brvH * frameScale + 1
+  );
+
+  // top middle
+  repeatImageToFill({
+    ctx,
+    thickness,
+    frameScale,
+    horizontal: true,
+    x: startX + cornerWidth,
+    y: startY,
+    width: middleWidth,
+    sliceImg: frameSpriteSheet,
+    sliceData: fancyFrameJson["horizontal-slice-top"]
+  });
+
+  // bottom middle
+  repeatImageToFill({
+    ctx,
+    thickness,
+    frameScale,
+    horizontal: true,
+    x: startX + cornerWidth,
+    y: height - thickness,
+    width: middleWidth,
+    sliceImg: frameSpriteSheet,
+    sliceData: fancyFrameJson["horizontal-slice-bottom"]
+  });
+
+  // left middle
+  repeatImageToFill({
+    ctx,
+    thickness,
+    frameScale,
+    vertical: true,
+    x: startX,
+    y: startY + cornerHeight,
+    height: middleHeight,
+    sliceImg: frameSpriteSheet,
+    sliceData: fancyFrameJson["vertical-slice-left"]
+  });
+
+  // right middle
+  repeatImageToFill({
+    ctx,
+    thickness,
+    frameScale,
+    vertical: true,
+    x: width - thickness,
+    y: startY + cornerHeight,
+    height: middleHeight,
+    sliceImg: frameSpriteSheet,
+    sliceData: fancyFrameJson["vertical-slice-right"]
+  });
+};
+
+const repeatImageToFill = ({
+  ctx,
+  thickness,
+  frameScale,
+  horizontal = false,
+  vertical = false,
+  x,
+  y,
+  width,
+  height,
+  sliceImg,
+  sliceData
+}) => {
+  const { x: sliceX, y: sliceY, h: sliceH, w: sliceW } = sliceData;
+
+  if (horizontal) {
+    const scaledSliceW = sliceW * frameScale;
+
+    const slicesNeeded = Math.round(width / scaledSliceW);
+    const adjustedSliceWidth = width / slicesNeeded;
+
+    let xPos = x;
+
+    for (let i = 0; i < slicesNeeded; i++) {
+      ctx.drawImage(
+        sliceImg,
+        sliceX,
+        sliceY,
+        sliceW,
+        sliceH,
+        xPos - 1,
+        y,
+        adjustedSliceWidth + 1,
+        thickness
+      );
+      xPos += adjustedSliceWidth;
+    }
+  }
+
+  if (vertical) {
+    const scaledSliceH = sliceH * frameScale;
+
+    const slicesNeeded = Math.round(height / scaledSliceH);
+    const adjustedSliceHeight = height / slicesNeeded;
+
+    let yPos = y;
+
+    for (let i = 0; i < slicesNeeded; i++) {
+      ctx.drawImage(
+        sliceImg,
+        sliceX,
+        sliceY,
+        sliceW,
+        sliceH,
+        x,
+        yPos - 1,
+        thickness,
+        adjustedSliceHeight + 1
+      );
+      yPos += adjustedSliceHeight;
+    }
+  }
+};
+
+// UTILS
 const hexToHSL = H => {
   // Convert hex to RGB first
   let r = 0,

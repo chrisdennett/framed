@@ -26,6 +26,10 @@ export default function App() {
     }
   };
 
+  const onAddImage = () => {
+    console.log("CHOOSE IMAGE");
+  };
+
   return (
     <Space.ViewPort right={10} bottom={10} left={10}>
       {/* TOP BAR - uses size info to hide things */}
@@ -50,6 +54,7 @@ export default function App() {
           <Space.LeftResizable size={260} scrollable={true}>
             <Controls
               onSaveImage={onSaveImage}
+              onAddImage={onAddImage}
               onUpdate={setAppData}
               appData={appData}
               wrap={showMenuAtBottom}
