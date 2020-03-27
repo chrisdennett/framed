@@ -2,9 +2,17 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import { frameOptionSettings } from "../appData";
 
-const Display = ({ appData, setCanvasRef, sourceImg, spriteSheet }) => {
+const Display = ({
+  appData,
+  setCanvasRef,
+  sourceImg,
+  spriteSheet,
+  sizeInfo
+}) => {
   const canvasRef = useRef(null);
   setCanvasRef(canvasRef.current);
+
+  const { width: displayWidth, height: displayHeight } = sizeInfo;
 
   const {
     frameOption,
@@ -34,7 +42,9 @@ const Display = ({ appData, setCanvasRef, sourceImg, spriteSheet }) => {
 
   return (
     <Container>
-      <CanvasStyled ref={canvasRef} />
+      <CanvasHolder style={{ height: displayHeight }}>
+        <CanvasStyled ref={canvasRef} />
+      </CanvasHolder>
     </Container>
   );
 };
@@ -51,6 +61,15 @@ const Container = styled.div`
   justify-content: center;
   width: 100%;
   height: 100%;
+`;
+
+const CanvasHolder = styled.div`
+  padding: 1%;
+  max-height: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const CanvasStyled = styled.canvas`
