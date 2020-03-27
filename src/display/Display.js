@@ -114,7 +114,7 @@ const createFramedCanvas = ({
     frameY,
     frameWidth,
     frameHeight,
-    frameColour,
+    frameColour: frameType === "fancy" ? "#000000" : frameColour,
     mountX,
     mountY,
     mountWidth,
