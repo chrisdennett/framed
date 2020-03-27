@@ -2,20 +2,40 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import fancyFrameSpriteSheet from "./spritesheet.png";
 
+const basicDefaults = {
+  frameColour: "#333",
+  mountColour: "#eeeeee",
+  frameType: "simple",
+  frameThickness: 20,
+  mountThickness: 90,
+  frameBevel: 5,
+  mountBevel: 3
+};
+
+const fancyDefaults = {
+  frameType: "fancy",
+  frameThickness: 80,
+  mountThickness: 90,
+  frameBevel: 0,
+  mountBevel: 3
+};
+
 const Display = ({ appData, sizeInfo, setCanvasRef }) => {
   const canvasRef = useRef(null);
   const [sourceImg, setSourceImg] = useState(null);
-  // const {
-  //   frameColour,
-  //   mountColour,
-  //   frameThickness,
-  //   mountThickness,
-  //   cropTop,
-  //   cropBottom,
-  //   cropLeft
-  // } = appData;
-
+  const [spriteSheet, setSpriteSheet] = useState(null);
   setCanvasRef(canvasRef.current);
+
+  const {
+    useFancyFrame,
+    frameColour,
+    mountColour,
+    frameThickness,
+    mountThickness,
+    cropTop,
+    cropBottom,
+    cropLeft
+  } = appData;
 
   useEffect(() => {
     if (!sourceImg) {
@@ -27,8 +47,20 @@ const Display = ({ appData, sizeInfo, setCanvasRef }) => {
       image.src = "./img/doug.png";
     }
 
-    if (sourceImg) {
-      const framedCanvas = createFramedCanvas({ sourceCanvas: sourceImg });
+    if (!spriteSheet) {
+      loadImage(fancyFrameSpriteSheet, img => {
+        setSpriteSheet(img);
+      });
+    }
+
+    if (sourceImg && spriteSheet) {
+      const presetDefaults = useFancyFrame ? fancyDefaults : basicDefaults;
+
+      const framedCanvas = createFramedCanvas({
+        ...presetDefaults,
+        sourceCanvas: sourceImg,
+        spriteSheet
+      });
       const ctx = canvasRef.current.getContext("2d");
       canvasRef.current.width = framedCanvas.width;
       canvasRef.current.height = framedCanvas.height;
@@ -68,10 +100,12 @@ const createFramedCanvas = ({
   sourceCanvas,
   frameColour = "#333",
   mountColour = "#eeeeee",
+  frameType = "simple",
   frameThickness = 20,
   mountThickness = 90,
-  frameBevel = 3,
-  mountBevel = 3
+  frameBevel = 5,
+  mountBevel = 3,
+  spriteSheet
 }) => {
   const outputCanvas = document.createElement("canvas");
 
@@ -81,6 +115,9 @@ const createFramedCanvas = ({
   const doubleFrameBevel = frameBevel * 2;
   const doubleMountBevel = mountBevel * 2;
 
+  const frameX = 0;
+  const frameY = 0;
+
   const mountBevelWidth = imgW + doubleMountBevel;
   const mountBevelHeight = imgH + doubleMountBevel;
   const mountWidth = mountBevelWidth + doubleMount;
@@ -88,8 +125,6 @@ const createFramedCanvas = ({
 
   const frameWidth = mountWidth + doubleFrame + doubleFrameBevel;
   const frameHeight = mountHeight + doubleFrame + doubleFrameBevel;
-  const frameBevelWidth = frameWidth - doubleFrame;
-  const frameBevelHeight = frameHeight - doubleFrame;
 
   outputCanvas.width = frameWidth;
   outputCanvas.height = frameHeight;
@@ -108,18 +143,13 @@ const createFramedCanvas = ({
 
   const ctx = outputCanvas.getContext("2d");
 
-  // frame bg
-  ctx.fillStyle = frameColour;
-  ctx.fillRect(0, 0, frameWidth, frameHeight);
-
   // mount
   ctx.fillStyle = mountColour;
   ctx.fillRect(mountX, mountY, mountWidth, mountHeight);
 
   ctx.drawImage(sourceCanvas, imgX, imgY);
 
-  const frameType = "plain";
-  const shadowOpacity = frameType === "ornate" ? 0.9 : 0.3;
+  const shadowOpacity = frameType === "fancy" ? 0.9 : 0.3;
 
   // mount bevel
   drawFrameSections({
@@ -133,25 +163,31 @@ const createFramedCanvas = ({
     colour: mountColour
   });
 
-  // frame
-  drawFrameSections({
-    ctx,
-    thickness: frameThickness,
-    width: frameWidth,
-    height: frameHeight,
-    colour: frameColour
-  });
-
-  drawFrameSections({
-    ctx,
-    isInner: true,
-    thickness: frameBevel,
-    x: frameBevelX,
-    y: frameBevelY,
-    width: frameBevelWidth,
-    height: frameBevelHeight,
-    colour: frameColour
-  });
+  // frame;
+  if (frameType === "fancy") {
+    drawFancyFrame({
+      ctx,
+      startX: frameX,
+      startY: frameY,
+      width: frameWidth,
+      height: frameHeight,
+      thickness: frameThickness,
+      frameSpriteSheet: spriteSheet,
+      frameThickness: 50
+    });
+  } else {
+    drawSimpleFrame({
+      ctx,
+      startX: frameX,
+      startY: frameY,
+      width: frameWidth,
+      height: frameHeight,
+      frameBevel,
+      thickness: frameThickness,
+      frameThickness: 50,
+      colour: frameColour
+    });
+  }
 
   // frame shadows
   drawInnerShadow(
@@ -178,6 +214,20 @@ const createFramedCanvas = ({
   drawInnerShadow(ctx, imgX, imgY, imgW, imgH, -0.003, 0.5);
 
   return outputCanvas;
+};
+
+// draw bg colour blocks
+const drawBgColourBlocks = ({
+  ctx,
+  frameColour,
+  frameWidth,
+  frameHeight,
+  frameX,
+  frameY
+}) => {
+  // frame bg
+  ctx.fillStyle = frameColour;
+  ctx.fillRect(frameX, frameY, frameWidth, frameHeight);
 };
 
 // draw sections onto canvas
@@ -292,6 +342,48 @@ const drawInnerShadow = (
   ctx.fill();
 };
 
+// SIMPLE FRAME
+const drawSimpleFrame = ({
+  ctx,
+  startX,
+  startY,
+  width,
+  height,
+  thickness,
+  frameBevel,
+  depth,
+  colour
+}) => {
+  const doubleFrame = thickness * 2;
+  const frameBevelWidth = width - doubleFrame;
+  const frameBevelHeight = height - doubleFrame;
+  const frameBevelX = thickness;
+  const frameBevelY = thickness;
+
+  // main
+  drawFrameSections({
+    ctx,
+    x: startX,
+    y: startY,
+    thickness,
+    width,
+    height,
+    colour
+  });
+
+  // bevel
+  drawFrameSections({
+    ctx,
+    isInner: true,
+    thickness: frameBevel,
+    x: frameBevelX,
+    y: frameBevelY,
+    width: frameBevelWidth,
+    height: frameBevelHeight,
+    colour
+  });
+};
+
 // FANCY FRAME
 // https://www.codeandweb.com/free-sprite-sheet-packer
 const fancyFrameJson = {
@@ -392,17 +484,15 @@ const fancyFrameJson = {
     h: 77
   }
 };
-const drawFancyFrame = (
+const drawFancyFrame = ({
   ctx,
   startX,
   startY,
   width,
   height,
   thickness,
-  frameDepth,
-  frameColour,
   frameSpriteSheet
-) => {
+}) => {
   // corners
   const { x: tlX, y: tlY, h: tlH, w: tlW } = fancyFrameJson["corner-top-left"];
   const { x: trX, y: trY, h: trH, w: trW } = fancyFrameJson["corner-top-right"];
@@ -741,4 +831,13 @@ const hexToHSL = H => {
   l = +(l * 100).toFixed(1);
 
   return { h, s, l };
+};
+
+const loadImage = (url, callback) => {
+  let sourceImg = new Image();
+  sourceImg.setAttribute("crossOrigin", "anonymous"); //
+  sourceImg.src = url;
+  sourceImg.onload = () => {
+    if (callback) callback(sourceImg);
+  };
 };

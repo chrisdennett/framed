@@ -3,6 +3,13 @@ const defaultAppData = {
   infoUrl: "https://artfly.io/framed/",
   defaultSaveName: "artfly-framed.jpg",
   settings: {
+    useFancyFrame: {
+      dividerAbove: true,
+      label: "Fancy Frame",
+      type: "boolean",
+      defaultValue: true
+    },
+
     frameColour: {
       dividerAbove: true,
       label: "Frame Colour",
