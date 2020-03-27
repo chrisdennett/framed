@@ -446,56 +446,132 @@ export function drawStretchyToCanvas(
     outputCtx.stroke();
   }
 }
+export function createMaxSizeCanvas(
+  inputCanvas,
+  _maxWidth = 1000,
+  _maxHeight = 1000
+) {
+  const { width: inputWidth, height: inputHeight } = inputCanvas;
+  const maxWidth = _maxWidth ? _maxWidth : inputWidth;
+  const maxHeight = _maxHeight ? _maxHeight : inputHeight;
 
-/*
-OLD
-export function drawStretchyToCanvas(sourceCanvas, outputCanvas, stretchBy, xPosRequested) {
+  // get width and height restricted to maximums
+  const { width: outputWidth, height: outputHeight } = getDimensionsToFit(
+    inputWidth,
+    inputHeight,
+    maxWidth,
+    maxHeight
+  );
 
-gcloud init && git config credential.https://source.developers.google.com.helper gcloud.cmd
+  // set up the output canvas
+  const outputCanvas = document.createElement("canvas");
+  outputCanvas.width = outputWidth;
+  outputCanvas.height = outputHeight;
 
-git remote add google https://source.developers.google.com/p/artfly-lab/r/DEV
+  // draw input to output at the restricted size
+  const ctx = outputCanvas.getContext("2d");
+  ctx.drawImage(
+    inputCanvas,
+    0,
+    0,
+    inputWidth,
+    inputHeight,
+    0,
+    0,
+    outputWidth,
+    outputHeight
+  );
 
-https://source.developers.google.com/p/artfly-lab/r/main
-
-    const sourceWidth = sourceCanvas.width;
-    const sourceHeight = sourceCanvas.height;
-
-    const xPos = xPosRequested < sourceWidth ? xPosRequested : xPosRequested - 1;
-
-    const sourceCtx = sourceCanvas.getContext('2d');
-    let imageData = sourceCtx.getImageData(0, 0, sourceWidth, sourceHeight);
-    let data = imageData.data;
-    let newArray = [], red, green, blue, alpha;
-
-    for (let i = 0; i < data.length; i += 4) {
-
-        const x = (i / 4) % sourceWidth;
-        // const y = Math.floor((i / 4) / sourceWidth);
-
-        red = data[i];
-        green = data[i+1];
-        blue = data[i+2];
-        alpha = data[i+3];
-
-        newArray.push(red, green, blue, alpha);
-
-        if (x === xPos) {
-
-            for(let j=0; j<stretchBy; j++){
-                newArray.push(red, green, blue, alpha);
-            }
-        }
-    }
-
-    const uArr = Uint8ClampedArray.from(newArray);
-    const newImageData = new ImageData(uArr, sourceWidth+stretchBy, sourceHeight);
-
-
-    const ctx = outputCanvas.getContext('2d');
-    ctx.putImageData(newImageData, 0, 0);
-
-    // draw image: context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
-    // ctx.drawImage(sourceCanvas, 0, 0, sourceCanvas.width, sourceCanvas.height, 0,0,outputCanvas.width, outputCanvas.height);
+  return outputCanvas;
 }
 
-*/
+export const createOrientatedCanvas = (sourceCanvas, orientation) => {
+  const outputCanvas = document.createElement("canvas");
+  const isPortrait = orientation > 4 && orientation < 9;
+
+  // switch height and width if it's portrait
+  let canvasW = isPortrait ? sourceCanvas.height : sourceCanvas.width;
+  let canvasH = isPortrait ? sourceCanvas.width : sourceCanvas.height;
+
+  const ctx = outputCanvas.getContext("2d");
+
+  outputCanvas.width = canvasW;
+  outputCanvas.height = canvasH;
+
+  // transform context before drawing image
+  switch (orientation) {
+    case 2:
+      ctx.transform(-1, 0, 0, 1, canvasW, 0);
+      break;
+
+    case 3:
+      ctx.transform(-1, 0, 0, -1, canvasW, canvasH);
+      break;
+
+    case 4:
+      ctx.transform(1, 0, 0, -1, 0, canvasH);
+      break;
+
+    case 5:
+      ctx.transform(0, 1, 1, 0, 0, 0);
+      break;
+    case 6:
+      ctx.transform(0, 1, -1, 0, canvasW, 0);
+      break;
+    case 7:
+      ctx.transform(0, -1, -1, 0, canvasW, canvasH);
+      break;
+    case 8:
+      ctx.transform(0, -1, 1, 0, 0, canvasH);
+      break;
+    default:
+      break;
+  }
+
+  ctx.drawImage(sourceCanvas, 0, 0);
+
+  return outputCanvas;
+};
+
+export const getDimensionsToFit = (
+  inputWidth,
+  inputHeight,
+  maxWidth,
+  maxHeight
+) => {
+  let outputWidth, outputHeight;
+  const { widthToHeightRatio, heightToWidthRatio } = getDimensionRatios(
+    inputWidth,
+    inputHeight
+  );
+
+  // if the width need reducing, set width to max and scale height accordingly
+  if (inputWidth > maxWidth) {
+    outputWidth = maxWidth;
+    outputHeight = outputWidth * widthToHeightRatio;
+
+    if (outputHeight > maxHeight) {
+      outputHeight = maxHeight;
+      outputWidth = outputHeight * heightToWidthRatio;
+    }
+  }
+  // if the height need reducing, set height to max and scale width accordingly
+  else if (inputHeight > maxHeight) {
+    outputHeight = maxHeight;
+    outputWidth = outputHeight * heightToWidthRatio;
+  }
+  // otherwise output can match input
+  else {
+    outputWidth = inputWidth;
+    outputHeight = inputHeight;
+  }
+
+  return { width: outputWidth, height: outputHeight };
+};
+
+export function getDimensionRatios(w, h) {
+  const widthToHeightRatio = Math.round(100 * (h / w)) / 100;
+  const heightToWidthRatio = Math.round(100 * (w / h)) / 100;
+
+  return { widthToHeightRatio, heightToWidthRatio };
+}

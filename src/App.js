@@ -9,7 +9,11 @@ import Display from "./display/Display";
 import Controls from "./controls/Controls";
 import { getAppData } from "./appData";
 import useWindowDimensions from "./hooks/usWindowDimensions";
-import { GetImage } from "./ImageHelper";
+import {
+  GetImage,
+  createMaxSizeCanvas,
+  createOrientatedCanvas
+} from "./ImageHelper";
 
 export default function App() {
   const [sourceImg, setSourceImg] = useState(null);
@@ -31,7 +35,7 @@ export default function App() {
   };
 
   const onAddImage = imgFile => {
-    GetImage(imgFile, img => {
+    createCanvasFromFile(imgFile, img => {
       setSourceImg(img);
     });
   };
@@ -43,7 +47,7 @@ export default function App() {
       image.onload = () => {
         setSourceImg(image);
       };
-      image.src = "./img/doug.png";
+      image.src = "./img/my-awesome-art.jpg";
     }
 
     if (!spriteSheet) {
@@ -128,4 +132,19 @@ const loadImage = (url, callback) => {
   sourceImg.onload = () => {
     if (callback) callback(sourceImg);
   };
+};
+
+export const createCanvasFromFile = (file, callback) => {
+  const maxOutputCanvasSize = 1000;
+
+  GetImage(file, (sourceImg, imgOrientation) => {
+    const maxWidthCanvas = createMaxSizeCanvas(
+      sourceImg,
+      maxOutputCanvasSize,
+      maxOutputCanvasSize
+    );
+    const canvas = createOrientatedCanvas(maxWidthCanvas, imgOrientation);
+
+    callback(canvas);
+  });
 };
