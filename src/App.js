@@ -95,15 +95,15 @@ export default function App() {
       <Space.Fill>
         {/* MENU */}
         {showMenuOnLeft && (
-          <Space.LeftResizable size={260} scrollable={true}>
+          <Space.Left size={260} scrollable={true}>
             {controls}
-          </Space.LeftResizable>
+          </Space.Left>
         )}
 
         {showMenuAtBottom && (
-          <Space.BottomResizable size={"30%"} scrollable={true}>
+          <Space.Bottom size={"30%"} scrollable={true}>
             {controls}
-          </Space.BottomResizable>
+          </Space.Bottom>
         )}
 
         {/* MAIN CONTENT */}

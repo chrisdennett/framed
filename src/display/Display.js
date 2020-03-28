@@ -113,7 +113,7 @@ const createFramedCanvas = ({
   const frameHeight = mountHeight + doubleFrame + doubleFrameBevel;
 
   outputCanvas.width = frameWidth;
-  outputCanvas.height = frameHeight + 300;
+  outputCanvas.height = frameHeight;
 
   const frameBevelX = frameThickness;
   const frameBevelY = frameThickness;
@@ -186,28 +186,28 @@ const createFramedCanvas = ({
   }
 
   // frame shadows
-  // drawInnerShadow(
-  //   ctx,
-  //   mountX,
-  //   mountY,
-  //   mountWidth,
-  //   mountHeight,
-  //   0.007,
-  //   shadowOpacity
-  // );
-  // drawInnerShadow(
-  //   ctx,
-  //   mountX,
-  //   mountY,
-  //   mountWidth,
-  //   mountHeight,
-  //   -0.004,
-  //   shadowOpacity - 0.1
-  // );
+  drawInnerShadow(
+    ctx,
+    mountX,
+    mountY,
+    mountWidth,
+    mountHeight,
+    0.007,
+    shadowOpacity
+  );
+  drawInnerShadow(
+    ctx,
+    mountX,
+    mountY,
+    mountWidth,
+    mountHeight,
+    -0.004,
+    shadowOpacity - 0.1
+  );
 
   // // mount shadows
-  // drawInnerShadow(ctx, imgX, imgY, imgW, imgH, 0.003, 0.7);
-  // drawInnerShadow(ctx, imgX, imgY, imgW, imgH, -0.003, 0.5);
+  drawInnerShadow(ctx, imgX, imgY, imgW, imgH, 0.003, 0.7);
+  drawInnerShadow(ctx, imgX, imgY, imgW, imgH, -0.003, 0.5);
 
   // drawPifflePlaque({ ctx, piffle, frameX, frameY, frameHeight, frameWidth });
 
