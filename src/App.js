@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import { saveAs } from "file-saver";
-import * as Space from "react-spaces";
 import fancyFrameSpriteSheet from "./spritesheet.png";
 // comps
 //
@@ -26,10 +26,24 @@ export default function App() {
   const [appData, setAppData] = useState(getAppData());
   const [canvasRef, setCanvasRef] = useState(null);
   const [optionsVisible, setOptionsVisible] = useState(true);
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
 
-  const showMenuOnLeft = width > 700 && optionsVisible;
-  const showMenuAtBottom = !showMenuOnLeft && optionsVisible;
+  const controlsOnLeft = width > 700;
+  const appBarHeight = 60;
+  const controlPanelSize = 200;
+  const mainOutterPadding = 10;
+  const mainInnerPadding = 10;
+
+  const controlPanelTop = controlsOnLeft
+    ? appBarHeight
+    : height - controlPanelSize;
+  const controlPanelWidth = controlsOnLeft ? controlPanelSize : width;
+
+  const mainLeft = controlsOnLeft ? controlPanelSize : mainOutterPadding;
+  const mainWidth = width - mainInnerPadding * 2;
+  const mainHeight = height - mainInnerPadding * 2;
+
+  const mainBottom = controlsOnLeft ? mainOutterPadding : controlPanelSize;
 
   const onSaveImage = () => {
     if (canvasRef) {
@@ -62,73 +76,46 @@ export default function App() {
     }
   });
 
-  const controls = (
-    <Controls
-      piffle={piffle}
-      setPiffle={setPiffle}
-      onSaveImage={onSaveImage}
-      onAddImage={onAddImage}
-      onUpdate={setAppData}
-      appData={appData}
-      wrap={showMenuAtBottom}
-    />
-  );
-
   return (
-    <Space.ViewPort right={10} bottom={10} left={10}>
-      {/* TOP BAR - uses size info to hide things */}
-      <Space.Top size={60}>
-        <Space.Info>
-          {sizeInfo => (
-            <TopBar
-              title={appData.title}
-              infoUrl={appData.infoUrl}
-              optionsVisible={optionsVisible}
-              setOptionsVisible={setOptionsVisible}
-              width={sizeInfo.width}
-            />
-          )}
-        </Space.Info>
-      </Space.Top>
+    <AppHolder>
+      <AppBar height={appBarHeight}>
+        <TopBar
+          title={appData.title}
+          infoUrl={appData.infoUrl}
+          optionsVisible={optionsVisible}
+          setOptionsVisible={setOptionsVisible}
+          width={width}
+        />
+      </AppBar>
 
-      {/* HOLDER for menu and main panel */}
-      <Space.Fill>
-        {/* MENU */}
-        {showMenuOnLeft && (
-          <Space.Left size={260} scrollable={true}>
-            {controls}
-          </Space.Left>
-        )}
+      <ControlPanel top={controlPanelTop} width={controlPanelWidth}>
+        <Controls
+          piffle={piffle}
+          setPiffle={setPiffle}
+          onSaveImage={onSaveImage}
+          onAddImage={onAddImage}
+          onUpdate={setAppData}
+          appData={appData}
+          wrap={width < 700}
+        />
+      </ControlPanel>
 
-        {showMenuAtBottom && (
-          <Space.Bottom size={"30%"} scrollable={true}>
-            {controls}
-          </Space.Bottom>
-        )}
-
-        {/* MAIN CONTENT */}
-        <Space.Fill
-          style={{
-            borderBottom: "3px solid rgba(0, 0, 0, 0.3)",
-            borderRight: "3px solid rgba(0, 0, 0, 0.3)",
-            borderRadius: 10
-          }}
-        >
-          <Space.Info>
-            {sizeInfo => (
-              <Display
-                piffle={piffle}
-                sourceImg={sourceImg}
-                spriteSheet={spriteSheet}
-                setCanvasRef={setCanvasRef}
-                sizeInfo={sizeInfo}
-                appData={appData}
-              />
-            )}
-          </Space.Info>
-        </Space.Fill>
-      </Space.Fill>
-    </Space.ViewPort>
+      <Main
+        top={appBarHeight}
+        bottom={mainBottom}
+        right={mainOutterPadding}
+        left={mainLeft}
+      >
+        <Display
+          piffle={piffle}
+          sourceImg={sourceImg}
+          spriteSheet={spriteSheet}
+          setCanvasRef={setCanvasRef}
+          sizeInfo={{ width: mainWidth, height: mainHeight }}
+          appData={appData}
+        />
+      </Main>
+    </AppHolder>
   );
 }
 
@@ -155,3 +142,32 @@ export const createCanvasFromFile = (file, callback) => {
     callback(canvas);
   });
 };
+
+//
+const AppHolder = styled.div`
+  padding: 10;
+`;
+
+const AppBar = styled.div`
+  padding: 10;
+`;
+
+const ControlPanel = styled.div`
+  padding: 10;
+  position: fixed;
+  left: 0;
+  top: ${props => props.top}px;
+  bottom: 0;
+  width: ${props => props.width}px;
+  overflow: auto;
+`;
+
+const Main = styled.div`
+  padding: 10;
+  position: fixed;
+  left: ${props => props.left}px;
+  right: ${props => props.right}px;
+  top: ${props => props.top}px;
+  bottom: ${props => props.bottom}px;
+  overflow: hidden;
+`;
