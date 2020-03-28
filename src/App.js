@@ -62,6 +62,18 @@ export default function App() {
     }
   });
 
+  const controls = (
+    <Controls
+      piffle={piffle}
+      setPiffle={setPiffle}
+      onSaveImage={onSaveImage}
+      onAddImage={onAddImage}
+      onUpdate={setAppData}
+      appData={appData}
+      wrap={showMenuAtBottom}
+    />
+  );
+
   return (
     <Space.ViewPort right={10} bottom={10} left={10}>
       {/* TOP BAR - uses size info to hide things */}
@@ -84,28 +96,13 @@ export default function App() {
         {/* MENU */}
         {showMenuOnLeft && (
           <Space.LeftResizable size={260} scrollable={true}>
-            <Controls
-              piffle={piffle}
-              setPiffle={setPiffle}
-              onSaveImage={onSaveImage}
-              onAddImage={onAddImage}
-              onUpdate={setAppData}
-              appData={appData}
-              wrap={showMenuAtBottom}
-            />
+            {controls}
           </Space.LeftResizable>
         )}
 
         {showMenuAtBottom && (
           <Space.BottomResizable size={"30%"} scrollable={true}>
-            <Controls
-              piffle={piffle}
-              setPiffle={setPiffle}
-              onSaveImage={onSaveImage}
-              onUpdate={setAppData}
-              appData={appData}
-              wrap={showMenuAtBottom}
-            />
+            {controls}
           </Space.BottomResizable>
         )}
 

@@ -209,7 +209,7 @@ const createFramedCanvas = ({
   // drawInnerShadow(ctx, imgX, imgY, imgW, imgH, 0.003, 0.7);
   // drawInnerShadow(ctx, imgX, imgY, imgW, imgH, -0.003, 0.5);
 
-  drawPifflePlaque({ ctx, piffle, frameX, frameY, frameHeight, frameWidth });
+  // drawPifflePlaque({ ctx, piffle, frameX, frameY, frameHeight, frameWidth });
 
   return outputCanvas;
 };

@@ -46,9 +46,9 @@ const Controls = ({
           <Button label="SAVE" raised onClick={onSaveImage} />
         </ButtHolder>
 
-        <ControlHolder dividerAbove={true}>
+        {/* <ControlHolder dividerAbove={true}>
           <PiffleControl piffle={piffle} setPiffle={setPiffle} />
-        </ControlHolder>
+        </ControlHolder> */}
 
         {settingsKeys.map(key => {
           const currSetting = settings[key];
