@@ -5,7 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #3e3e3e;
+  background: whitesmoke;
+  /* background: url("/img/concrete_wall_2.png") #f3f3f3; */
 }
 
 code {

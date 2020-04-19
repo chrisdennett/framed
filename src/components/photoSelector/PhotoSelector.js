@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import "@material/button/dist/mdc.button.css";
-import { Button } from "@rmwc/button";
+import "@rmwc/icon-button/styles";
+import { IconButton } from "@rmwc/icon-button";
 
 const PhotoSelector = ({ onPhotoSelected }) => {
-  const onFileSelect = e => {
+  const onFileSelect = (e) => {
     e.preventDefault();
     if (e.target.files[0]) {
       const selected = e.target.files;
@@ -26,7 +27,7 @@ const PhotoSelector = ({ onPhotoSelected }) => {
       />
 
       <label htmlFor={"photo-selector"}>
-        <Button label="ADD IMAGE" raised />
+        <IconButton label="add image" icon="add_a_photo" />
       </label>
     </Holder>
   );
@@ -35,6 +36,7 @@ const PhotoSelector = ({ onPhotoSelected }) => {
 export default PhotoSelector;
 
 const Holder = styled.div`
+  display: inline-block;
   position: relative;
   input {
     width: 0.1px;

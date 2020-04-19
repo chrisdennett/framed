@@ -1,13 +1,13 @@
 export const frameOptionSettings = {
   simple: {
     frameType: "simple",
-    frameBevel: 5
+    frameBevel: 5,
   },
 
   fancy: {
     frameType: "fancy",
-    frameBevel: 0
-  }
+    frameBevel: 0,
+  },
 };
 
 const defaultAppData = {
@@ -22,26 +22,25 @@ const defaultAppData = {
       type: "select",
       options: {
         simple: {
-          name: "Simple"
+          name: "Simple",
         },
         fancy: {
-          name: "Fancy"
-        }
-      }
+          name: "Fancy",
+        },
+      },
     },
 
     frameColour: {
       showIfs: [{ key: "frameOption", condition: "simple" }],
-      dividerAbove: true,
       label: "Frame Colour",
       type: "colour",
-      defaultValue: "#242424"
+      defaultValue: "#242424",
     },
 
     mountColour: {
       label: "Mount Colour",
       type: "colour",
-      defaultValue: "#f5f5f5"
+      defaultValue: "#f5f5f5",
     },
 
     frameThickness: {
@@ -51,7 +50,7 @@ const defaultAppData = {
       min: 1,
       max: 201,
       step: 1,
-      defaultValue: 32
+      defaultValue: 32,
     },
 
     mountThickness: {
@@ -60,8 +59,8 @@ const defaultAppData = {
       min: 1,
       max: 201,
       step: 1,
-      defaultValue: 62
-    }
+      defaultValue: 62,
+    },
 
     // cropArtwork: {
     //   dividerAbove: true,
@@ -109,7 +108,7 @@ const defaultAppData = {
     //   step: 1,
     //   defaultValue: 0
     // }
-  }
+  },
 };
 
 export const getAppData = (srcData = defaultAppData) => {

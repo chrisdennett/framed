@@ -7,7 +7,7 @@ import { isUndefined } from "util";
 
 const sliderStyle = {
   position: "relative",
-  width: "100%"
+  width: "100%",
 };
 
 const SliderControl = ({
@@ -21,7 +21,7 @@ const SliderControl = ({
   showTicks = false,
   min = 0,
   max = 1,
-  step = 0.001
+  step = 0.001,
 }) => {
   const domain = [min, max];
 
@@ -31,7 +31,7 @@ const SliderControl = ({
   if (!values) values = [value];
 
   // only return array if there are multiple values
-  const onSliderUpdate = values => {
+  const onSliderUpdate = (values) => {
     let newValue = values.length > 1 ? values : values[0];
     const hasDecimals = newValue % 1 > 0;
 
@@ -59,7 +59,7 @@ const SliderControl = ({
           <Handles>
             {({ handles, getHandleProps }) => (
               <div className="slider-handles">
-                {handles.map(handle => (
+                {handles.map((handle) => (
                   <Handle
                     disabled={disabled}
                     key={handle.id}
@@ -90,7 +90,7 @@ const SliderControl = ({
             <Ticks count={5}>
               {({ ticks }) => (
                 <div className="slider-ticks">
-                  {ticks.map(tick => (
+                  {ticks.map((tick) => (
                     <Tick key={tick.id} tick={tick} count={ticks.length} />
                   ))}
                 </div>
@@ -116,9 +116,9 @@ const SliderLabel = styled.div`
   text-transform: uppercase;
   font-size: 12px;
   min-height: 30px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(0, 0, 0, 0.7);
 
   span {
-    color: white;
+    color: rgba(0, 0, 0, 0.7);
   }
 `;

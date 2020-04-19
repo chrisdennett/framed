@@ -15,7 +15,7 @@ const QuickSelectMenu = ({
   currentOptionKey,
   options = {},
   onUpdate,
-  label
+  label,
 }) => {
   const optionKeys = Object.keys(options);
   const totalOptions = optionKeys.length;
@@ -25,12 +25,12 @@ const QuickSelectMenu = ({
   const prevOptionIndex =
     currOptionIndex > 0 ? currOptionIndex - 1 : totalOptions - 1;
 
-  const optionNames = optionKeys.map(key => options[key].name);
+  const optionNames = optionKeys.map((key) => options[key].name);
 
-  const onSelect = e => {
+  const onSelect = (e) => {
     const optionName = e.target.value;
     const optionKey = optionKeys.filter(
-      key => options[key].name === optionName
+      (key) => options[key].name === optionName
     )[0];
 
     onUpdate(optionKey);
@@ -62,7 +62,7 @@ const SliderLabel = styled.div`
   width: 100%;
   text-transform: uppercase;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(0, 0, 0, 0.7);
 `;
 
 const Container = styled.div`
@@ -81,7 +81,7 @@ const Container = styled.div`
     height: 42px;
 
     option {
-      color: black;
+      color: rgba(0, 0, 0, 0.7);
     }
 
     .mdc-select__dropdown-icon {
@@ -90,23 +90,23 @@ const Container = styled.div`
   }
 
   .mdc-select:not(.mdc-select--disabled) {
-    background: #3e3e3e;
+    background: rgba(0, 0, 0, 0);
 
     .mdc-select__native-control {
-      border-color: white;
+      border-color: rgba(0, 0, 0, 0.7);
     }
 
     .mdc-select:not(.mdc-select--disabled).mdc-select--focused
       .mdc-line-ripple {
-      background-color: white;
+      /* background-color: white; */
     }
 
     .mdc-select--focused .mdc-floating-label {
-      color: white;
+      color: rgba(0, 0, 0, 0.7);
     }
 
     .mdc-select__native-control {
-      color: white;
+      color: rgba(0, 0, 0, 0.7);
     }
 
     .mdc-floating-label {
@@ -120,6 +120,7 @@ const NavButton = styled.button`
   padding: 10px;
   font-size: 20px;
   border: none;
-  background: #3e3e3e;
-  color: white;
+  background: none;
+  color: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
 `;

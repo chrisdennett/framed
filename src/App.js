@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { saveAs } from "file-saver";
-import fancyFrameSpriteSheet from "./spritesheet.png";
 // comps
 //
-import TopBar from "./top-bar/TopBar";
 import Display from "./display/Display";
 import Controls from "./controls/Controls";
 import { getAppData } from "./appData";
@@ -12,49 +10,36 @@ import useWindowDimensions from "./hooks/usWindowDimensions";
 import {
   GetImage,
   createMaxSizeCanvas,
-  createOrientatedCanvas
+  createOrientatedCanvas,
 } from "./ImageHelper";
+import { generatePiffle } from "./controls/piffleControl/PiffleControl";
 
 export default function App() {
   const [sourceImg, setSourceImg] = useState(null);
-  const [piffle, setPiffle] = useState({
-    name: "chris",
-    media: "sharpie",
-    text: "xxx"
+  const [piffleInputs, setPiffleInputs] = useState({
+    name: "Chris Dennett",
+    birthYear: "1975",
+    media: "Sharpie Marker",
+    repiffleCount: 0,
+    canvasType: "Back of utility bill",
   });
-  const [spriteSheet, setSpriteSheet] = useState(null);
   const [appData, setAppData] = useState(getAppData());
   const [canvasRef, setCanvasRef] = useState(null);
-  const [optionsVisible, setOptionsVisible] = useState(true);
   const { width, height } = useWindowDimensions();
 
-  const controlsOnLeft = width > 700;
-  const appBarHeight = 60;
-  const controlPanelSize = 200;
-  const mainOutterPadding = 10;
-  const mainInnerPadding = 10;
-
-  const controlPanelTop = controlsOnLeft
-    ? appBarHeight
-    : height - controlPanelSize;
-  const controlPanelWidth = controlsOnLeft ? controlPanelSize : width;
-
-  const mainLeft = controlsOnLeft ? controlPanelSize : mainOutterPadding;
-  const mainWidth = width - mainInnerPadding * 2;
-  const mainHeight = height - mainInnerPadding * 2;
-
-  const mainBottom = controlsOnLeft ? mainOutterPadding : controlPanelSize;
+  const inMobileMode = width < 400;
+  const piffle = generatePiffle(piffleInputs, inMobileMode);
 
   const onSaveImage = () => {
     if (canvasRef) {
-      canvasRef.toBlob(blob => {
+      canvasRef.toBlob((blob) => {
         saveAs(blob, appData.defaultSaveName);
       });
     }
   };
 
-  const onAddImage = imgFile => {
-    createCanvasFromFile(imgFile, img => {
+  const onAddImage = (imgFile) => {
+    createCanvasFromFile(imgFile, (img) => {
       setSourceImg(img);
     });
   };
@@ -68,65 +53,33 @@ export default function App() {
       };
       image.src = "./img/my-awesome-art.jpg";
     }
-
-    if (!spriteSheet) {
-      loadImage(fancyFrameSpriteSheet, img => {
-        setSpriteSheet(img);
-      });
-    }
   });
 
   return (
     <AppHolder>
-      <AppBar height={appBarHeight}>
-        <TopBar
-          title={appData.title}
-          infoUrl={appData.infoUrl}
-          optionsVisible={optionsVisible}
-          setOptionsVisible={setOptionsVisible}
-          width={width}
-        />
-      </AppBar>
-
-      <ControlPanel top={controlPanelTop} width={controlPanelWidth}>
+      <ControlPanel top={0} width={width}>
         <Controls
-          piffle={piffle}
-          setPiffle={setPiffle}
+          piffleInputs={piffleInputs}
+          setPiffleInputs={setPiffleInputs}
           onSaveImage={onSaveImage}
           onAddImage={onAddImage}
           onUpdate={setAppData}
           appData={appData}
-          wrap={width < 700}
         />
       </ControlPanel>
 
-      <Main
-        top={appBarHeight}
-        bottom={mainBottom}
-        right={mainOutterPadding}
-        left={mainLeft}
-      >
+      <Main top={0} bottom={0} right={0} left={0}>
         <Display
           piffle={piffle}
           sourceImg={sourceImg}
-          spriteSheet={spriteSheet}
           setCanvasRef={setCanvasRef}
-          sizeInfo={{ width: mainWidth, height: mainHeight }}
+          sizeInfo={{ width, height }}
           appData={appData}
         />
       </Main>
     </AppHolder>
   );
 }
-
-const loadImage = (url, callback) => {
-  let sourceImg = new Image();
-  sourceImg.setAttribute("crossOrigin", "anonymous"); //
-  sourceImg.src = url;
-  sourceImg.onload = () => {
-    if (callback) callback(sourceImg);
-  };
-};
 
 export const createCanvasFromFile = (file, callback) => {
   const maxOutputCanvasSize = 1000;
@@ -148,26 +101,27 @@ const AppHolder = styled.div`
   padding: 10;
 `;
 
-const AppBar = styled.div`
-  padding: 10;
-`;
+// const AppBar = styled.div`
+//   padding: 10;
+// `;
 
 const ControlPanel = styled.div`
   padding: 10;
   position: fixed;
+  z-index: 1;
   left: 0;
-  top: ${props => props.top}px;
+  top: ${(props) => props.top}px;
   bottom: 0;
-  width: ${props => props.width}px;
+  width: ${(props) => props.width}px;
   overflow: auto;
 `;
 
 const Main = styled.div`
   padding: 10;
   position: fixed;
-  left: ${props => props.left}px;
-  right: ${props => props.right}px;
-  top: ${props => props.top}px;
-  bottom: ${props => props.bottom}px;
+  left: ${(props) => props.left}px;
+  right: ${(props) => props.right}px;
+  top: ${(props) => props.top}px;
+  bottom: ${(props) => props.bottom}px;
   overflow: hidden;
 `;

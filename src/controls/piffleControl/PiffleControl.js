@@ -2,29 +2,34 @@ import React from "react";
 import styled from "styled-components";
 import "@material/button/dist/mdc.button.css";
 import { Button } from "@rmwc/button";
+import rita from "rita";
 
-export const PiffleControl = ({ piffle, setPiffle }) => {
-  const { name, media, text } = piffle;
+export const PiffleControl = ({ piffleInputs, setPiffleInputs }) => {
+  const { name, birthYear, media, canvasType, repiffleCount } = piffleInputs;
 
-  const onArtistNameChange = e => {
+  const onArtistNameChange = (e) => {
     const name = e.target.value;
-    const text = generatePiffle({ name, media });
-    console.log("text: ", text);
-    setPiffle({ ...piffle, name, text });
+    setPiffleInputs({ ...piffleInputs, name });
   };
 
-  const onMediaTypeChange = e => {
+  const onMediaTypeChange = (e) => {
     const media = e.target.value;
-    const text = generatePiffle({ name, media });
-    console.log("text: ", text);
-    setPiffle({ ...piffle, media, text });
+    setPiffleInputs({ ...piffleInputs, media });
   };
 
-  if (text && text === "xxx") {
-    const text = generatePiffle({ name, media });
-    console.log("text: ", text);
-    setPiffle({ ...piffle, text });
-  }
+  const onCanvasTypeChange = (e) => {
+    const canvasType = e.target.value;
+    setPiffleInputs({ ...piffleInputs, canvasType });
+  };
+
+  const onBirthYearChange = (e) => {
+    const birthYear = e.target.value;
+    setPiffleInputs({ ...piffleInputs, birthYear });
+  };
+
+  const onRepiffleCountChange = () => {
+    setPiffleInputs({ ...piffleInputs, repiffleCount: repiffleCount + 1 });
+  };
 
   return (
     <Container>
@@ -32,12 +37,20 @@ export const PiffleControl = ({ piffle, setPiffle }) => {
         <InputLabel>Artist's Name: </InputLabel>
         <input type="text" value={name} onChange={onArtistNameChange} />
       </InputHolder>
-      <div>
-        <InputLabel>Media Type: </InputLabel>
+      <InputHolder>
+        <InputLabel>Birth Year: </InputLabel>
+        <input type="text" value={birthYear} onChange={onBirthYearChange} />
+      </InputHolder>
+      <InputHolder>
+        <InputLabel>Created With: </InputLabel>
         <input type="text" value={media} onChange={onMediaTypeChange} />
-      </div>
+      </InputHolder>
+      <InputHolder>
+        <InputLabel>Created On: </InputLabel>
+        <input type="text" value={canvasType} onChange={onCanvasTypeChange} />
+      </InputHolder>
       <ButtHolder>
-        <Button label="RE-PIFFLE" raised />
+        <Button label="RE-PIFFLE" raised onClick={onRepiffleCountChange} />
       </ButtHolder>
     </Container>
   );
@@ -51,6 +64,7 @@ const Container = styled.div`
     padding: 10px;
     border-radius: 3px;
     border: none;
+    width: 150px;
     font-size: 16px;
   }
 `;
@@ -64,7 +78,7 @@ const InputLabel = styled.div`
   text-transform: uppercase;
   font-size: 12px;
   margin-bottom: 5px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(0, 0, 0, 0.7);
 
   span {
     color: white;
@@ -76,7 +90,7 @@ const ButtHolder = styled.div`
 `;
 
 //
-const generatePiffle = ({ name, media }) => {
+export const generatePiffle = (inputs, inMobileMode) => {
   const starterElements = starter.split("#");
   let phrase = "";
 
@@ -84,16 +98,40 @@ const generatePiffle = ({ name, media }) => {
     phrase += getElement(el);
   }
 
-  let personalisedPhrase = phrase.replace("artistName", name);
-  personalisedPhrase = personalisedPhrase.replace("mediaType", media);
+  const firstName = inputs.name.split(" ")[0];
+  let personalisedPhrase = phrase.replace("artistName", firstName);
+  personalisedPhrase = personalisedPhrase.replace("mediaType", inputs.media);
 
-  return personalisedPhrase;
+  let title = generateTitle(inMobileMode);
+
+  return { ...inputs, title, text: personalisedPhrase };
+};
+
+function getRandomInt(min, max) {
+  return min + Math.floor(Math.random() * (max - min));
+}
+
+const generateTitle = (inMobileMode) => {
+  // let rs = rita.randomWord("jj", 4);
+
+  const w1 = capitalize(rita.randomWord("jj", getRandomInt(1, 5)));
+  const w2 = capitalize(rita.randomWord("jj", getRandomInt(1, 5)));
+  const w3 = capitalize(rita.randomWord("nn", getRandomInt(1, 5)));
+
+  if (Math.random() > 0.4 || inMobileMode) return `${w1} ${w3}`;
+
+  return `${w1} ${w2} ${w3}`;
+};
+
+const capitalize = (s) => {
+  if (typeof s !== "string") return "";
+  return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
 const starter =
-  "#artistName# #pluralVerb1# the #adjective1# #noun1# of #mediaType#, #verb1# #pluralNoun1# #preposition1# #adjective2# #pluralNoun2#, #adverb1# #verb2# #artTypeNoun1# #pluralNoun3#.";
+  "Here #artistName# #pluralVerb1# #adjective1# #noun1#, #verb1# #pluralNoun1# #preposition1# #adjective2# #pluralNoun2#, #adverb1# #verb2# #artTypeNoun1# #pluralNoun3#.";
 
-const getElement = el => {
+const getElement = (el) => {
   let processedEl = el;
 
   if (grammar[el]) {
@@ -122,7 +160,7 @@ const grammar = {
     "deploys",
     "unfolds",
     "harnesses",
-    "examines"
+    "examines",
   ],
   adjective1: [
     "collective",
@@ -137,20 +175,20 @@ const grammar = {
     "provocative",
     "reductive",
     "fragile",
-    "instinctive"
+    "instinctive",
   ],
   noun1: [
     "non-being",
-    "universality",
-    "unreality",
+    "universalities",
+    "unrealities",
     "violence",
-    "passivity",
-    "aggression",
-    "testament",
-    "robustness",
+    "passivities",
+    "aggressions",
+    "testaments",
+    "robustnesses",
     "significance",
-    "landscape",
-    "humanity"
+    "landscapes",
+    "humanity",
   ],
   verb1: [
     "luring",
@@ -164,7 +202,7 @@ const grammar = {
     "inducing",
     "seducing",
     "pushing",
-    "hooking"
+    "hooking",
   ],
   pluralNoun1: [
     "viewers",
@@ -172,7 +210,7 @@ const grammar = {
     "onlookers",
     "spectators",
     "witnesses",
-    "bystanders"
+    "bystanders",
   ],
   preposition1: [
     "into",
@@ -184,7 +222,7 @@ const grammar = {
     "to question",
     "to abandon",
     "to disregard",
-    "to shun"
+    "to shun",
   ],
   adjective2: [
     "informal",
@@ -204,7 +242,7 @@ const grammar = {
     "mundane",
     "implicit",
     "explicit",
-    "intense"
+    "intense",
   ],
   pluralNoun2: [
     "unreality",
@@ -217,7 +255,7 @@ const grammar = {
     "synthesis",
     "parallels",
     "confrontations",
-    "narratives"
+    "narratives",
   ],
   adverb1: [
     "obliquely",
@@ -226,7 +264,7 @@ const grammar = {
     "obtusely",
     "robustly",
     "unapologetically",
-    "uncompromisingly"
+    "uncompromisingly",
   ],
   verb2: [
     "underpinning",
@@ -238,7 +276,7 @@ const grammar = {
     "deafening",
     "stifling",
     "engulfing",
-    "devouring"
+    "devouring",
   ],
   artTypeNoun1: [
     "modernist",
@@ -249,7 +287,7 @@ const grammar = {
     "post-modernist",
     "deconstructionist",
     "gothic",
-    "hyper realist",
+    "hyper-realist",
     "naive",
     "minimalist",
     "neoclassical",
@@ -258,7 +296,7 @@ const grammar = {
     "psychedelic",
     "purist",
     "symbolic",
-    "sculptural"
+    "sculptural",
   ],
   pluralNoun3: [
     "corruptions",
@@ -269,6 +307,6 @@ const grammar = {
     "suggestion",
     "responses",
     "phenomena",
-    "hesitations"
-  ]
+    "hesitations",
+  ],
 };
