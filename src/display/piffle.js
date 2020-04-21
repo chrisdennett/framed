@@ -55,7 +55,7 @@ export const drawPifflePlaque = ({ ctx, piffle, x, y, height, width }) => {
   ctx.font = `${mainFontSize}px Calibri`;
 
   // add medium on canvas line
-  const mediumLine = `${piffle.media} on ${piffle.canvasType}`;
+  const mediumLine = `${piffle.media}`;
   ctx.fillText(mediumLine, textX, textY);
 
   textY += titleFontSize;

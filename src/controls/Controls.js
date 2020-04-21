@@ -5,23 +5,21 @@ import "@material/button/dist/mdc.button.css";
 import SliderControl from "./sliderControl/SliderControl";
 import { SwitchControl } from "./switchControl/SwitchControl";
 import ColourPicker from "../components/colourPicker/ColourPicker";
-import PhotoSelector from "../components/photoSelector/PhotoSelector";
+
 import QuickSelectMenu from "../components/quickSelectControl/QuickSelectControl";
 import { PiffleControl } from "./piffleControl/PiffleControl";
-import "@rmwc/icon-button/styles";
-import { IconButton } from "@rmwc/icon-button";
 
 const Controls = ({
   appData,
   onUpdate,
-  wrap = false,
-  onSaveImage,
-  onAddImage,
-  piffleInputs,
-  setPiffleInputs,
+  activePanel,
+  piffleData,
+  setPiffleData,
+  inMobileMode,
 }) => {
-  const [activePanel, setActivePanel] = React.useState("plaque");
   const { settings } = appData;
+
+  console.log("activePanel: ", activePanel);
 
   const updateSettings = (key, newValue) => {
     onUpdate({ ...appData, [key]: newValue });
@@ -31,54 +29,24 @@ const Controls = ({
     onUpdate({ ...appData, ...updates });
   };
 
-  const onPhotoSelected = (file) => {
-    onAddImage(file);
-  };
-
   const settingsKeys = Object.keys(settings);
 
-  const onPanelSelect = (panelName) => {
-    const newPanel = activePanel === panelName ? null : panelName;
-    setActivePanel(newPanel);
-  };
-
   return (
-    <Container>
-      <StyledTopBar>
-        <IconButton
-          style={activePanel === "plaque" ? { color: "red" } : null}
-          label="plaque words"
-          icon="assignment"
-          onClick={() => onPanelSelect("plaque")}
-        />
-        <IconButton
-          style={activePanel === "frame" ? { color: "red" } : null}
-          label="frame options"
-          icon="filter_frames"
-          onClick={() => onPanelSelect("frame")}
-        />
-        <PhotoSelector onPhotoSelected={onPhotoSelected} />
-        <IconButton label="SAVE" icon="save" onClick={onSaveImage} />
-        <IconButton
-          tag="a"
-          label="info"
-          icon="info"
-          href={appData.infoUrl}
-          target="_blank"
-        />
-      </StyledTopBar>
-
+    <StyledControls>
       {activePanel === "plaque" && (
-        <ControlHolder>
-          <PiffleControl
-            piffleInputs={piffleInputs}
-            setPiffleInputs={setPiffleInputs}
-          />
-        </ControlHolder>
+        <StyledPanel>
+          <ControlHolder>
+            <PiffleControl
+              inMobileMode={inMobileMode}
+              piffleData={piffleData}
+              setPiffleData={setPiffleData}
+            />
+          </ControlHolder>
+        </StyledPanel>
       )}
 
       {activePanel === "frame" && (
-        <div>
+        <StyledPanel>
           {settingsKeys.map((key) => {
             const currSetting = settings[key];
             const currValue = appData[key];
@@ -152,16 +120,35 @@ const Controls = ({
 
             return null;
           })}
-        </div>
+        </StyledPanel>
       )}
-    </Container>
+    </StyledControls>
   );
 };
 
 export default Controls;
 
 // STYLES
-const Container = styled.div`
+
+const StyledPanel = styled.div``;
+
+const StyledControls = styled.div`
+  position: fixed;
+  z-index: 2;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 100%;
+  border-top: ${(props) => (props.dividerAbove ? "1px solid #ccc" : "none")};
+  margin-top: ${(props) => (props.dividerAbove ? "3px" : "")};
+  padding: 10px;
+  background: whitesmoke;
+  border: rgba(0, 0, 0, 0.1) solid 1px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+`;
+
+const ControlHolder = styled.div`
   padding-top: 5px;
   color: rgba(0, 0, 0, 0.7);
 
@@ -169,22 +156,5 @@ const Container = styled.div`
   .mdc-button--unelevated:not(:disabled) {
     background-color: #ffc300;
     color: black;
-    width: 100%;
   }
-`;
-
-const StyledTopBar = styled.div`
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-`;
-
-const ControlHolder = styled.div`
-  border-top: ${(props) => (props.dividerAbove ? "1px solid #ccc" : "none")};
-  margin-top: ${(props) => (props.dividerAbove ? "3px" : "")};
-  padding: 10px;
-  max-width: 200px;
-  background: whitesmoke;
-  border: rgba(0, 0, 0, 0.1) solid 1px;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 `;

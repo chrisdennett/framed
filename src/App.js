@@ -12,23 +12,32 @@ import {
   createMaxSizeCanvas,
   createOrientatedCanvas,
 } from "./ImageHelper";
-import { generatePiffle } from "./controls/piffleControl/PiffleControl";
+import { TopBar } from "./topBar/TopBar";
+import {
+  generateTitle,
+  generateDescription,
+} from "./controls/piffleControl/PiffleControl";
+
+const defaultPiffleData = {
+  name: "Chris Dennett",
+  birthYear: "1975",
+  media: "Sharpie Marker on Scrap Paper",
+  repiffleCount: 0,
+  title: generateTitle(),
+};
+
+const defaultDescription = generateDescription(defaultPiffleData);
+defaultPiffleData.text = defaultDescription;
 
 export default function App() {
-  const [sourceImg, setSourceImg] = useState(null);
-  const [piffleInputs, setPiffleInputs] = useState({
-    name: "Chris Dennett",
-    birthYear: "1975",
-    media: "Sharpie Marker",
-    repiffleCount: 0,
-    canvasType: "Back of utility bill",
-  });
-  const [appData, setAppData] = useState(getAppData());
-  const [canvasRef, setCanvasRef] = useState(null);
   const { width, height } = useWindowDimensions();
 
   const inMobileMode = width < 400;
-  const piffle = generatePiffle(piffleInputs, inMobileMode);
+  const [activePanel, setActivePanel] = React.useState("plaque");
+  const [sourceImg, setSourceImg] = useState(null);
+  const [piffleData, setPiffleData] = useState(defaultPiffleData);
+  const [appData, setAppData] = useState(getAppData());
+  const [canvasRef, setCanvasRef] = useState(null);
 
   const onSaveImage = () => {
     if (canvasRef) {
@@ -57,20 +66,28 @@ export default function App() {
 
   return (
     <AppHolder>
-      <ControlPanel top={0} width={width}>
+      <TopBar
+        activePanel={activePanel}
+        setActivePanel={setActivePanel}
+        onSaveImage={onSaveImage}
+        onAddImage={onAddImage}
+        appData={appData}
+      />
+
+      {activePanel && (
         <Controls
-          piffleInputs={piffleInputs}
-          setPiffleInputs={setPiffleInputs}
-          onSaveImage={onSaveImage}
-          onAddImage={onAddImage}
+          inMobileMode={inMobileMode}
+          activePanel={activePanel}
+          piffleData={piffleData}
+          setPiffleData={setPiffleData}
           onUpdate={setAppData}
           appData={appData}
         />
-      </ControlPanel>
+      )}
 
       <Main top={0} bottom={0} right={0} left={0}>
         <Display
-          piffle={piffle}
+          piffle={piffleData}
           sourceImg={sourceImg}
           setCanvasRef={setCanvasRef}
           sizeInfo={{ width, height }}
@@ -96,24 +113,9 @@ export const createCanvasFromFile = (file, callback) => {
   });
 };
 
-//
+// Styles
 const AppHolder = styled.div`
   padding: 10;
-`;
-
-// const AppBar = styled.div`
-//   padding: 10;
-// `;
-
-const ControlPanel = styled.div`
-  padding: 10;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: ${(props) => props.top}px;
-  bottom: 0;
-  width: ${(props) => props.width}px;
-  overflow: auto;
 `;
 
 const Main = styled.div`

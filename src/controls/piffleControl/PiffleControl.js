@@ -4,54 +4,106 @@ import "@material/button/dist/mdc.button.css";
 import { Button } from "@rmwc/button";
 import rita from "rita";
 
-export const PiffleControl = ({ piffleInputs, setPiffleInputs }) => {
-  const { name, birthYear, media, canvasType, repiffleCount } = piffleInputs;
+export const PiffleControl = ({ piffleData, setPiffleData, inMobileMode }) => {
+  const {
+    name,
+    birthYear,
+    media,
+    title = "Untitled",
+    text = "...",
+  } = piffleData;
 
-  const onArtistNameChange = (e) => {
-    const name = e.target.value;
-    setPiffleInputs({ ...piffleInputs, name });
+  const onPiffleAttChange = (label, value) => {
+    let newText = text;
+
+    if (label === "name") {
+      newText = replaceNameInDescription(value, text);
+    }
+
+    setPiffleData({ ...piffleData, [label]: value, text: newText });
   };
 
-  const onMediaTypeChange = (e) => {
-    const media = e.target.value;
-    setPiffleInputs({ ...piffleInputs, media });
+  const onGenerateTitle = () => {
+    const newTitle = generateTitle(inMobileMode);
+    setPiffleData({ ...piffleData, title: newTitle });
   };
 
-  const onCanvasTypeChange = (e) => {
-    const canvasType = e.target.value;
-    setPiffleInputs({ ...piffleInputs, canvasType });
-  };
-
-  const onBirthYearChange = (e) => {
-    const birthYear = e.target.value;
-    setPiffleInputs({ ...piffleInputs, birthYear });
-  };
-
-  const onRepiffleCountChange = () => {
-    setPiffleInputs({ ...piffleInputs, repiffleCount: repiffleCount + 1 });
+  const onGenerateDescription = () => {
+    const newDescription = generateDescription(piffleData);
+    setPiffleData({ ...piffleData, text: newDescription });
   };
 
   return (
     <Container>
       <InputHolder>
         <InputLabel>Artist's Name: </InputLabel>
-        <input type="text" value={name} onChange={onArtistNameChange} />
+        <input
+          type="text"
+          size={12}
+          value={name}
+          onChange={(e) => onPiffleAttChange("name", e.target.value)}
+        />
       </InputHolder>
       <InputHolder>
         <InputLabel>Birth Year: </InputLabel>
-        <input type="text" value={birthYear} onChange={onBirthYearChange} />
+        <input
+          type="text"
+          value={birthYear}
+          size={4}
+          onChange={(e) => onPiffleAttChange("birthYear", e.target.value)}
+        />
       </InputHolder>
-      <InputHolder>
-        <InputLabel>Created With: </InputLabel>
-        <input type="text" value={media} onChange={onMediaTypeChange} />
+      <InputHolder fullWidth>
+        <InputLabel>
+          Medium:
+          <span style={{ marginLeft: 10, textTransform: "lowercase" }}>
+            (e.g. oil on canvas)
+          </span>
+        </InputLabel>
+        <input
+          type="text"
+          size={30}
+          value={media}
+          onChange={(e) => onPiffleAttChange("media", e.target.value)}
+        />
       </InputHolder>
-      <InputHolder>
-        <InputLabel>Created On: </InputLabel>
-        <input type="text" value={canvasType} onChange={onCanvasTypeChange} />
+      <InputHolder fullWidth>
+        <InputLabel>
+          Title:{" "}
+          <StyledGenerateButton
+            label="Generate"
+            dense
+            onClick={onGenerateTitle}
+          />
+        </InputLabel>
+
+        <input
+          type="text"
+          size={30}
+          value={title}
+          onChange={(e) => onPiffleAttChange("title", e.target.value)}
+        />
       </InputHolder>
-      <ButtHolder>
+      <InputHolder fullWidth>
+        <InputLabel>
+          Description:{" "}
+          <StyledGenerateButton
+            label="Generate"
+            dense
+            onClick={onGenerateDescription}
+          />
+        </InputLabel>
+        <textarea
+          type="text"
+          rows={7}
+          value={text}
+          onChange={(e) => onPiffleAttChange("text", e.target.value)}
+        />
+      </InputHolder>
+
+      {/* <ButtHolder>
         <Button label="RE-PIFFLE" raised onClick={onRepiffleCountChange} />
-      </ButtHolder>
+      </ButtHolder> */}
     </Container>
   );
 };
@@ -59,38 +111,53 @@ export const PiffleControl = ({ piffleInputs, setPiffleInputs }) => {
 const Container = styled.div`
   padding-left: 7px;
   padding-right: 7px;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const InputHolder = styled.div`
+  margin-bottom: 15px;
+  margin-right: 10px;
+  width: ${(props) => (props.fullWidth ? "100%" : "inherit")};
 
   input {
     padding: 10px;
     border-radius: 3px;
     border: none;
-    width: 150px;
-    font-size: 16px;
+    font-size: 14px;
+    font-family: monospace;
+    /* width: 95%; */
+  }
+
+  textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
   }
 `;
 
-const InputHolder = styled.div`
-  margin-bottom: 15px;
-`;
-
 const InputLabel = styled.div`
-  width: 100%;
+  display: flex;
+  align-items: center;
   text-transform: uppercase;
   font-size: 12px;
   margin-bottom: 5px;
   color: rgba(0, 0, 0, 0.7);
-
-  span {
-    color: white;
-  }
 `;
 
-const ButtHolder = styled.div`
-  margin: 5px 5px 15px 0;
+const StyledGenerateButton = styled(Button)`
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  margin-left: 10px;
 `;
+
+const replaceNameInDescription = (newName, description) => {
+  const newFirstName = newName.split(" ")[0];
+  const descriptionWithoutName = description.split(" ").slice(1).join(" ");
+  return newFirstName + " " + descriptionWithoutName;
+};
 
 //
-export const generatePiffle = (inputs, inMobileMode) => {
+export const generateDescription = (currentData) => {
   const starterElements = starter.split("#");
   let phrase = "";
 
@@ -98,20 +165,21 @@ export const generatePiffle = (inputs, inMobileMode) => {
     phrase += getElement(el);
   }
 
-  const firstName = inputs.name.split(" ")[0];
+  const firstName = currentData.name.split(" ")[0];
   let personalisedPhrase = phrase.replace("artistName", firstName);
-  personalisedPhrase = personalisedPhrase.replace("mediaType", inputs.media);
+  personalisedPhrase = personalisedPhrase.replace(
+    "mediaType",
+    currentData.media
+  );
 
-  let title = generateTitle(inMobileMode);
-
-  return { ...inputs, title, text: personalisedPhrase };
+  return personalisedPhrase;
 };
 
 function getRandomInt(min, max) {
   return min + Math.floor(Math.random() * (max - min));
 }
 
-const generateTitle = (inMobileMode) => {
+export const generateTitle = (inMobileMode) => {
   // let rs = rita.randomWord("jj", 4);
 
   const w1 = capitalize(rita.randomWord("jj", getRandomInt(1, 5)));
@@ -129,7 +197,7 @@ const capitalize = (s) => {
 };
 
 const starter =
-  "Here #artistName# #pluralVerb1# #adjective1# #noun1#, #verb1# #pluralNoun1# #preposition1# #adjective2# #pluralNoun2#, #adverb1# #verb2# #artTypeNoun1# #pluralNoun3#.";
+  "#artistName# #pluralVerb1# #adjective1# #noun1#, #verb1# #pluralNoun1# #preposition1# #adjective2# #pluralNoun2#, #adverb1# #verb2# #artTypeNoun1# #pluralNoun3#.";
 
 const getElement = (el) => {
   let processedEl = el;
@@ -194,6 +262,7 @@ const grammar = {
     "luring",
     "inviting",
     "enticing",
+    "forcing",
     "hooking",
     "pulling",
     "ambushing",
@@ -202,15 +271,18 @@ const grammar = {
     "inducing",
     "seducing",
     "pushing",
-    "hooking",
+    "provoking",
+    "challenging",
   ],
   pluralNoun1: [
     "viewers",
     "observers",
     "onlookers",
     "spectators",
+    "gawkers",
     "witnesses",
     "bystanders",
+    "beholders",
   ],
   preposition1: [
     "into",
