@@ -151,7 +151,7 @@ const createRoomCanvas = ({
   ctx.drawImage(framedCanvas, frameX, frameY, targFrameW, targFrameH);
   ctx.restore();
 
-  const gapUnderFrame = targFrameH * 0.07;
+  const gapUnderFrame = Math.round(targFrameH * 0.07);
   const plaquePos = {
     x: isLandscape
       ? Math.min(
@@ -164,7 +164,9 @@ const createRoomCanvas = ({
       : frameY + targFrameH + gapUnderFrame,
   };
 
-  ctx.drawImage(plaqueCanvas, plaquePos.x, plaquePos.y);
+  console.log("plaquePos: ", plaquePos);
+
+  ctx.drawImage(plaqueCanvas, Math.round(plaquePos.x), Math.round(plaquePos.y));
 
   return roomCanvas;
 };
