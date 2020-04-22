@@ -130,7 +130,9 @@ export default Controls;
 
 // STYLES
 
-const StyledPanel = styled.div``;
+const StyledPanel = styled.div`
+  max-width: 400px;
+`;
 
 const StyledControls = styled.div`
   position: fixed;

@@ -1,90 +1,144 @@
-export const drawPifflePlaque = ({ ctx, piffle, x, y, height, width }) => {
-  //ctx.fillText(piffle.text, 50, frameY + frameHeight + 80);
+export const drawPifflePlaque = ({ piffle, x, y, height, width }) => {
+  const plaqueCanvas = document.createElement("canvas");
+  const ctx = plaqueCanvas.getContext("2d");
+  plaqueCanvas.width = width;
 
   const plaqueX = x;
   const plaqueY = y;
   const maxPlaqueWidth = width;
-  const titleFontSize = height >= 300 ? 24 : 22;
-  const mainFontSize = height >= 300 ? 18 : 16;
-  const textPadding = height >= 300 ? 25 : 15;
+  const targetTitleFontSize = width > 400 ? 24 : 20;
+  const textPadding = 10; //Math.min(30, width * 0.07);
+  let widestTextWidth = 0;
 
   // add card bg
-  ctx.fillStyle = "#efefef";
+  // ctx.fillStyle = "#efefef";
 
-  ctx.save();
-  ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 3;
-  ctx.shadowBlur = 2;
-  ctx.shadowColor = `rgba(0, 0, 0, 0.4)`;
-  ctx.fillRect(plaqueX, plaqueY, maxPlaqueWidth, height);
+  // ctx.save();
+  // ctx.shadowOffsetX = 0;
+  // ctx.shadowOffsetY = 3;
+  // ctx.shadowBlur = 2;
+  // ctx.shadowColor = `rgba(0, 0, 0, 0.4)`;
+  // ctx.fillRect(plaqueX, plaqueY, maxPlaqueWidth, height);
 
-  ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = -3;
-  ctx.shadowBlur = 2;
-  ctx.shadowColor = `rgba(255, 255, 255, 0.6)`;
+  // ctx.shadowOffsetX = 0;
+  // ctx.shadowOffsetY = -3;
+  // ctx.shadowBlur = 2;
+  // ctx.shadowColor = `rgba(255, 255, 255, 0.6)`;
 
-  ctx.fillRect(plaqueX, plaqueY, maxPlaqueWidth, height);
-  ctx.restore();
+  // ctx.fillRect(plaqueX, plaqueY, maxPlaqueWidth, height);
+  // ctx.restore();
 
   // TEXT
-
   ctx.fillStyle = "#333";
   const textX = plaqueX + textPadding;
-  let textY = plaqueY + textPadding + titleFontSize;
+  let textY = plaqueY + textPadding * 2;
 
   // add name line
-  const nameText = `${piffle.name}  `;
-  ctx.font = `bold ${titleFontSize}px Calibri`;
-  ctx.fillText(nameText, textX, textY);
-  //
-  const nameText2 = `(b.${piffle.birthYear})`;
-  ctx.font = `${titleFontSize}px Calibri`;
-  ctx.fillText(nameText2, textX + ctx.measureText(nameText).width, textY);
+  const nameText = `${piffle.name}`;
+  const { fontSize: nameFontSize, endWidth } = reduceFontSizeToFit(
+    ctx,
+    targetTitleFontSize,
+    nameText,
+    ` (b.${piffle.birthYear})`,
+    maxPlaqueWidth - textPadding,
+    textX,
+    textY
+  );
+
+  if (endWidth > widestTextWidth) widestTextWidth = endWidth;
 
   // add title line
-  textY += titleFontSize;
-  const titleText = `${piffle.title},  `;
-  ctx.font = `bold italic ${titleFontSize}px Calibri`;
-  ctx.fillText(titleText, textX, textY);
-  //
-  const titleText2 = `${new Date().getFullYear()}`;
-  ctx.font = `${titleFontSize}px Calibri`;
-  ctx.fillText(titleText2, textX + ctx.measureText(titleText).width, textY);
+  textY += nameFontSize * 1.1;
+  const titleText = `${piffle.title},`;
+  const titleText2 = ` ${new Date().getFullYear()}`;
+  const { fontSize: titleFontSize, endWidth: w2 } = reduceFontSizeToFit(
+    ctx,
+    nameFontSize,
+    titleText,
+    titleText2,
+    maxPlaqueWidth - textPadding,
+    textX,
+    textY
+  );
 
-  textY += titleFontSize;
-  ctx.font = `${mainFontSize}px Calibri`;
+  if (w2 > widestTextWidth) widestTextWidth = w2;
 
   // add medium on canvas line
+  textY += nameFontSize;
   const mediumLine = `${piffle.media}`;
-  ctx.fillText(mediumLine, textX, textY);
-
-  textY += titleFontSize;
-
-  wrapText(
+  const { fontSize: mediumFontSize, endWidth: w3 } = reduceFontSizeToFit(
     ctx,
-    piffle.text,
+    titleFontSize,
+    "",
+    mediumLine,
+    maxPlaqueWidth - textPadding,
     textX,
-    textY + textPadding,
-    maxPlaqueWidth - textPadding * 2,
-    mainFontSize * 1.2
+    textY
   );
+
+  if (w3 > widestTextWidth) widestTextWidth = w3;
+  const textHeight = textY + mediumFontSize;
+
+  return { plaqueCanvas, widestTextWidth, textHeight };
 };
 
-function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-  var words = text.split(" ");
-  var line = "";
+const reduceFontSizeToFit = (ctx, startFontSize, text1, text2, width, x, y) => {
+  let testFontSize = startFontSize;
+  let textWidth, text1Width, text2Width;
+  let count = 0;
+  let textTooBig = true;
 
-  for (var n = 0; n < words.length; n++) {
-    var testLine = line + words[n] + " ";
-    var metrics = ctx.measureText(testLine);
-    var testWidth = metrics.width;
-    if (testWidth > maxWidth && n > 0) {
-      ctx.fillText(line, x, y);
-      line = words[n] + " ";
-      y += lineHeight;
-    } else {
-      line = testLine;
-    }
+  while (textTooBig) {
+    ctx.font = `bold ${testFontSize}px Calibri`;
+    text1Width = ctx.measureText(text1).width;
+
+    ctx.font = `${testFontSize - 3}px Calibri`;
+    text2Width = ctx.measureText(text2).width;
+    textWidth = text1Width + text2Width;
+
+    textTooBig = textWidth > width;
+
+    testFontSize--;
+
+    // safety valve
+    count++;
+    if (count > 1000) break;
   }
-  ctx.fillText(line, x, y);
-}
+
+  ctx.font = `bold ${testFontSize}px Calibri`;
+  ctx.fillText(text1, x, y);
+  text1Width = ctx.measureText(text1).width;
+  ctx.font = `${testFontSize - 3}px Calibri`;
+  ctx.fillText(text2, x + text1Width, y);
+  text2Width = ctx.measureText(text2).width;
+
+  return { fontSize: testFontSize, endWidth: x + text1Width + text2Width };
+};
+
+// wrapText(
+//   ctx,
+//   piffle.text,
+//   textX,
+//   textY + textPadding,
+//   maxPlaqueWidth - textPadding * 2,
+//   mainFontSize * 1.2
+// );
+
+// function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+//   var words = text.split(" ");
+//   var line = "";
+
+//   for (var n = 0; n < words.length; n++) {
+//     var testLine = line + words[n] + " ";
+//     var metrics = ctx.measureText(testLine);
+//     var testWidth = metrics.width;
+//     if (testWidth > maxWidth && n > 0) {
+//       ctx.fillText(line, x, y);
+//       line = words[n] + " ";
+//       y += lineHeight;
+//     } else {
+//       line = testLine;
+//     }
+//   }
+//   ctx.fillText(line, x, y);
+// }
