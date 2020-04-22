@@ -20,10 +20,9 @@ import {
 import { useLocalStorage } from "./hooks/useLocalStorage";
 
 const defaultPiffleData = {
-  name: "Chris Dennett",
-  birthYear: "1975",
-  media: "Sharpie Marker on Scrap Paper",
-  repiffleCount: 0,
+  name: "Anon.",
+  birthYear: "1999",
+  media: "Tea on Carpet",
   title: generateTitle(),
 };
 

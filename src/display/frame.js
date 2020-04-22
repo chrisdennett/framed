@@ -10,8 +10,16 @@ export const createFrameCanvas = ({
   spriteSheet,
 }) => {
   const outputCanvas = document.createElement("canvas");
-
   const { width: imgW, height: imgH } = sourceCanvas;
+
+  if (frameType === "none") {
+    outputCanvas.width = imgW;
+    outputCanvas.height = imgH;
+    outputCanvas.getContext("2d").drawImage(sourceCanvas, 0, 0);
+
+    return outputCanvas;
+  }
+
   const doubleFrame = frameThickness * 2;
   const doubleMount = mountThickness * 2;
   const doubleFrameBevel = frameBevel * 2;

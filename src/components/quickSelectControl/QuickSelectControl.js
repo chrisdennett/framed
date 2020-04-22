@@ -18,6 +18,8 @@ const QuickSelectMenu = ({
   label,
 }) => {
   const optionKeys = Object.keys(options);
+  console.log("optionKeys: ", optionKeys);
+
   const totalOptions = optionKeys.length;
   const currOptionIndex = optionKeys.indexOf(currentOptionKey);
   const nextOptionIndex =

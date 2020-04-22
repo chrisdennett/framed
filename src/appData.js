@@ -8,6 +8,11 @@ export const frameOptionSettings = {
     frameType: "fancy",
     frameBevel: 0,
   },
+
+  none: {
+    frameType: "none",
+    frameBevel: 0,
+  },
 };
 
 const defaultAppData = {
@@ -27,6 +32,9 @@ const defaultAppData = {
         fancy: {
           name: "Fancy",
         },
+        none: {
+          name: "None",
+        },
       },
     },
 
@@ -38,12 +46,20 @@ const defaultAppData = {
     },
 
     mountColour: {
+      showIfs: [
+        { key: "frameOption", condition: "simple" },
+        { key: "frameOption", condition: "fancy" },
+      ],
       label: "Mount Colour",
       type: "colour",
       defaultValue: "#f5f5f5",
     },
 
     frameThickness: {
+      showIfs: [
+        { key: "frameOption", condition: "simple" },
+        { key: "frameOption", condition: "fancy" },
+      ],
       dividerAbove: true,
       label: "Frame Thickness",
       type: "range",
@@ -54,6 +70,10 @@ const defaultAppData = {
     },
 
     mountThickness: {
+      showIfs: [
+        { key: "frameOption", condition: "simple" },
+        { key: "frameOption", condition: "fancy" },
+      ],
       label: "Mount Thickness",
       type: "range",
       min: 1,

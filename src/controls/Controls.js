@@ -53,10 +53,14 @@ const Controls = ({
             const { dividerAbove } = currSetting;
 
             if (currSetting.showIfs) {
-              for (let condition of currSetting.showIfs)
-                if (appData[condition.key] !== condition.condition) {
-                  return null;
+              let isAllowed = false;
+              for (let condition of currSetting.showIfs) {
+                if (appData[condition.key] === condition.condition) {
+                  isAllowed = true;
                 }
+              }
+
+              if (!isAllowed) return null;
             }
 
             if (currSetting.type === "select") {
