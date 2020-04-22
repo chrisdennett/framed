@@ -105,8 +105,8 @@ const createRoomCanvas = ({
     spriteSheet,
   });
 
-  const maxPlaqueHeight = isLandscape ? displayHeight : displayHeight / 3;
-  const maxPlaqueWidth = isLandscape ? displayWidth / 3 : displayWidth;
+  const maxPlaqueHeight = isLandscape ? displayHeight : displayHeight / 2.5;
+  const maxPlaqueWidth = isLandscape ? displayWidth / 2.5 : displayWidth;
   const plaquePadding = 20;
 
   const { plaqueCanvas, widestTextWidth, textHeight } = drawPifflePlaque({
@@ -151,20 +151,18 @@ const createRoomCanvas = ({
   ctx.drawImage(framedCanvas, frameX, frameY, targFrameW, targFrameH);
   ctx.restore();
 
-  const gapUnderFrame = Math.round(targFrameH * 0.07);
+  const gapFromFrame = Math.round(targFrameH * 0.07);
   const plaquePos = {
     x: isLandscape
       ? Math.min(
-          frameX + targFrameW + gapUnderFrame,
+          frameX + targFrameW + gapFromFrame,
           displayWidth - (widestTextWidth + plaquePadding)
         )
       : frameX,
     y: isLandscape
       ? frameY + targFrameH - textHeight * 1.5
-      : frameY + targFrameH + gapUnderFrame,
+      : frameY + targFrameH + gapFromFrame,
   };
-
-  console.log("plaquePos: ", plaquePos);
 
   ctx.drawImage(plaqueCanvas, Math.round(plaquePos.x), Math.round(plaquePos.y));
 
