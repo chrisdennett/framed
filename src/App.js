@@ -17,6 +17,7 @@ import {
   generateTitle,
   generateDescription,
 } from "./controls/piffleControl/PiffleControl";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 const defaultPiffleData = {
   name: "Chris Dennett",
@@ -34,8 +35,13 @@ export default function App() {
   const inMobileMode = width < 400;
   const [activePanel, setActivePanel] = React.useState(null);
   const [sourceImg, setSourceImg] = useState(null);
-  const [piffleData, setPiffleData] = useState(defaultPiffleData);
-  const [appData, setAppData] = useState(getAppData());
+  // const [piffleData, setPiffleData] = useState(defaultPiffleData);
+  const [piffleData, setPiffleData] = useLocalStorage(
+    "piffle",
+    defaultPiffleData
+  );
+  const [appData, setAppData] = useLocalStorage("frameAppData", getAppData());
+  // const [appData, setAppData] = useState(getAppData());
   const [canvasRef, setCanvasRef] = useState(null);
 
   const onSaveImage = () => {
