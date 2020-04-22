@@ -84,7 +84,7 @@ export const PiffleControl = ({ piffleData, setPiffleData, inMobileMode }) => {
           onChange={(e) => onPiffleAttChange("title", e.target.value)}
         />
       </InputHolder>
-      <InputHolder fullWidth>
+      {/* <InputHolder fullWidth>
         <InputLabel>
           Description:{" "}
           <StyledGenerateButton
@@ -99,11 +99,7 @@ export const PiffleControl = ({ piffleData, setPiffleData, inMobileMode }) => {
           value={text}
           onChange={(e) => onPiffleAttChange("text", e.target.value)}
         />
-      </InputHolder>
-
-      {/* <ButtHolder>
-        <Button label="RE-PIFFLE" raised onClick={onRepiffleCountChange} />
-      </ButtHolder> */}
+      </InputHolder> */}
     </Container>
   );
 };

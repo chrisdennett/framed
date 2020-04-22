@@ -32,101 +32,103 @@ const Controls = ({
   const settingsKeys = Object.keys(settings);
 
   return (
-    <StyledControls>
-      {activePanel === "plaque" && (
-        <StyledPanel>
-          <ControlHolder>
-            <PiffleControl
-              inMobileMode={inMobileMode}
-              piffleData={piffleData}
-              setPiffleData={setPiffleData}
-            />
-          </ControlHolder>
-        </StyledPanel>
-      )}
+    <Holder>
+      <StyledControls>
+        {activePanel === "plaque" && (
+          <StyledPanel>
+            <ControlHolder>
+              <PiffleControl
+                inMobileMode={inMobileMode}
+                piffleData={piffleData}
+                setPiffleData={setPiffleData}
+              />
+            </ControlHolder>
+          </StyledPanel>
+        )}
 
-      {activePanel === "frame" && (
-        <StyledPanel>
-          {settingsKeys.map((key) => {
-            const currSetting = settings[key];
-            const currValue = appData[key];
-            const { dividerAbove } = currSetting;
+        {activePanel === "frame" && (
+          <StyledPanel>
+            {settingsKeys.map((key) => {
+              const currSetting = settings[key];
+              const currValue = appData[key];
+              const { dividerAbove } = currSetting;
 
-            if (currSetting.showIfs) {
-              let isAllowed = false;
-              for (let condition of currSetting.showIfs) {
-                if (appData[condition.key] === condition.condition) {
-                  isAllowed = true;
+              if (currSetting.showIfs) {
+                let isAllowed = false;
+                for (let condition of currSetting.showIfs) {
+                  if (appData[condition.key] === condition.condition) {
+                    isAllowed = true;
+                  }
                 }
+
+                if (!isAllowed) return null;
               }
 
-              if (!isAllowed) return null;
-            }
+              if (currSetting.type === "select") {
+                return (
+                  <ControlHolder dividerAbove={dividerAbove} key={key}>
+                    <QuickSelectMenu
+                      currentOptionKey={currValue}
+                      label={currSetting.label}
+                      options={currSetting.options}
+                      onUpdate={(selectedOption) => {
+                        updateMultipleSettings({
+                          [key]: selectedOption,
+                          ...currSetting.options[currValue].data,
+                        });
+                      }}
+                    />
+                  </ControlHolder>
+                );
+              }
 
-            if (currSetting.type === "select") {
-              return (
-                <ControlHolder dividerAbove={dividerAbove} key={key}>
-                  <QuickSelectMenu
-                    currentOptionKey={currValue}
-                    label={currSetting.label}
-                    options={currSetting.options}
-                    onUpdate={(selectedOption) => {
-                      updateMultipleSettings({
-                        [key]: selectedOption,
-                        ...currSetting.options[currValue].data,
-                      });
-                    }}
-                  />
-                </ControlHolder>
-              );
-            }
+              if (currSetting.type === "colour") {
+                return (
+                  <ControlHolder dividerAbove={dividerAbove} key={key}>
+                    <ColourPicker
+                      label={currSetting.label}
+                      value={currValue}
+                      onChange={(value) => updateSettings(key, value)}
+                    />
+                  </ControlHolder>
+                );
+              }
 
-            if (currSetting.type === "colour") {
-              return (
-                <ControlHolder dividerAbove={dividerAbove} key={key}>
-                  <ColourPicker
-                    label={currSetting.label}
-                    value={currValue}
-                    onChange={(value) => updateSettings(key, value)}
-                  />
-                </ControlHolder>
-              );
-            }
+              if (currSetting.type === "boolean") {
+                return (
+                  <ControlHolder dividerAbove={dividerAbove} key={key}>
+                    <SwitchControl
+                      label={currSetting.label}
+                      value={currValue}
+                      onChange={(value) => updateSettings(key, value)}
+                    />
+                  </ControlHolder>
+                );
+              }
 
-            if (currSetting.type === "boolean") {
-              return (
-                <ControlHolder dividerAbove={dividerAbove} key={key}>
-                  <SwitchControl
-                    label={currSetting.label}
-                    value={currValue}
-                    onChange={(value) => updateSettings(key, value)}
-                  />
-                </ControlHolder>
-              );
-            }
+              if (currSetting.type === "range") {
+                return (
+                  <ControlHolder dividerAbove={dividerAbove} key={key}>
+                    <SliderControl
+                      labelStyle={{ minWidth: 150 }}
+                      label={currSetting.label}
+                      displayValue={true}
+                      min={currSetting.min}
+                      max={currSetting.max}
+                      value={currValue}
+                      step={currSetting.step}
+                      onChange={(value) => updateSettings(key, value)}
+                    />
+                  </ControlHolder>
+                );
+              }
 
-            if (currSetting.type === "range") {
-              return (
-                <ControlHolder dividerAbove={dividerAbove} key={key}>
-                  <SliderControl
-                    labelStyle={{ minWidth: 150 }}
-                    label={currSetting.label}
-                    displayValue={true}
-                    min={currSetting.min}
-                    max={currSetting.max}
-                    value={currValue}
-                    step={currSetting.step}
-                    onChange={(value) => updateSettings(key, value)}
-                  />
-                </ControlHolder>
-              );
-            }
-
-            return null;
-          })}
-        </StyledPanel>
-      )}
-    </StyledControls>
+              return null;
+            })}
+          </StyledPanel>
+        )}
+      </StyledControls>
+    </Holder>
   );
 };
 
@@ -138,11 +140,17 @@ const StyledPanel = styled.div`
   max-width: 400px;
 `;
 
-const StyledControls = styled.div`
+const Holder = styled.div`
   position: fixed;
-  z-index: 2;
-  top: 50px;
+  top: 0;
   left: 0;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 2;
+`;
+
+const StyledControls = styled.div`
+  margin-top: 50px;
   border-top: ${(props) => (props.dividerAbove ? "1px solid #ccc" : "none")};
   margin-top: ${(props) => (props.dividerAbove ? "3px" : "")};
   padding: 10px;
