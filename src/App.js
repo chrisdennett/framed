@@ -32,7 +32,7 @@ defaultPiffleData.text = defaultDescription;
 export default function App() {
   const { width, height } = useWindowDimensions();
   const inMobileMode = width < 400;
-  const [activePanel, setActivePanel] = React.useState("plaque");
+  const [activePanel, setActivePanel] = React.useState(null);
   const [sourceImg, setSourceImg] = useState(null);
   // const [piffleData, setPiffleData] = useState(defaultPiffleData);
   const [piffleData, setPiffleData] = useLocalStorage(

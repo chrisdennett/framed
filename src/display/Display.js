@@ -143,28 +143,37 @@ const createRoomCanvas = ({
   const frameX = frameArea.left + (maxFrameW - targFrameW) / 2;
   const frameY = frameArea.top + (maxFrameH - targFrameH) / 2;
 
+  // Outer frame Shadow
+  const shadow1Size = framedCanvas.height * 0.005;
+  const shadow2Size = framedCanvas.height * 0.02;
   ctx.save();
-  ctx.shadowOffsetX = 5;
-  ctx.shadowOffsetY = 10;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = shadow1Size;
   ctx.shadowBlur = 5;
+  ctx.shadowColor = `rgba(0, 0, 0, 0.9)`;
+  ctx.drawImage(framedCanvas, frameX, frameY, targFrameW, targFrameH);
+
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = shadow2Size;
+  ctx.shadowBlur = 10;
   ctx.shadowColor = `rgba(0, 0, 0, 0.3)`;
   ctx.drawImage(framedCanvas, frameX, frameY, targFrameW, targFrameH);
   ctx.restore();
 
+  // plaque calcs
   const gapFromFrame = Math.round(targFrameH * 0.07);
-  const plaquePos = {
-    x: isLandscape
-      ? Math.min(
-          frameX + targFrameW + gapFromFrame,
-          displayWidth - (widestTextWidth + plaquePadding)
-        )
-      : frameX,
-    y: isLandscape
-      ? frameY + targFrameH - textHeight * 1.5
-      : frameY + targFrameH + gapFromFrame,
-  };
+  const plaqueX = isLandscape
+    ? Math.min(
+        frameX + targFrameW + gapFromFrame,
+        displayWidth - (widestTextWidth + plaquePadding)
+      )
+    : frameX;
 
-  ctx.drawImage(plaqueCanvas, Math.round(plaquePos.x), Math.round(plaquePos.y));
+  const plaqueY = isLandscape
+    ? frameY + targFrameH - textHeight * 1.5
+    : frameY + targFrameH + gapFromFrame;
+
+  ctx.drawImage(plaqueCanvas, Math.round(plaqueX), Math.round(plaqueY));
 
   return roomCanvas;
 };
