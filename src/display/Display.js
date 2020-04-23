@@ -107,9 +107,9 @@ const createRoomCanvas = ({
 
   const maxPlaqueHeight = isLandscape ? displayHeight : displayHeight / 2.5;
   const maxPlaqueWidth = isLandscape ? displayWidth / 2.5 : displayWidth;
-  const plaquePadding = 20;
+  const plaqueMargin = isLandscape ? displayWidth * 0.02 : displayHeight * 0.02;
 
-  const { plaqueCanvas, widestTextWidth, textHeight } = drawPifflePlaque({
+  const { plaqueCanvas, plaqueTextWidth, plaqueTextHeight } = drawPifflePlaque({
     ctx,
     piffle,
     x: 0,
@@ -118,12 +118,12 @@ const createRoomCanvas = ({
     height: maxPlaqueHeight,
   });
 
-  const doublePlaquePadding = plaquePadding * 2;
+  const doublePlaqueMargin = plaqueMargin * 2;
 
   const frameArea = {
     top: 60,
-    right: isLandscape ? widestTextWidth + doublePlaquePadding : 15,
-    bottom: isLandscape ? 25 : textHeight + doublePlaquePadding,
+    right: isLandscape ? plaqueTextWidth + doublePlaqueMargin : 15,
+    bottom: isLandscape ? 25 : plaqueTextHeight + doublePlaqueMargin,
     left: 15,
   };
 
@@ -161,24 +161,67 @@ const createRoomCanvas = ({
   ctx.restore();
 
   // plaque calcs
-  const gapFromFrame = Math.round(targFrameH * 0.07);
-  const plaqueX = isLandscape
-    ? Math.min(
-        frameX + targFrameW + gapFromFrame,
-        displayWidth - (widestTextWidth + plaquePadding)
-      )
-    : frameX;
+  const plaqueX = isLandscape ? frameX + targFrameW + plaqueMargin : frameX;
+
+  const plaquePadding = isLandscape
+    ? displayWidth * 0.01
+    : displayHeight * 0.01;
+  const doublePlaquePadding = plaquePadding * 2;
 
   const plaqueY = isLandscape
-    ? frameY + targFrameH - textHeight * 1.5
-    : frameY + targFrameH + gapFromFrame;
+    ? frameY + targFrameH - plaqueTextHeight * 2.5
+    : frameY + targFrameH + plaqueMargin;
 
   // Draw plaque bg
-  // ctx.fillStyle = "#fff";
-  // ctx.fillRect(plaqueX, plaqueY, widestTextWidth, textHeight);
+  ctx.fillStyle = "hsla(0, 0%, 99%)";
+  ctx.save();
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 3;
+  ctx.shadowBlur = 2;
+  ctx.shadowColor = `rgba(0, 0, 0, 0.4)`;
+  ctx.fillRect(
+    plaqueX,
+    plaqueY,
+    plaqueTextWidth + doublePlaquePadding,
+    plaqueTextHeight + doublePlaquePadding
+  );
+
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = -3;
+  ctx.shadowBlur = 2;
+  ctx.shadowColor = `rgba(255, 255, 255, 0.6)`;
+  ctx.fillRect(
+    plaqueX,
+    plaqueY,
+    plaqueTextWidth + doublePlaquePadding,
+    plaqueTextHeight + doublePlaquePadding
+  );
+  ctx.restore();
+
+  // add card bg
+  // ctx.fillStyle = "#efefef";
+
+  // ctx.save();
+  // ctx.shadowOffsetX = 0;
+  // ctx.shadowOffsetY = 3;
+  // ctx.shadowBlur = 2;
+  // ctx.shadowColor = `rgba(0, 0, 0, 0.4)`;
+  // ctx.fillRect(plaqueX, plaqueY, maxPlaqueWidth, height);
+
+  // ctx.shadowOffsetX = 0;
+  // ctx.shadowOffsetY = -3;
+  // ctx.shadowBlur = 2;
+  // ctx.shadowColor = `rgba(255, 255, 255, 0.6)`;
+
+  // ctx.fillRect(plaqueX, plaqueY, maxPlaqueWidth, height);
+  // ctx.restore();
 
   // Draw plaque wording
-  ctx.drawImage(plaqueCanvas, Math.round(plaqueX), Math.round(plaqueY));
+  ctx.drawImage(
+    plaqueCanvas,
+    Math.round(plaqueX + plaquePadding),
+    Math.round(plaqueY + plaquePadding)
+  );
 
   return roomCanvas;
 };

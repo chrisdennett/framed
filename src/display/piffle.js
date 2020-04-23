@@ -1,4 +1,4 @@
-export const drawPifflePlaque = ({ piffle, x, y, height, width }) => {
+export const drawPifflePlaque = ({ piffle, x, y, width }) => {
   const plaqueCanvas = document.createElement("canvas");
   const ctx = plaqueCanvas.getContext("2d");
   plaqueCanvas.width = width;
@@ -6,32 +6,18 @@ export const drawPifflePlaque = ({ piffle, x, y, height, width }) => {
   const plaqueX = x;
   const plaqueY = y;
   const maxPlaqueWidth = width;
-  const targetTitleFontSize = width > 400 ? 24 : 20;
-  const textPadding = 10; //Math.min(30, width * 0.07);
+  let targetTitleFontSize = width * 0.03;
+  if (targetTitleFontSize < 18) targetTitleFontSize = 18;
+  if (targetTitleFontSize > 32) targetTitleFontSize = 22;
+  const startY = 10; //Math.min(30, width * 0.07);
   let widestTextWidth = 0;
 
-  // add card bg
-  // ctx.fillStyle = "#efefef";
-
-  // ctx.save();
-  // ctx.shadowOffsetX = 0;
-  // ctx.shadowOffsetY = 3;
-  // ctx.shadowBlur = 2;
-  // ctx.shadowColor = `rgba(0, 0, 0, 0.4)`;
-  // ctx.fillRect(plaqueX, plaqueY, maxPlaqueWidth, height);
-
-  // ctx.shadowOffsetX = 0;
-  // ctx.shadowOffsetY = -3;
-  // ctx.shadowBlur = 2;
-  // ctx.shadowColor = `rgba(255, 255, 255, 0.6)`;
-
-  // ctx.fillRect(plaqueX, plaqueY, maxPlaqueWidth, height);
-  // ctx.restore();
+  console.log("width: ", width);
 
   // TEXT
   ctx.fillStyle = "#333";
   const textX = plaqueX;
-  let textY = plaqueY + textPadding * 2;
+  let textY = plaqueY + startY * 2;
 
   // add name line
   const nameText = `${piffle.name}`;
@@ -40,7 +26,7 @@ export const drawPifflePlaque = ({ piffle, x, y, height, width }) => {
     targetTitleFontSize,
     nameText,
     ` (b.${piffle.birthYear})`,
-    maxPlaqueWidth - textPadding,
+    maxPlaqueWidth,
     textX,
     textY
   );
@@ -56,7 +42,7 @@ export const drawPifflePlaque = ({ piffle, x, y, height, width }) => {
     nameFontSize,
     titleText,
     titleText2,
-    maxPlaqueWidth - textPadding,
+    maxPlaqueWidth,
     textX,
     textY
   );
@@ -71,15 +57,19 @@ export const drawPifflePlaque = ({ piffle, x, y, height, width }) => {
     titleFontSize,
     "",
     mediumLine,
-    maxPlaqueWidth - textPadding,
+    maxPlaqueWidth,
     textX,
     textY
   );
 
   if (w3 > widestTextWidth) widestTextWidth = w3;
-  const textHeight = textY + mediumFontSize;
+  const textHeight = textY + mediumFontSize * 0.5;
 
-  return { plaqueCanvas, widestTextWidth, textHeight };
+  return {
+    plaqueCanvas,
+    plaqueTextWidth: widestTextWidth,
+    plaqueTextHeight: textHeight,
+  };
 };
 
 const reduceFontSizeToFit = (ctx, startFontSize, text1, text2, width, x, y) => {
