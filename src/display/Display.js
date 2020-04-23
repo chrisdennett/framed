@@ -107,7 +107,7 @@ const createRoomCanvas = ({
 
   const maxPlaqueHeight = isLandscape ? displayHeight : displayHeight / 2.5;
   const maxPlaqueWidth = isLandscape ? displayWidth / 2.5 : displayWidth;
-  const plaqueMargin = isLandscape ? displayWidth * 0.02 : displayHeight * 0.02;
+  const plaqueMargin = isLandscape ? displayWidth * 0.03 : displayHeight * 0.03;
 
   const { plaqueCanvas, plaqueTextWidth, plaqueTextHeight } = drawPifflePlaque({
     ctx,

@@ -22,7 +22,7 @@ import { useLocalStorage } from "./hooks/useLocalStorage";
 const defaultPiffleData = {
   name: "Anon.",
   birthYear: "1999",
-  media: "Tea on Carpet",
+  media: "Felt tip on Scrap Paper",
   title: generateTitle(),
 };
 
