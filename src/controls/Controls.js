@@ -153,16 +153,6 @@ const Holder = styled.div`
   z-index: 2;
 `;
 
-const Overlay = styled.div`
-  position: absolute;
-  top: 0px;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 3;
-  background: black;
-`;
-
 const StyledControls = styled.div`
   z-index: 42222222;
   margin-top: 50px;

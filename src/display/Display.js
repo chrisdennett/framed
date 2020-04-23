@@ -27,7 +27,7 @@ const Display = ({ appData, piffle, setCanvasRef, sourceImg, sizeInfo }) => {
         setSpriteSheet(img);
       });
     }
-  }, [wall, fancyFrameSpriteSheet]);
+  });
 
   const {
     frameOption,

@@ -28,10 +28,10 @@ export const PiffleControl = ({ piffleData, setPiffleData, inMobileMode }) => {
     setPiffleData({ ...piffleData, title: newTitle });
   };
 
-  const onGenerateDescription = () => {
-    const newDescription = generateDescription(piffleData);
-    setPiffleData({ ...piffleData, text: newDescription });
-  };
+  // const onGenerateDescription = () => {
+  //   const newDescription = generateDescription(piffleData);
+  //   setPiffleData({ ...piffleData, text: newDescription });
+  // };
 
   return (
     <Container>
