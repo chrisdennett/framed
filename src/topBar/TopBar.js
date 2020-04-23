@@ -9,6 +9,7 @@ export const TopBar = ({
   setActivePanel,
   appData,
   onSaveImage,
+  onCopyImage,
   onAddImage,
 }) => {
   const onPanelSelect = (panelName) => {
@@ -36,6 +37,7 @@ export const TopBar = ({
       />
       <PhotoSelector onPhotoSelected={onPhotoSelected} />
       <IconButton label="SAVE" icon="save" onClick={onSaveImage} />
+      <IconButton label="COPY" icon="photo_library" onClick={onCopyImage} />
       <IconButton
         tag="a"
         label="info"

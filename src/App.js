@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { saveAs } from "file-saver";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // comps
 //
 import Display from "./display/Display";
@@ -51,6 +53,28 @@ export default function App() {
     }
   };
 
+  const copyToClipboard = async (pngBlob) => {
+    try {
+      await navigator.clipboard.write([
+        // eslint-disable-next-line no-undef
+        new ClipboardItem({
+          [pngBlob.type]: pngBlob,
+        }),
+      ]);
+      toast.success("COPIED!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } catch (error) {
+      toast.error("Sorry, copy failed. Try Save", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
+
+  const onCopyImage = () => {
+    canvasRef.toBlob(copyToClipboard, "image/png", 1);
+  };
+
   const onAddImage = (imgFile) => {
     createCanvasFromFile(imgFile, (img) => {
       setSourceImg(img);
@@ -68,14 +92,19 @@ export default function App() {
     }
   });
 
+  const notify = () => toast("Wow so easy !");
+
   return (
     <AppHolder>
+      <button onClick={notify}>Notify !</button>
+      <ToastContainer />
       <TopBar
         activePanel={activePanel}
         setActivePanel={setActivePanel}
         onSaveImage={onSaveImage}
         onAddImage={onAddImage}
         appData={appData}
+        onCopyImage={onCopyImage}
       />
 
       {activePanel && (
