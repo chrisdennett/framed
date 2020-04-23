@@ -34,7 +34,7 @@ defaultPiffleData.text = defaultDescription;
 export default function App() {
   const { width, height } = useWindowDimensions();
   const inMobileMode = width < 400;
-  const [activePanel, setActivePanel] = React.useState(null);
+  const [activePanel, setActivePanel] = useState(null);
   const [sourceImg, setSourceImg] = useState(null);
   // const [piffleData, setPiffleData] = useState(defaultPiffleData);
   const [piffleData, setPiffleData] = useLocalStorage(
@@ -92,15 +92,14 @@ export default function App() {
     }
   });
 
-  const notify = () => toast("Wow so easy !");
-
   return (
     <AppHolder>
-      <button onClick={notify}>Notify !</button>
-      <ToastContainer />
+      <ToastContainer autoClose={3000} />
       <TopBar
         activePanel={activePanel}
-        setActivePanel={setActivePanel}
+        setActivePanel={(panel) =>
+          setActivePanel((prev) => (prev === panel ? null : panel))
+        }
         onSaveImage={onSaveImage}
         onAddImage={onAddImage}
         appData={appData}

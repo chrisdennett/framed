@@ -12,11 +12,6 @@ export const TopBar = ({
   onCopyImage,
   onAddImage,
 }) => {
-  const onPanelSelect = (panelName) => {
-    const newPanel = activePanel === panelName ? null : panelName;
-    setActivePanel(newPanel);
-  };
-
   const onPhotoSelected = (file) => {
     onAddImage(file);
   };
@@ -27,13 +22,13 @@ export const TopBar = ({
         style={activePanel === "plaque" ? { color: "red" } : null}
         label="plaque words"
         icon="assignment"
-        onClick={() => onPanelSelect("plaque")}
+        onClick={() => setActivePanel("plaque")}
       />
       <IconButton
         style={activePanel === "frame" ? { color: "red" } : null}
         label="frame options"
         icon="filter_frames"
-        onClick={() => onPanelSelect("frame")}
+        onClick={() => setActivePanel("frame")}
       />
       <PhotoSelector onPhotoSelected={onPhotoSelected} />
       <IconButton label="SAVE" icon="save" onClick={onSaveImage} />

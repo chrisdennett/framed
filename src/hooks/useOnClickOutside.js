@@ -6,7 +6,12 @@ export const useOnClickOutside = (ref, handler) => {
     () => {
       const listener = (event) => {
         // Do nothing if clicking ref's element or descendent elements
-        if (!ref.current || ref.current.contains(event.target)) {
+        // HACK - CJD - added submit to allow butts on top bar
+        if (
+          !ref.current ||
+          ref.current.contains(event.target) ||
+          event.target.type === "submit"
+        ) {
           return;
         }
 
