@@ -8,7 +8,7 @@ export const drawPifflePlaque = ({ piffle, x, y, width }) => {
   const maxPlaqueWidth = width;
   let targetTitleFontSize = maxPlaqueWidth * 0.03;
   if (targetTitleFontSize < 18) targetTitleFontSize = 18;
-  if (targetTitleFontSize > 32) targetTitleFontSize = 22;
+  if (targetTitleFontSize > 22) targetTitleFontSize = 22;
   const startY = targetTitleFontSize / 2; //Math.min(30, width * 0.07);
   let widestTextWidth = 0;
 

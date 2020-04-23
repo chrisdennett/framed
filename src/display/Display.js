@@ -106,7 +106,7 @@ const createRoomCanvas = ({
   });
 
   // const maxPlaqueHeight = isLandscape ? displayHeight : displayHeight / 2.5;
-  const maxPlaqueWidth = isLandscape ? displayWidth / 2.5 : displayWidth;
+  const maxPlaqueWidth = isLandscape ? displayWidth : displayWidth;
   const plaqueMargin = isLandscape ? displayWidth * 0.05 : displayHeight * 0.05;
 
   const { plaqueCanvas, plaqueTextWidth, plaqueTextHeight } = drawPifflePlaque({
@@ -174,7 +174,7 @@ const createRoomCanvas = ({
 
   const plaqueShadowSize = framedCanvas.height * 0.002;
   // Draw plaque bg
-  ctx.fillStyle = "hsla(0, 0%, 97%)";
+  ctx.fillStyle = "hsla(0, 0%, 94%)";
   ctx.save();
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = plaqueShadowSize;
@@ -199,24 +199,6 @@ const createRoomCanvas = ({
   );
   ctx.restore();
 
-  // add card bg
-  // ctx.fillStyle = "#efefef";
-
-  // ctx.save();
-  // ctx.shadowOffsetX = 0;
-  // ctx.shadowOffsetY = 3;
-  // ctx.shadowBlur = 2;
-  // ctx.shadowColor = `rgba(0, 0, 0, 0.4)`;
-  // ctx.fillRect(plaqueX, plaqueY, maxPlaqueWidth, height);
-
-  // ctx.shadowOffsetX = 0;
-  // ctx.shadowOffsetY = -3;
-  // ctx.shadowBlur = 2;
-  // ctx.shadowColor = `rgba(255, 255, 255, 0.6)`;
-
-  // ctx.fillRect(plaqueX, plaqueY, maxPlaqueWidth, height);
-  // ctx.restore();
-
   // Draw plaque wording
   ctx.drawImage(
     plaqueCanvas,
@@ -233,9 +215,9 @@ const drawWall = ({ ctx, width, height, tileImg }) => {
   ctx.fillRect(0, 0, width, height);
 
   // Create gradient
-  var grd = ctx.createLinearGradient(0, 0, width / 2, height);
+  var grd = ctx.createLinearGradient(0, 0, 0, height);
   grd.addColorStop(0, "rgba(0,0,0,0)");
-  grd.addColorStop(1, "rgba(0,0,0,0.25)");
+  grd.addColorStop(1, "rgba(0,0,0,0.23)");
 
   // Fill with gradient
   ctx.fillStyle = grd;
