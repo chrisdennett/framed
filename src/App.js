@@ -32,7 +32,7 @@ defaultPiffleData.text = defaultDescription;
 export default function App() {
   const { width, height } = useWindowDimensions();
   const inMobileMode = width < 400;
-  const [activePanel, setActivePanel] = React.useState(null);
+  const [activePanel, setActivePanel] = React.useState("plaque");
   const [sourceImg, setSourceImg] = useState(null);
   // const [piffleData, setPiffleData] = useState(defaultPiffleData);
   const [piffleData, setPiffleData] = useLocalStorage(
@@ -82,6 +82,7 @@ export default function App() {
         <Controls
           inMobileMode={inMobileMode}
           activePanel={activePanel}
+          setActivePanel={setActivePanel}
           piffleData={piffleData}
           setPiffleData={setPiffleData}
           onUpdate={setAppData}

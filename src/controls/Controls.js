@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import "@material/button/dist/mdc.button.css";
 // comps
@@ -8,6 +8,7 @@ import ColourPicker from "../components/colourPicker/ColourPicker";
 
 import QuickSelectMenu from "../components/quickSelectControl/QuickSelectControl";
 import { PiffleControl } from "./piffleControl/PiffleControl";
+import { useOnClickOutside } from "../hooks/useOnClickOutside";
 
 const Controls = ({
   appData,
@@ -16,10 +17,11 @@ const Controls = ({
   piffleData,
   setPiffleData,
   inMobileMode,
+  setActivePanel,
 }) => {
   const { settings } = appData;
-
-  console.log("activePanel: ", activePanel);
+  const ref = useRef();
+  useOnClickOutside(ref, () => setActivePanel(null));
 
   const updateSettings = (key, newValue) => {
     onUpdate({ ...appData, [key]: newValue });
@@ -32,7 +34,9 @@ const Controls = ({
   const settingsKeys = Object.keys(settings);
 
   return (
-    <Holder>
+    <Holder ref={ref}>
+      {/* <Overlay onClick={() => setActivePanel(null)} /> */}
+
       <StyledControls>
         {activePanel === "plaque" && (
           <StyledPanel>
@@ -149,7 +153,18 @@ const Holder = styled.div`
   z-index: 2;
 `;
 
+const Overlay = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+  background: black;
+`;
+
 const StyledControls = styled.div`
+  z-index: 42222222;
   margin-top: 50px;
   border-top: ${(props) => (props.dividerAbove ? "1px solid #ccc" : "none")};
   margin-top: ${(props) => (props.dividerAbove ? "3px" : "")};
