@@ -30,7 +30,7 @@ export const drawPifflePlaque = ({ piffle, x, y, height, width }) => {
 
   // TEXT
   ctx.fillStyle = "#333";
-  const textX = plaqueX + textPadding;
+  const textX = plaqueX;
   let textY = plaqueY + textPadding * 2;
 
   // add name line

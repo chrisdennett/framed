@@ -173,6 +173,11 @@ const createRoomCanvas = ({
     ? frameY + targFrameH - textHeight * 1.5
     : frameY + targFrameH + gapFromFrame;
 
+  // Draw plaque bg
+  // ctx.fillStyle = "#fff";
+  // ctx.fillRect(plaqueX, plaqueY, widestTextWidth, textHeight);
+
+  // Draw plaque wording
   ctx.drawImage(plaqueCanvas, Math.round(plaqueX), Math.round(plaqueY));
 
   return roomCanvas;
