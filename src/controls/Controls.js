@@ -34,10 +34,10 @@ const Controls = ({
   const settingsKeys = Object.keys(settings);
 
   return (
-    <Holder ref={ref}>
+    <Holder>
       {/* <Overlay onClick={() => setActivePanel(null)} /> */}
 
-      <StyledControls>
+      <StyledControls ref={ref}>
         {activePanel === "plaque" && (
           <StyledPanel>
             <ControlHolder>
