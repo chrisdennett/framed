@@ -105,7 +105,7 @@ const createRoomCanvas = ({
     spriteSheet,
   });
 
-  const maxPlaqueHeight = isLandscape ? displayHeight : displayHeight / 2.5;
+  // const maxPlaqueHeight = isLandscape ? displayHeight : displayHeight / 2.5;
   const maxPlaqueWidth = isLandscape ? displayWidth / 2.5 : displayWidth;
   const plaqueMargin = isLandscape ? displayWidth * 0.05 : displayHeight * 0.05;
 
@@ -115,7 +115,6 @@ const createRoomCanvas = ({
     x: 0,
     y: 0,
     width: maxPlaqueWidth,
-    height: maxPlaqueHeight,
   });
 
   const doublePlaqueMargin = plaqueMargin * 2;
@@ -173,13 +172,14 @@ const createRoomCanvas = ({
     ? frameY + targFrameH - plaqueTextHeight * 2.5
     : frameY + targFrameH + plaqueMargin * 0.75;
 
+  const plaqueShadowSize = framedCanvas.height * 0.002;
   // Draw plaque bg
-  ctx.fillStyle = "hsla(0, 0%, 99%)";
+  ctx.fillStyle = "hsla(0, 0%, 97%)";
   ctx.save();
   ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = 3;
+  ctx.shadowOffsetY = plaqueShadowSize;
   ctx.shadowBlur = 2;
-  ctx.shadowColor = `rgba(0, 0, 0, 0.4)`;
+  ctx.shadowColor = `rgba(0, 0, 0, 0.8)`;
   ctx.fillRect(
     plaqueX,
     plaqueY,
@@ -188,9 +188,9 @@ const createRoomCanvas = ({
   );
 
   ctx.shadowOffsetX = 0;
-  ctx.shadowOffsetY = -3;
+  ctx.shadowOffsetY = -plaqueShadowSize;
   ctx.shadowBlur = 2;
-  ctx.shadowColor = `rgba(255, 255, 255, 0.6)`;
+  ctx.shadowColor = `rgba(255, 255, 255, 1)`;
   ctx.fillRect(
     plaqueX,
     plaqueY,
@@ -230,5 +230,14 @@ const createRoomCanvas = ({
 const drawWall = ({ ctx, width, height, tileImg }) => {
   const tile = ctx.createPattern(tileImg, "repeat");
   ctx.fillStyle = tile;
+  ctx.fillRect(0, 0, width, height);
+
+  // Create gradient
+  var grd = ctx.createLinearGradient(0, 0, width / 2, height);
+  grd.addColorStop(0, "rgba(0,0,0,0)");
+  grd.addColorStop(1, "rgba(0,0,0,0.25)");
+
+  // Fill with gradient
+  ctx.fillStyle = grd;
   ctx.fillRect(0, 0, width, height);
 };

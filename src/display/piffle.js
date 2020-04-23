@@ -6,13 +6,13 @@ export const drawPifflePlaque = ({ piffle, x, y, width }) => {
   const plaqueX = x;
   const plaqueY = y;
   const maxPlaqueWidth = width;
-  let targetTitleFontSize = width * 0.03;
+  let targetTitleFontSize = maxPlaqueWidth * 0.03;
   if (targetTitleFontSize < 18) targetTitleFontSize = 18;
   if (targetTitleFontSize > 32) targetTitleFontSize = 22;
   const startY = targetTitleFontSize / 2; //Math.min(30, width * 0.07);
   let widestTextWidth = 0;
 
-  console.log("width: ", width);
+  console.log("maxPlaqueWidth: ", maxPlaqueWidth);
 
   // TEXT
   ctx.fillStyle = "#333";
