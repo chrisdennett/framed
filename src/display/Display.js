@@ -107,7 +107,7 @@ const createRoomCanvas = ({
 
   const maxPlaqueHeight = isLandscape ? displayHeight : displayHeight / 2.5;
   const maxPlaqueWidth = isLandscape ? displayWidth / 2.5 : displayWidth;
-  const plaqueMargin = isLandscape ? displayWidth * 0.03 : displayHeight * 0.03;
+  const plaqueMargin = isLandscape ? displayWidth * 0.05 : displayHeight * 0.05;
 
   const { plaqueCanvas, plaqueTextWidth, plaqueTextHeight } = drawPifflePlaque({
     ctx,
@@ -161,16 +161,17 @@ const createRoomCanvas = ({
   ctx.restore();
 
   // plaque calcs
-  const plaqueX = isLandscape ? frameX + targFrameW + plaqueMargin : frameX;
+  const plaqueX = isLandscape
+    ? frameX + targFrameW + plaqueMargin * 0.75
+    : frameX;
 
-  const plaquePadding = isLandscape
-    ? displayWidth * 0.01
-    : displayHeight * 0.01;
+  let plaquePadding = isLandscape ? displayWidth * 0.01 : displayHeight * 0.01;
+  if (plaquePadding < 10) plaquePadding = 10;
   const doublePlaquePadding = plaquePadding * 2;
 
   const plaqueY = isLandscape
     ? frameY + targFrameH - plaqueTextHeight * 2.5
-    : frameY + targFrameH + plaqueMargin;
+    : frameY + targFrameH + plaqueMargin * 0.75;
 
   // Draw plaque bg
   ctx.fillStyle = "hsla(0, 0%, 99%)";

@@ -9,7 +9,7 @@ export const drawPifflePlaque = ({ piffle, x, y, width }) => {
   let targetTitleFontSize = width * 0.03;
   if (targetTitleFontSize < 18) targetTitleFontSize = 18;
   if (targetTitleFontSize > 32) targetTitleFontSize = 22;
-  const startY = 10; //Math.min(30, width * 0.07);
+  const startY = targetTitleFontSize / 2; //Math.min(30, width * 0.07);
   let widestTextWidth = 0;
 
   console.log("width: ", width);
@@ -63,7 +63,7 @@ export const drawPifflePlaque = ({ piffle, x, y, width }) => {
   );
 
   if (w3 > widestTextWidth) widestTextWidth = w3;
-  const textHeight = textY + mediumFontSize * 0.5;
+  const textHeight = textY + mediumFontSize * 0.4;
 
   return {
     plaqueCanvas,
